@@ -1,0 +1,287 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Заказ в dpd</title>
+	<!-- <link rel="stylesheet" type="text/css" href="view.css" media="all"> -->
+	<link rel="stylesheet" href="./dpd_files/styles.css">
+	<script type="text/javascript" src="./dpd_files/view.js"></script>
+	<script type="text/javascript" src="./dpd_files/calendar.js"></script>
+	<script type="text/javascript" src="./dpd_files/myscript.js"></script>
+</head>
+
+<body>
+
+	<div id='ymap' style="width: 500px; height: 500px; display: none;">
+		<script type="text/javascript" charset="utf-8"
+			src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A053bd947d462cc1a45aeba4070defff75501905071c0eaf68436ac9976ec698c&amp;width=500&amp;height=500&amp;lang=ru_RU&amp;">
+		</script>
+	</div>
+
+	<br>
+	
+	<button id="buttonHideMap" style="display: none"
+	onclick="document.getElementById('ymap').style.display='none';
+	document.getElementById('buttonShowMap').style.display='block';
+	document.getElementById('buttonHideMap').style.display='none';">скрыть</button>
+
+	<button id="buttonShowMap" 
+	onclick="document.getElementById('ymap').style.display='block';
+	document.getElementById('buttonHideMap').style.display='block';
+	document.getElementById('buttonShowMap').style.display='none';">показать</button>
+
+		<img id="top" src="./dpd_files/top.png" alt="">
+		<div id="form_container">
+
+			<h1><a></a></h1>
+			<br><br>
+			<div class="form_description">
+				<h2>Создание заказа dpd</h2>
+			</div>
+
+
+			<ul>
+				<li>
+					<input type="text" id="lineNum" value="4999">
+					<button onclick="getJSON()">ввести номер строки</button>
+					<br> <br>
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<label class="description">Дата приема груза</label>
+					<input id="datePickup" type="date" value="2012-04-10" />
+					<label class="description" for="element_13">Интервал времени приёма груза</label>
+					<div class='left'>
+						<select class="element select medium" id="pickupTimePeriod" value="9-13">
+							<option value="9-18">9-18</option>
+							<option value="9-13">9-13</option>
+							<option value="13-18>">13-18</option>
+						</select>
+					</div>
+				</li>
+				<br>
+
+				<div class="form_description"></div>
+				<!-- <h3>Отправитель</h3>
+				<li id="sender">
+					<label class="description">*Компания / Имя отправителя</label>
+					<input id="senderName" type="text" />
+					<label class="description">Регион</label>
+					<input id="senderRegion" type="text" />
+					<label class="description">*Город</label>
+					<input id="senderCity" type="text" />
+					<label class="description">*Улица</label>
+					<input id="senderStreet" type="text" />
+					<label class="description">Аббревиатура улицы</label>
+					<input id="senderStreetAbbr" type="text" />
+					<label class="description">дом</label>
+					<input id="senderHouse" type="text" />
+					<br>
+					<div class="left">
+						<label class="description">корпус</label>
+						<input id="senderKorpus" type="text" />
+						<label class="description">строение</label>
+						<input id="senderStr" type="text" />
+					</div>
+					<div class="right">
+						<label class="description">владение</label>
+						<input id="senderVlad" type="text" />
+						<label class="description">павильон</label>
+						<input id="senderExtrainfo" type="text" />
+						<label class="description">офис</label>
+						<input id="senderOffice" type="text" />
+						<label class="description">квартира</label>
+						<input id="senderFlat" type="text" />
+					</div>
+					<label class="description">Контактное лицо</label>
+					<input id="senderContactFio" type="text" />
+					<label class="description">Телефон</label>
+					<input id="senderContactPhone" type="text" />
+				</li>
+				<br> -->
+
+				<div class="form_description"></div>
+				<h3>Заказ</h3>
+				<li id="order">
+					<label class="description">Номер заказа</label>
+					<input id="orderNumberInternal" type="text" />
+					<label class="description">Выбор услуги</label>
+					<select class="element select medium" id="serviceCode" value="ECN">
+						<option value="BZN">DPD 18:00</option>
+						<option value="ECN">DPD ECONOMY </option>
+						<option value="ECU">DPD ECONOMY CU</option>
+						<option value="CUR">DPD CLASSIC</option>
+						<option value="NDY">DPD EXPRESS</option>
+						<option value="CSM">DPD Online Express</option>
+						<option value="PCL">DPD OPTIMUM</option>
+						<option value="PUP">DPD SHOP(только для ТТ)</option>
+						<option value="MAX">DPD MAX domestic</option>
+						<option value="MXO">DPD STANDART</option>
+					</select>
+					<label class="description">Вариант доставки</label>
+					<select class="element select medium" id="serviceVariant" value="ДД">
+						<option value="ДД">ДД</option>
+						<option value="ДТ">ДТ
+						<option>
+						<option value="ТД">ТД</option>
+						<option value="ТТ">ТТ</option>
+					</select>
+					<label class="description">Количество посылок</label>
+					<input id="cargoNumPack" type="text" />
+					<label class="description">Вес посылки</label>
+					<input id="cargoWeight" type="text" />
+					<label class="description">Объём</label>
+					<input id="cargoVolume" type="text" />
+					<label class="description">Сумма объявленной стоимости</label>
+					<input id="cargoValue" type="text" />
+					<label class="description">Содержимое отправки</label>
+					<input id="receiverStreetAbbr" type="text" />
+					<label class="description">Интервал времени доставки груза</label>
+					<select class="element select medium" id="pickupTimePeriod" value="1">
+						<option value="9-18">9-18</option>
+						<option value="9-14">9-14</option>
+						<option value="13-18>">13-18</option>
+						<option value="18-2>">18-22</option>
+						<option value="9-22>">9-22 (только по услугам DPD Online Express, DPD OPTIMUM)</option>
+					</select>
+				</li>
+				<!-- <label class="description">Форма оплаты услуг доставки</label>
+					<input id="receiverStreetAbbr" type="text" value=""/> -->
+				<div class="form_description"></div>
+				<h3>Адрес доставки</h3>
+				<li>
+					<label class="description">*Компания / Имя Получателя</label>
+					<input id="receiverName" type="text" />
+					<label class="description">Регион</label>
+					<input id="receiverRegion" type="text" />
+					<label class="description">*Город</label>
+					<input id="receiverCity" type="text" />
+					<label class="description">*Улица</label>
+					<input id="receiverStreet" type="text" />
+					<label class="description">Аббревиатура улицы</label>
+					<input id="receiverStreetAbbr" type="text" />
+					<label class="description">дом</label>
+					<input id="receiverHouse" type="text" />
+					<br>
+					<div class="left">
+						<label class="description">корпус</label>
+						<input id="receiverKorpus" type="text" />
+						<label class="description">строение</label>
+						<input id="receiverStr" type="text" />
+					</div>
+					<div class="right">
+						<label class="description">владение</label>
+						<input id="receiverVlad" type="text" />
+						<label class="description">павильон</label>
+						<input id="receiverExtrainfo" type="text" />
+						<label class="description">офис</label>
+						<input id="receiverOffice" type="text" />
+						<label class="description">квартира</label>
+						<input id="receiverFlat" type="text" />
+					</div>
+					<label class="description">Контактное лицо</label>
+					<input id="receiverContactFio" type="text" />
+					<label class="description">Телефон</label>
+					<input id="receiverContactPhone" type="text" />
+				</li>
+				</li>
+
+				<!-- <li id="li_2">
+					<label class="description" for="element_2">Paragraph </label>
+					<div>
+						<textarea id="element_2" name="element_2" class="element textarea medium"></textarea>
+					</div>
+				</li>
+				<li id="li_11">
+					<label class="description" for="element_11">Multiple Choice </label>
+					<span>
+						<input id="element_11_1" name="element_11" class="element radio" type="radio" value="1" />
+						<label class="choice" for="element_11_1">First option</label>
+						<input id="element_11_2" name="element_11" class="element radio" type="radio" value="2" />
+						<label class="choice" for="element_11_2">Second option</label>
+						<input id="element_11_3" name="element_11" class="element radio" type="radio" value="3" />
+						<label class="choice" for="element_11_3">Third option</label>
+
+					</span>
+				</li>
+				<li id="li_3">
+					<label class="description" for="element_3">Address </label>
+
+					<div>
+						<input id="element_3_1" name="element_3_1" class="element text large"type="text">
+						<label for="element_3_1">Street Address</label>
+					</div>
+
+					<div>
+						<input id="element_3_2" name="element_3_2" class="element text large"type="text">
+						<label for="element_3_2">Address Line 2</label>
+					</div>
+
+					<div class="left">
+						<input id="element_3_3" name="element_3_3" class="element text medium"type="text">
+						<label for="element_3_3">City</label>
+					</div>
+
+					<div class="right">
+						<input id="element_3_4" name="element_3_4" class="element text medium"type="text">
+						<label for="element_3_4">State / Province / Region</label>
+					</div>
+
+					<div class="left">
+						<input id="element_3_5" name="element_3_5" class="element text medium" maxlength="15" value=""
+							type="text">
+						<label for="element_3_5">Postal / Zip Code</label>
+				</li>
+				<li class="section_break">
+					<h3>Section Break</h3>
+					<p></p>
+				</li>
+				<li id="li_5">
+					<label class="description" for="element_5">Number </label>
+					<div>
+						<input id="element_5" name="element_5" class="element text medium" type="text" maxlength="255"
+							value="" />
+					</div>
+				</li>
+				<li id="li_12">
+					<label class="description" for="element_12">Checkboxes </label>
+					<span>
+						<input id="element_12_1" name="element_12_1" class="element checkbox" type="checkbox"
+							value="1" />
+						<label class="choice" for="element_12_1">First option</label>
+						<input id="element_12_2" name="element_12_2" class="element checkbox" type="checkbox"
+							value="1" />
+						<label class="choice" for="element_12_2">Second option</label>
+						<input id="element_12_3" name="element_12_3" class="element checkbox" type="checkbox"
+							value="1" />
+						<label class="choice" for="element_12_3">Third option</label>
+
+					</span>
+				</li>
+				<li id="li_13">
+					<label class="description" for="element_13">Drop Down </label>
+					<div>
+						<select class="element select medium" id="element_13" name="element_13">
+							<optionselected="selected"></option>
+							<option value="1">First option</option>
+							<option value="2">Second option</option>
+							<option value="3">Third option</option>
+
+						</select>
+					</div>
+				</li> -->
+				<li class="buttons">
+					<input type="hidden" name="form_id" value="33927" />
+
+					<input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+				</li>
+			</ul>
+			<div id="footer">
+			</div>
+			<img id="bottom" src="./dpd_files/bottom.png" alt="">
+</body>
+
+</html>

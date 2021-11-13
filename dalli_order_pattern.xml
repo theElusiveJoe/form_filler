@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<basketcreate>
+	<auth />
+	<order number="ABC-1">
+		<receiver>
+			<town>7700000000000</town>
+			<address>Тестовая улица</address>
+			<person>Тестовый получатель</person>
+			<phone>79999999999</phone>
+			<date>2019-08-10</date>
+			<time_min>20:00</time_min>
+			<time_max>22:00</time_max>
+		</receiver>
+		<service>1</service>
+		<weight>0.25</weight>
+		<quantity>1</quantity>
+		<paytype>CASH</paytype>
+		<priced>100</priced>
+		<price>1100</price>
+		<upsnak></upsnak>
+		<inshprice>2184</inshprice>
+		<instruction>Вход через арку, домофон 10к1234, пятый этаж</instruction>
+		<!-- <deliveryset above_price="555" return_price="444">
+			<below below_sum="333" price="222" />
+			<below below_sum="111" price="123" />
+		</deliveryset> -->
+		<items>
+			<!-- <item quantity="1" weight="0" retprice="0" barcode="19634788" article="">Подарок</item> -->
+			<!-- <item quantity="1" weight="0" retprice="1000" barcode="19634791" article="" VATrate="20" origincountry="RU" GTD="1234567890" suppcompany="ООО 'Рога и копыта'" suppphone="+7 495 999 99 99" suppINN="111122555" governmentCode="111124445555">Кеды</item> --> -->
+		</items>
+		<acceptpartially>NO</acceptpartially>
+	</order>
+</basketcreate>

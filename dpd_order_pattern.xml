@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://dpd.ru/ws/order2/2012-04-04">
+	<soapenv:Body>
+		<tns:createOrder>
+			<orders>
+				<auth>
+					<clientNumber>1002017398</clientNumber>
+					<clientKey>6D4216831E84FE7DE86BBDC4B5E9C97CE3E0E21D</clientKey>
+				</auth>
+				<header>
+					<datePickup>2021-11-15</datePickup>
+					<payer>1002017398</payer>
+					<senderAddress>
+						<!-- <code>?</code> -->
+						<name>имя</name>
+						<!-- <terminalCode>?</terminalCode> -->
+						<!-- <addressString>?</addressString> -->
+						<countryName>Россия</countryName>
+						<!-- <index>?</index> -->
+						<!-- <region>?</region> -->
+						<city>Москва</city>
+						<street>Авиаторов</street>
+						<!-- <streetAbbr>?</streetAbbr> -->
+						<!-- <house>?</house>
+						<houseKorpus>?</houseKorpus>
+						<str>?</str>
+						<vlad>?</vlad>
+						<extraInfo>?</extraInfo>
+						<office>?</office>
+						<flat>?</flat>
+						<workTimeFrom>?</workTimeFrom>
+						<workTimeTo>?</workTimeTo>
+						<dinnerTimeFrom>?</dinnerTimeFrom>
+						<dinnerTimeTo>?</dinnerTimeTo>
+						<contactFio>?</contactFio>
+						<contactPhone>?</contactPhone>
+						<contactEmail>?</contactEmail>
+						<instructions>?</instructions>
+						<needPass>?</needPass> -->
+					</senderAddress>
+					<pickupTimePeriod>9-18</pickupTimePeriod>
+					<!-- <regularNum>?</regularNum> -->
+				</header>
+				<order>
+					<orderNumberInternal>123</orderNumberInternal>
+					<serviceCode>PCL</serviceCode>
+					<serviceVariant>ДД</serviceVariant>
+					<cargoNumPack>1</cargoNumPack>
+					<cargoWeight>4</cargoWeight>
+					<!-- <cargoVolume>?</cargoVolume> -->
+					<cargoRegistered>false</cargoRegistered>
+					<cargoValue>1200</cargoValue>
+					<cargoCategory>Товар</cargoCategory>
+					<!-- <deliveryTimePeriod>?</deliveryTimePeriod>
+					<paymentType>?</paymentType>
+					<extraParam>
+						<name>?</name>
+						<value>?</value>
+					</extraParam>
+					<dataInt>
+						<currency>?</currency>
+						<currencyDeclaredValue>?</currencyDeclaredValue>
+					</dataInt> -->
+					<receiverAddress>
+						<!-- <code>?</code> -->
+						<name>имя2</name>
+						<!-- <terminalCode>?</terminalCode> -->
+						<!-- <addressString>?</addressString> -->
+						<countryName>Россия</countryName>
+						<!-- <index>?</index> -->
+						<!-- <region>?</region> -->
+						<city>Москва</city>
+						<street>Авиаторов2</street>
+					</receiverAddress>
+					<!-- <extraService>
+						<esCode>?</esCode>
+						<param>
+							<name>?</name>
+							<value>?</value>
+						</param>
+					</extraService> -->
+					<!-- <parcel>
+						<number>?</number>
+						<dpdParcelNumber>?</dpdParcelNumber>
+						<number_for_print>?</number_for_print>
+						<box_needed>?</box_needed>
+						<weight>?</weight>
+						<length>?</length>
+						<width>?</width>
+						<height>?</height>
+						<insuranceCost>?</insuranceCost>
+						<insuranceCostVat>?</insuranceCostVat>
+						<codAmount>?</codAmount>
+					</parcel> -->
+					<!--
+					<unitLoad>
+						<article>?</article>
+						<descript>?</descript>
+						<declared_value>?</declared_value>
+						<parcel_num>?</parcel_num>
+						<npp_amount>?</npp_amount>
+						<vat_percent>?</vat_percent>
+						<without_vat>?</without_vat>
+						<count>?</count>
+					</unitLoad> -->
+				</order>
+			</orders>
+		</tns:createOrder>
+	</soapenv:Body>
+</soapenv:Envelope>
