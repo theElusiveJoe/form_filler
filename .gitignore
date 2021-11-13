@@ -3,5 +3,5 @@
 /install
 form-filler*.json
 query*.xml
-smth.xml
+smth.*
 /src/utils
