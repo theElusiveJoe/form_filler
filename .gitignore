@@ -1,6 +1,7 @@
 /.vscode
 /db
 /install
+/__*
 form-filler*.json
 query*.xml
 smth.*

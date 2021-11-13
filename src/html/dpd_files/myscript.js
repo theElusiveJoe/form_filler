@@ -28,7 +28,7 @@
 //     return date + '.' + mon + '.' + tomorrow.getFullYear().toString();
 // }
 
-function getDPDTerminals(region, city, addr){
+function getDPDTerminals(obj){
     var xhr = new XMLHttpRequest();
     xhr.onloadend = () => {
         alert('got termianls')
@@ -36,11 +36,7 @@ function getDPDTerminals(region, city, addr){
     }
     xhr.open('POST','http://localhost:8040/'+'getDPDTerminals.func', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    body = {
-        'region': region,
-        'city': city,
-        'addr': addr,
-    }
+    body = JSON.stringify(obj)
     xhr.send(JSON.stringify(body));
 }
 
@@ -50,14 +46,29 @@ function getJSON() {
     xhr.onloadend = () => {
         var order = JSON.parse(xhr.responseText)
 
+        // получив первичные данные, веб страница запрашивает адрес пункта самовывоза
+        // для этого на сервер отсылаются:
+        //      регион, город, адрес (и обычныый и customField1)
+        //      тип оплаты
+        //      вес и размеры товара
+
         document.getElementById('orderNumberInternal').value = order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim();
         if (order['zippack']['obj']['ShippingName'].includes('до пункта выдачи')){
             // alert('до пункта выдачи')
-            var region = order['zippack']['obj']['Customer']['Region'];
-            var city = order['zippack']['obj']['Customer']['City'];
-            var addr = order['zippack']['obj']['Customer']['CustomField1'];
-            console.log(region, city, addr);
-            getDPDTerminals(region,city,addr);
+            // пока считаем, что если до пункта водачи, то адрес в CustomField1
+            var size = order['gsheets']['size'].split('/')
+            console.log(size)
+            var intSize = [Number(size[0]), Number(size[1]), Number(size[2])].sort()
+            var obj = {
+                'region' : order['zippack']['obj']['Customer']['Region'],
+                'city' : order['zippack']['obj']['Customer']['City'],
+                'addr' : order['zippack']['obj']['Customer']['CustomField1'],
+                'maxDim' : intSize[2],
+                'midDim' : intSize[1],
+                'minDim' : intSize[0],
+                'maxWeight' : Math.ceil(Number(order['gsheets']['weight'])/Number(order['gsheets']['positions']))
+            }
+            getDPDTerminals(obj);
         }
         // пытаемся вывбрать пвз
         // document.getElementsById('receiver[person]')[0].value = order['zippack']['obj']['Customer']['FirstName'];
