@@ -66,7 +66,8 @@ function getJSON() {
                 'maxDim' : intSize[2],
                 'midDim' : intSize[1],
                 'minDim' : intSize[0],
-                'maxWeight' : Math.ceil(Number(order['gsheets']['weight'])/Number(order['gsheets']['positions']))
+                'maxWeight' : Math.ceil(Number(order['gsheets']['weight'])/Number(order['gsheets']['positions'])),
+                'payType' : order['gsheets']['payment_method']
             }
             getDPDTerminals(obj);
         }
