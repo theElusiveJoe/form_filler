@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import json
 import http.client
+import sqlite3
 
 with open('tokens.json', 'r') as f:
     tokens = json.load(f)
@@ -80,15 +81,30 @@ def create_dpd_order():
 
     # return json.dumps(errors)
 
-def getTerminals(addr):
-    addr_data = json.loads(addr)
-    print(addr_data)
-    tableName = 'terminalsSelfDelivery2'
+def getTerminals(siteQuery):
+    print(siteQuery)
+    orderData = json.loads(siteQuery)
+    print(orderData)
+
     conn = sqlite3.connect(r'./db/dpd.db')
     cur = conn.cursor() 
 
-    query1 = 'SELECT * FROM parcelShops WHere'
+    # сначала проверим, доступен ли в выбраном городе тип платежа
+    if orderData['payType'] == "наложный":
+        query1 = f"""SELECT * FROM citiesCashPay Where cityName='{orderData['city']}'"""
+        cur.execute(query1)
+        dbresp = cur.fetchall()
+        if len(dbresp) == 0:
+            resp = {
+                'error' : 'yes',
+                'reason' : """этого города нет в списке городов,
+                в которых доступен наложный платёж"""
+            }
+            return json.dumps(resp)
+    
+
 
     return('bibki')
 if __name__ == "__main__":
-    getTerminals('{"region":"Новосибирская область","city":"Новосибирск","addr":"г. Новосибирск, Красный п-кт, дом318"}')
+    resp = getTerminals('{"region":"Новосибирская область","city":"Новосибирск","addr":"г. Новосибирск, Красный п-кт, дом318","maxDim":37,"midDim":18,"minDim":13,"maxWeight":3,"payType":"наложный"}')
+    print(resp)
