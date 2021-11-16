@@ -13,7 +13,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 from compose_info import get_order_info
 from dalii_order import create_dalli_order
-from dpd_order import getTerminals as get_dpd_terminals
+from dpd_pick_terminal import getTerminals as get_dpd_terminals
 # from dpd_order import find_terminal as find_dpd_terminal
 
 
