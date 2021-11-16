@@ -6,8 +6,7 @@ with open("tokens.json", "r") as f:
     tokens = json.load(f)
     client_number = tokens["dpd_number"]
     client_key = tokens["dpd_key"]
-    dadata_token = tokens["dadata_token"]
-    dadata_key = tokens["dadata_key"]
+   
 
 
 def create_xml(data):

@@ -1,6 +1,12 @@
 import json
 import sqlite3
+import http.client
 
+
+with open("tokens.json", "r") as f:
+    tokens = json.load(f)
+    dadata_token = tokens["dadata_token"]
+    dadata_key = tokens["dadata_key"]
 
 def getCorrectAddres(badAddress):
     """
@@ -96,14 +102,14 @@ def getTerminals(siteQuery, dadataResp = ''):
 
 
     # проверим, адекватен ли адрес
-    if addr_obj["qc"] != 0:
+    print(addr_obj["qc"])
+    print(orderData["region"] + "  " + orderData["city"] + "  " + ('' if orderData["addr"]=='' else orderData["addr"]) )
+    if addr_obj["qc"] != 0 and addr_obj["qc"] != 3:
         codes = {
-            1: """
-            Остались «лишние» части. Пример: «109341 Тверская область Москва Верхние Поля» — здесь лишняя «Тверская область».\n
+            1: """Остались «лишние» части. Пример: «109341 Тверская область Москва Верхние Поля» — здесь лишняя «Тверская область».
     Либо в исходном адресе недостаточно данных для уверенного разбора. Пример: «Сходня Красная 12» — здесь нет региона 
     и города.""",
             2: "Адрес пустой или заведомо «мусорный»",
-            3: "Есть альтернативные варианты. Пример: «Москва Тверская-Ямская» — в Москве четыре Тверских-Ямских улицы.",
         }
         resp["description"] = codes[addr_obj["qc"]]
         resp["problems"] = "проблемы с адресом"
@@ -124,29 +130,38 @@ def getTerminals(siteQuery, dadataResp = ''):
             return json.dumps(resp)
 
     # если все хорошо, начинаем искать
-    regionCode = addr_obj["city_kladr_id"][:2]
-    cityСode = addr_obj["city_kladr_id"][:-2]
-    street = addr_obj["street"]
-    house = addr_obj["house"]
-    block = addr_obj["block"]  # и корпус и строение
+    regionCode = addr_obj["region_kladr_id"][:2] if addr_obj["region_kladr_id"] is not None else ''
+    print(regionCode)
+    cityСode = addr_obj["city_kladr_id"][:-2] if addr_obj["city_kladr_id"] is not None else ''
+    if regionCode == '77': cityСode = '77000000000' # потому что Москва у dadata - это , *****, не город
+    street = addr_obj["street"] if addr_obj["street"] is not None else ''
+    house = addr_obj["house"] if addr_obj["house"] is not None else ''
+    block = addr_obj["block"] if addr_obj["block"] is not None else ''# и корпус и строение
     optional_string = ""
     if block is not None:
         optional_string = (
-            "AND building ( LIKE " % {block} % " OR structure LIKE " % {block} % ") "
+            f'AND (building LIKE "%{block}%" OR structure LIKE "%{block}%") '
         )
 
     # в первой (без ограничений):
-    cur.execute(
-        f"""
+    # where1 = f'regionCode == "{regionCode}" AND'
+    sqlQuery =  f"""
         SELECT code, latitude, longitude, cityName, streetAbbr, street, houseNo, ownership, building, structure
         FROM terminalsSelfDelivery2 
-        WHERE   regionCode == '{regionCode}' AND
-                cityCode == '{cityСode}' AND
+        WHERE   regionCode == "{regionCode}" AND
+                cityCode == "{cityСode}" AND
                 street LIKE "%{street}%" AND
                 (houseNo LIKE "%{house}%" OR ownership LIKE "%{house}%") 
                 {optional_string}"""
+    print(sqlQuery)
+    cur.execute(
+       sqlQuery
     )
     searchResult = cur.fetchall()
+    if len(searchResult) >= 3:
+            print(searchResult[:3])
+    else:
+        print(searchResult)
 
     # сразу в яблочко
     if len(searchResult) == 1:
@@ -162,11 +177,10 @@ def getTerminals(siteQuery, dadataResp = ''):
         )
         resp["suggestions"].append(suggestion)
         print('ret3')
-        return resp
+        return json.dumps(resp)
 
     # во второй (with restrictions):
-    cur.execute(
-        f"""
+    sqlQuery = f"""
         SELECT code, latitude, longitude, 
         cityName, streetAbbr, street, houseNo, ownership, building, structure, 
         maxWeight, maxLength, maxWidth, maxHeight
@@ -176,8 +190,16 @@ def getTerminals(siteQuery, dadataResp = ''):
                 street LIKE "%{street}%" AND
                 (houseNo LIKE "%{house}%" OR ownership LIKE "%{house}%") 
                 {optional_string} """
+
+    print(sqlQuery)
+    cur.execute(
+       sqlQuery
     )
     searchResult = cur.fetchall()
+    if len(searchResult) >= 3:
+            print(searchResult[:3])
+    else:
+        print(searchResult)
 
     # со второго раза - тоже не плохо
     if len(searchResult) == 1:
@@ -214,17 +236,17 @@ def getTerminals(siteQuery, dadataResp = ''):
             # print(suggestion)
             resp["suggestions"].append(suggestion)
             print('ret4')
-            return resp
+            return json.dumps(resp)
 
     # if couldn't unambiguously choose address
     resp["problems"] = True
-    resp["description"] = "package is too large (or found more than one suitable)"
+    resp["description"] = "слишком большая посылка, либо нашлось несколько подходящих пунктов"
 
     # find suitable in that city
 
     # in table 1
-    cur.execute(
-        f"""
+
+    sqlQuery = f"""
         SELECT  code, latitude, longitude, cityName, 
                 streetAbbr, street, houseNo, ownership, building, structure
         FROM terminalsSelfDelivery2 
@@ -233,8 +255,16 @@ def getTerminals(siteQuery, dadataResp = ''):
                 street LIKE "%{street}%" AND
                 (houseNo LIKE "%{house}%" OR ownership LIKE "%{house}%") 
                 {optional_string}"""
+    
+    print(sqlQuery)
+    cur.execute(
+       sqlQuery
     )
     searchResult = cur.fetchall()
+    if len(searchResult) >= 3:
+            print(searchResult[:3])
+    else:
+        print(searchResult)
 
     for x in searchResult:
         addrTuple = ()
@@ -250,8 +280,7 @@ def getTerminals(siteQuery, dadataResp = ''):
         resp["suggestions"].append(suggestion)
 
     # in table 2
-    cur.execute(
-        f"""
+    sqlQuery = f"""
         SELECT  code, latitude, longitude, cityName, 
                 streetAbbr, street, houseNo, ownership, building, structure
         FROM parcelShops 
@@ -260,6 +289,10 @@ def getTerminals(siteQuery, dadataResp = ''):
                 {orderData["maxWeight"]} <= maxWeight AND {orderData["maxLength"]} <= maxLength AND
                 {orderData["midWidth"]} <= maxWidth AND {orderData["minHeight"]} <= maxHeight
                 """
+
+    print(sqlQuery)
+    cur.execute(
+       sqlQuery
     )
     searchResult = cur.fetchall()
     for x in searchResult:
@@ -274,38 +307,74 @@ def getTerminals(siteQuery, dadataResp = ''):
             rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
         )
         resp["suggestions"].append(suggestion)
+        if len(searchResult) >= 3:
+            print(searchResult[:3])
+        else:
+            print(searchResult)
     
     print('ret5')
-    return resp
+    return json.dumps(resp)
 
 
+def updateDadataResps():
+    f = open('./test/dpdAddressTests.json', 'r')
+    tests = json.load(f)
+    adresses = []
+    for test in tests:
+        orderData = test    
+        # print(orderData)
+        print(orderData["region"] + "  " + orderData["city"] + "  " + (' ' if orderData["addr"]=='' else orderData["addr"]) )
+        addr_obj = getCorrectAddres(
+            orderData["region"] + "  " + orderData["city"] + "  " + (' ' if orderData["addr"]=='' else orderData["addr"]) 
+        )[0]
+        adresses.append(addr_obj)
+    print(adresses)
+    f = open('./test/dadataResps.json', 'w').write(json.dumps(adresses, ensure_ascii=False))
+
+def createManyDadataResps():
+    adresses = []
+    tests = [
+        'Московская область, город Одинцово',
+        'город москва',
+        'смоленская область, сафоново',
+        'волгодонск',
+        'ленинградская область, питербург'
+    ]
+    for test in tests:
+        # print(orderData)
+        print(test)
+        addr_obj = getCorrectAddres(
+            test
+        )[0]
+        adresses.append(addr_obj)
+    f = open('./test/dadataRespExamples.json', 'w').write(json.dumps(adresses, ensure_ascii=False))
 
 if __name__ == "__main__":
-    # f = open('./test/dpdAddressTests.json', 'r')
-    # tests = json.load(f)
-    # adresses = []
-    # for test in tests:
-    #     orderData = test    
-    #     # print(orderData)
-    #     print(orderData["region"] + "  " + orderData["city"] + "  " + (' ' if orderData["addr"]=='' else orderData["addr"]) )
-    #     addr_obj = getCorrectAddres(
-    #         orderData["region"] + "  " + orderData["city"] + "  " + (' ' if orderData["addr"]=='' else orderData["addr"]) 
-    #     )[0]
-    #     adresses.append(addr_obj)
-    # print(adresses)
-    # f = open('./test/dadaraResps.json', 'w').write(json.dumps(adresses, ensure_ascii=False))
-
+    # updateDadataResps()
+    createManyDadataResps()
 
     ftests = open('test/dpdAddressTests.json')
-    tests = json.load(ftests)[0]
+    tests = json.load(ftests)
     ftests.close()
 
-    fresps = open('test/dadaraResps.dadaraResps.json')
-    resps = json.load(fresps)[0]
+    fresps = open('test/dadataResps.json')
+    resps = json.load(fresps)
     fresps.close()
 
-    for i in len(tests):
+    fresults = open('test/results.json', 'w')
+    results = []
 
+    nums = range(len(tests))
+    nums = [6]
+
+    for i in nums:
+        print('_________' ,i ,'_________')
+        a = json.loads(getTerminals(tests[i], dadataResp=resps[i]))
+        a['predicion'] = tests[i]['prediction']
+        results.append(a)
+
+    print('ended')
+    json.dump(results, fresults, ensure_ascii=False)
 
     # for test in testsList:
     #     # a = getTerminals(test)
