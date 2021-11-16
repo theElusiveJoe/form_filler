@@ -27,108 +27,152 @@
 //     if (date.length == 1){mon = '0' + mon;}
 //     return date + '.' + mon + '.' + tomorrow.getFullYear().toString();
 // }
+var ziplusheets = {}
 
-function getDPDTerminals(obj){
-    var xhr = new XMLHttpRequest();
-    xhr.onloadend = () => {
-        alert('got termianls')
-        // var terminals = JSON.parse(xhr.responseText)
-    }
-    xhr.open('POST','http://localhost:8040/'+'getDPDTerminals.func', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    body = JSON.stringify(obj)
-    xhr.send(JSON.stringify(body));
+function getTodayDate() {
+    var now = new Date();
+    var date = now.getDate().toString();
+    var date = now.getDate().toString();
+    var mon = (now.getMonth() + 1).toString();
+    if (date.length == 1) { date = '0' + date; }
+    if (date.length == 1) { mon = '0' + mon; }
+    return (now.getFullYear().toString() + '-' + mon + '-'+ date);
 }
 
-function getJSON() {
-    var xhr = new XMLHttpRequest();
-   
-    xhr.onloadend = () => {
-        var order = JSON.parse(xhr.responseText)
+function GetByPath(obj, path) {
+    var parts = path.split(".");
+    var current = obj;
+    for (var i = 0; i < parts.length; i++) {
+        current = current[parts[i]];
+        if (!current)
+            break;
+    }
+    return current;
+}
 
-        // получив первичные данные, веб страница запрашивает адрес пункта самовывоза
-        // для этого на сервер отсылаются:
-        //      регион, город, адрес (и обычныый и customField1)
-        //      тип оплаты
-        //      вес и размеры товара
 
-        document.getElementById('orderNumberInternal').value = order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim();
-        if (order['zippack']['obj']['ShippingName'].includes('до пункта выдачи')){
-            // alert('до пункта выдачи')
-            // пока считаем, что если до пункта водачи, то адрес в CustomField1
-            var size = order['gsheets']['size'].split('/')
-            console.log(size)
-            var intSize = [Number(size[0]), Number(size[1]), Number(size[2])].sort()
-            var obj = {
-                'region' : order['zippack']['obj']['Customer']['Region'],
-                'city' : order['zippack']['obj']['Customer']['City'],
-                'addr' : order['zippack']['obj']['Customer']['CustomField1'],
-                'maxDim' : intSize[2],
-                'midDim' : intSize[1],
-                'minDim' : intSize[0],
-                'maxWeight' : Math.ceil(Number(order['gsheets']['weight'])/Number(order['gsheets']['positions'])),
-                'payType' : order['gsheets']['payment_method']
-            }
-            getDPDTerminals(obj);
-        }
-        // пытаемся вывбрать пвз
-        // document.getElementsById('receiver[person]')[0].value = order['zippack']['obj']['Customer']['FirstName'];
-        // document.getElementsById('receiver[phone]')[0].value = order['zippack']['obj']['Customer']['Phone'];
-        // document.getElementsById('receiver[email]')[0].value = order['zippack']['obj']['Customer']['Email'];
-        // document.getElementsById('receiver[town]')[0].value = order['zippack']['obj']['Customer']['Region'];
-        
-        // document.getElementsById('receiver[address]')[0].value = createAdress(order)
-        // document.getElementsById('receiver[pvzcode]')[0].value = order['zippack']['obj']['Customer']['Region']; // ?????
-        // document.getElementsById('weight')[0].value = order['gsheets']['weight'].replace(',', '.').replace(/[^\d.]/g, '');
-        // document.getElementsById('quantity')[0].value = order['gsheets']['positions']
-        // document.getElementsById('receiver[date]')[0].value = getTodayDate();
-        // var time =  order['gsheets']['payment_time']
-        // document.getElementsById('receiver[timeMin]')[0].value = time.slice(0,2) + ':00'; 
-        // document.getElementsById('receiver[timeMax]')[0].value = time.slice(-2) + ':00';
-        // document.getElementsById('instruction')[0].value = order['gsheets']['comments'] + order['zippack']['obj']['CustomerComment'] + order['zippack']['obj']['AdminComment'];
-        
 
-        // for (var i = 0; i <  document.getElementsByClassId("btnBoxesRemove").length; i++){
-        //     document.getElementsByClassId("btnBoxesRemove")[i].click();
-        // }
-        // for (var i = 0; i < order['zippack']['obj']['Items'].length; i++){
-        //     document.getElementById('additembtm').click()
-        // }
-        // var sum = 0
-        // var disc = (100 - order['zippack']['obj']['OrderDiscount'])/100;
-        // for (var j = 0; j <  document.getElementById('itemsList').children.length; j++){
-        //     var i = document.getElementById('itemsList').children[j].getAttributeNode('id').value.substr(4);
-        //     var k = Number(i)
-        //     document.getElementById('itemsList')
-        //     document.getElementsById('items['+i+'][type]')[0].value = "1";
-        //     document.getElementsById('items['+i+'][article]')[0].value = order['zippack']['obj']['Items'][j]['ArtNo']
-        //     document.getElementsById('items['+i+'][Id]')[0].value = order['zippack']['obj']['Items'][j]['Id']
-        //     var amm = order['zippack']['obj']['Items'][j]['Amount'];
-        //     var price = Number(order['zippack']['obj']['Items'][j]['Price'])
-        //     document.getElementsById('items['+i+'][quantity]')[0].value = amm;
-        //     var one_price = Math.trunc(price*disc*100)/100;
-        //     sum += one_price*amm;
-        //     document.getElementsById('items['+i+'][retprice]')[0].value = one_price;
-        //     document.getElementsById('items['+i+'][mass]')[0].value = 1;
-        // }
-            
-        // document.getElementsById('priced')[0].value = order['zippack']['obj']['ShippingCost']
-        // document.getElementsById('declaredPrice')[0].value = sum + order['zippack']['obj']['ShippingCost']; //order['zippack']['obj']['Sum']                
-        // document.getElementsById('price')[0].value = sum + order['zippack']['obj']['ShippingCost']; //order['zippack']['obj']['Sum']  
-        // var paytype = "NO";
-        // if (order['gsheets']['payment_method'] == 'наложный'){
-        //     paytype = "CARD";
-        // } else if (order['gsheets']['payment_method'] == 'нал'){
-        //     paytype = "CASH";
-        // }
-        // document.getElementsById('paytype')[0].value = paytype;
+function fillFields(order) {
+    console.log(order)
+    ziplusheets = order
+    // начинаем заполнять поля
+    simpleFields = {
+        'cargoNumPack': 'gsheets.positions', // количество посылок
+        'cargoWeight': 'gsheets.weight', // вес всех посылок
+        'receiverName': 'zippack.obj.Customer.FirstName', // фио получателя
+        'receiverContactFio': 'zippack.obj.Customer.FirstName', // фио контактного лица 
+        'receiverContactPhone': 'zippack.obj.Customer.Phone', // телефон
+        'receiverEmail': 'zippack.obj.Customer.Email', // почта
+        'receiverRegion': 'zippack.obj.Customer.Region', // регион
+        'receiverCity': 'zippack.obj.Customer.City', // город
+        // 'receiverStreet': 'zippack.obj.Customer.Street', // улица
+    }
+    for (key in simpleFields) {
+        document.getElementById(key).value = GetByPath(order, simpleFields[key])
+        console.log(key)
     }
     
-    var linenum = document.getElementById("lineNum").value
-    xhr.open('GET', 'http://localhost:8040/'+linenum+'.json', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    console.log(getTodayDate());
+    document.getElementById('datePickup').value = getTodayDate();
+    document.getElementById('pickupTimePeriod').value = '9-13';
 
+
+    // заполнение информации о заказе
+
+    // вариант доставки
+    var serviceVariant = 'ДД'
+    if (order['zippack']['obj']['ShippingName'].includes('выдачи')) {
+        serviceVariant = 'ДТ'
+    }
+    document.getElementById('serviceVariant').value = serviceVariant
+    // цена = сумма - доставка
+    var cost = Number(order['zippack']['obj']['Sum']) - Number(order['zippack']['obj']['ShippingCost'])
+    document.getElementById('cargoValue').value = cost
+    // номер заказа
+    document.getElementById('orderNumberInternal').value = order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim();
+    console.log(order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim())
+    // содержимое отправки
+    document.getElementById('cargoCategory').value = 'пакеты'
+
+    // заполнение получателя
+
+
+    // document.getElementById('receiver[address]').value = createAdress(order)
+
+    // document.getElementById('weight').value = order['gsheets']['weight'].replace(',', '.').replace(/[^\d.]/g, '');
+    // document.getElementById('quantity').value = order['gsheets']['positions']
+    // document.getElementById('receiver[date]').value = getTodayDate();
+    // var time = order['gsheets']['payment_time']
+    // document.getElementById('instruction').value = order['gsheets']['comments'] + order['zippack']['obj']['CustomerComment'] + order['zippack']['obj']['AdminComment'];
+
+    // товары
+    document.getElementById('itemsList').innerHTML = ''
+    for (i = 0; i < GetByPath(order, 'zippack.obj.Items').length; i++){
+        item = GetByPath(order, 'zippack.obj.Items')[i];
+        console.log(item)
+        document.getElementById('itemsList').innerHTML += '<tr id="box'+i+'">' +
+        '<td><input size="1" type="text" id="items['+i+'][no]"></td>' + 
+        '<td><input size="15" type="text" id="items['+i+'][article]"></td>' + 
+        '<td><input size="100" style.width="100%" type="text" id="items['+i+'][name]"></td>' + 
+        '<td><input type="text" id="items['+i+'][quantity]"></td>' +
+        '<td><input type="text" id="items['+i+'][price]"></td>' +
+        '</tr> '
+        document.getElementById('items['+i+'][no]').value = i+1
+        document.getElementById('items['+i+'][article]').value = item['ArtNo']
+        document.getElementById('items['+i+'][name]').value = item['Name']
+        document.getElementById('items['+i+'][quantity]').value = item['Amount']
+        document.getElementById('items['+i+'][price]').value = item['Price']
+    }
+
+    // for (var i = 0; i <  document.getElementsByClassId("btnBoxesRemove").length; i++){
+    //     document.getElementsByClassId("btnBoxesRemove")[i].click();
+    // }
+    // for (var i = 0; i < order['zippack']['obj']['Items'].length; i++){
+    //     document.getElementById('additembtm').click()
+    // }
+    // var sum = 0
+    // var disc = (100 - order['zippack']['obj']['OrderDiscount'])/100;
+    // for (var j = 0; j <  document.getElementById('itemsList').children.length; j++){
+    //     var i = document.getElementById('itemsList').children[j].getAttributeNode('id').value.substr(4);
+    //     var k = Number(i)
+    //     document.getElementById('itemsList')
+    //     document.getElementById('items['+i+'][type]')[0].value = "1";
+    //     document.getElementById('items['+i+'][article]')[0].value = order['zippack']['obj']['Items'][j]['ArtNo']
+    //     document.getElementById('items['+i+'][Id]')[0].value = order['zippack']['obj']['Items'][j]['Id']
+    //     var amm = order['zippack']['obj']['Items'][j]['Amount'];
+    //     var price = Number(order['zippack']['obj']['Items'][j]['Price'])
+    //     document.getElementById('items['+i+'][quantity]')[0].value = amm;
+    //     var one_price = Math.trunc(price*disc*100)/100;
+    //     sum += one_price*amm;
+    //     document.getElementById('items['+i+'][retprice]')[0].value = one_price;
+    //     document.getElementById('items['+i+'][mass]')[0].value = 1;
+    // }
+
+    // document.getElementById('priced')[0].value = order['zippack']['obj']['ShippingCost']
+    // document.getElementById('declaredPrice')[0].value = sum + order['zippack']['obj']['ShippingCost']; //order['zippack']['obj']['Sum']                
+    // document.getElementById('price')[0].value = sum + order['zippack']['obj']['ShippingCost']; //order['zippack']['obj']['Sum']  
+    // var paytype = "NO";
+    // if (order['gsheets']['payment_method'] == 'наложный'){
+    //     paytype = "CARD";
+    // } else if (order['gsheets']['payment_method'] == 'нал'){
+    //     paytype = "CASH";
+    // }
+    // document.getElementById('paytype')[0].value = paytype;
+}
+
+// получаем первичные данные по заказу с сервера и заполняем поля формы
+function getJSON() {
+    // отпраляем запрос
+    var xhr = new XMLHttpRequest();
+    var linenum = document.getElementById("lineNum").value
+    xhr.open('GET', 'http://localhost:8040/' + linenum + '.json', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
-    
+
+    // после загрузки заполняем поля
+    xhr.onloadend = () =>{
+        obj = JSON.parse(xhr.responseText)
+        fillFields(obj)
+    }
 }
 

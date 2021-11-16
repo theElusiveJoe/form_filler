@@ -26,7 +26,12 @@ def get_order_from_zippack(order_id):
     # tree = ET.ElementTree(ET.fromstring(json2xml.Json2xml(json_data).to_xml()))
     # open('zippack.xml', 'w+').write(json2xml.Json2xml(json_data).to_xml())
     # return tree
-    return json.dumps(json_data, ensure_ascii=False)
+    try:
+        res = json.dumps(json_data, ensure_ascii=False)
+    except BaseException:
+        print('SOMETHING WENT WRONG')
+        return ""
+    return res
 
 if __name__ == '__main__':
-    print(get_order_from_zippack(12345))
+    print(get_order_from_zippack(12850))

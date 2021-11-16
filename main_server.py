@@ -103,6 +103,8 @@ class S(BaseHTTPRequestHandler):
 
     def do_POST(self):
         # парсим аргументы
+        print('new post')
+
         url = urlparse(self.path)
         query = url.query
         params = {}

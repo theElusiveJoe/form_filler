@@ -85,7 +85,7 @@ def getQueryTextFromXML(queryNum):
 
 
 def getQueryText(queryNum):
-    queryToXMLs()
+    # queryToXMLs()
     return getQueryTextFromXML(queryNum)
 
     conn = http.client.HTTPConnection("wstest.dpd.ru")
@@ -173,7 +173,10 @@ def updateParcelShops():
     columns_declare_str = ""
     columns_list = ""
     for x in columns:
-        columns_declare_str += x + " TEXT, "
+        if x in ["maxShipmetWeight","maxWeight","maxLength","maxWidth","maxHeight","dimentionSum"]:
+            columns_declare_str += x + " INTEGER, "
+        else:
+            columns_declare_str += x + " TEXT, "
         columns_list += x + ", "
     columns_declare_str = columns_declare_str[:-2]
     columns_list = columns_list[:-2]
@@ -337,7 +340,7 @@ def parseLimits(limitsElem):
     for tag in tags:
         elem = limitsElem.find(tag)
         if elem is None:
-            res.append("none")
+            res.append(10000)
             continue
         res.append(elem.text)
 
@@ -348,3 +351,4 @@ if __name__ == "__main__":
     updateCitiesCashPay()
     updateParcelShops()
     updateTerminalsSelfDelivery2()
+   
