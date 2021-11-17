@@ -1,6 +1,7 @@
 import json
 import sqlite3
 import http.client
+import os
 
 
 with open("tokens.json", "r") as f:
@@ -35,43 +36,25 @@ def getCorrectAddres(badAddress):
 
 
 def beautifyAddr(addrTuple):
-    # # print(addrTuple)
-    (
-        rescityName,
-        resstreetAbbr,
-        resstreet,
-        reshouseNo,
-        resownership,
-        resbuilding,
-        resstructure,
-    ) = addrTuple
-    addr = rescityName + ", " + resstreetAbbr + " " + resstreet + ", "
-    addr += (
-        ""
-        if reshouseNo == "none"
-        else reshouseNo + ""
-        if resownership == "none"
-        else resownership
-    )
-    if "none" not in [resbuilding, resstructure]:
-        return addr + f"({resstructure}|{resbuilding})"
-    if resbuilding == resstructure == "none":
-        return addr
-    if resstructure != "none":
-        return addr + f"({resstructure})"
-        return addr + f"({building})"
+    addr = ''
+    for i in range(5):
+        addr += addrTuple[i] + ', '
+
+    addr += f'({addrTuple[5]}{addrTuple[6]})'   
+    addr = addr.replace('none', '').replace('()', '').replace(' , ', '').replace(',(', '(')
+    return addr
 
 def isNoneInJson(hashmap, key, trimres = 0):
     print(key, ': ', hashmap[key])
     if key not in hashmap.keys() or hashmap[key] is None:
+        print('return-')
         return '-'
+    if trimres == 0:
+        return hashmap[key]
     return hashmap[key][:-trimres]
 
 def createSuggestionTemplate(code, lat, long, addr):
     return {"code": code, "lat": lat, "long": long, "addr": addr}
-
-
-    # # print(addr_obj)
 
 def getTerminals(siteQuery, dadataResp = ''):
     """
@@ -155,17 +138,21 @@ def getTerminals(siteQuery, dadataResp = ''):
         
         isNoneInJson(addr_obj, 'house'), isNoneInJson(addr_obj, 'house')
     )
-    # # print(searchParams)
+    print(searchParams)
     
-    sqlQuery = f"""SELECT code, latitude, longitude, cityName, streetAbbr, street, houseNo, ownership, building, structure
+    a = isNoneInJson(addr_obj, 'region')
+    print(addr_obj)
+    print('a = ', a)
+    sqlQuery = f"""
+        SELECT code, latitude, longitude, cityName, streetAbbr, street, houseNo, ownership, building, structure
         FROM terminalsSelfDelivery2 
         WHERE       (
-                        regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR regionName  LIKE "%{isNoneInJson(addr_obj,'region')}%"
+                        regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%" OR regionName LIKE "{a}"
                     )
                 AND 
-                    (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
+                    (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%"
-                        OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
+                        OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
                     ) 
                
                 """
@@ -189,6 +176,7 @@ def getTerminals(siteQuery, dadataResp = ''):
             searchResult[0][2],
             searchResult[0][3:],
         )
+        print(beautifyAddr(addrTuple))
         suggestion = createSuggestionTemplate(
             rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
         )
@@ -197,7 +185,8 @@ def getTerminals(siteQuery, dadataResp = ''):
         return json.dumps(resp)
 
     # во второй (with restrictions):
-    sqlQuery = f"""SELECT code, latitude, longitude, 
+    sqlQuery = f"""
+        SELECT code, latitude, longitude, 
         cityName, streetAbbr, street, houseNo, ownership, building, structure, 
         maxWeight, maxLength, maxWidth, maxHeight
         FROM parcelShops
@@ -256,7 +245,8 @@ def getTerminals(siteQuery, dadataResp = ''):
             and resMaxW >= orderData["midWidth"]
             and resMaxH >= orderData["minHeight"]
             and resMaxWeight >= orderData["maxWeight"]
-        ):
+        ):  
+            print(beautifyAddr(addrTuple))
             suggestion = createSuggestionTemplate(
                 rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
             )
@@ -273,7 +263,8 @@ def getTerminals(siteQuery, dadataResp = ''):
 
     # in table 1
 
-    sqlQuery = f"""SELECT code, latitude, longitude, cityName, streetAbbr, street, houseNo, ownership, building, structure
+    sqlQuery = f"""
+        SELECT code, latitude, longitude, cityName, streetAbbr, street, houseNo, ownership, building, structure
         FROM terminalsSelfDelivery2
         WHERE       (
                         regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR regionName  LIKE "%{isNoneInJson(addr_obj,'region')}%"
@@ -282,12 +273,6 @@ def getTerminals(siteQuery, dadataResp = ''):
                     (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%"
                         OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
-                    ) 
-                AND
-                    street LIKE "%{isNoneInJson(addr_obj,'street')}%"
-                AND
-                    (
-                        houseNo LIKE "%{isNoneInJson(addr_obj,'house')}%" OR ownership LIKE "%{isNoneInJson(addr_obj,'house')}%"
                     ) 
                 """
     
@@ -310,13 +295,15 @@ def getTerminals(siteQuery, dadataResp = ''):
             x[2],
             x[3:],
         )
+        print(beautifyAddr(addrTuple))
         suggestion = createSuggestionTemplate(
             rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
         )
         resp["suggestions"].append(suggestion)
 
     # in table 2
-    sqlQuery = f"""SELECT code, latitude, longitude, 
+    sqlQuery = f"""
+        SELECT code, latitude, longitude, 
         cityName, streetAbbr, street, houseNo, ownership, building, structure
         FROM parcelShops
         WHERE       (
@@ -326,12 +313,6 @@ def getTerminals(siteQuery, dadataResp = ''):
                     (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%"
                         OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
-                    ) 
-                AND
-                    street LIKE "%{isNoneInJson(addr_obj,'street')}%"
-                AND
-                    (
-                        houseNo LIKE "%{isNoneInJson(addr_obj,'house')}%" OR ownership LIKE "%{isNoneInJson(addr_obj,'house')}%"
                     ) 
                 AND (
                         {orderData["maxWeight"]} <= maxWeight AND {orderData["maxLength"]} <= maxLength AND
@@ -351,7 +332,7 @@ def getTerminals(siteQuery, dadataResp = ''):
             x[2],
             x[3:],
         )
-        # print(addrTuple[:-4])
+        print(beautifyAddr(addrTuple))
         suggestion = createSuggestionTemplate(
             rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
         )
@@ -404,6 +385,7 @@ if __name__ == "__main__":
     # updateDadataResps()
     # createManyDadataResps()
 
+
     ftests = open('test/dpdAddressTests.json')
     tests = json.load(ftests)
     ftests.close()
@@ -416,7 +398,7 @@ if __name__ == "__main__":
     results = []
 
     nums = range(len(tests))
-    nums = [6]
+    # nums = [6]
     # print(tests[6], resps[6])
 
     for i in nums:
