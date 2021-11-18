@@ -1,159 +1,187 @@
 <!DOCTYPE html>
 <!-- saved from url=(0034)https://lk.dalli-service.com/zakaz -->
-<html lang="ru" class=" qiwvclnt idc0_332"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Форма Далли</title>
-  <link href="./dalli_files/bootstrap.min.css" rel="stylesheet">
-  <link href="./dalli_files/font-awesome.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="./dalli_files/bootstrap-datepicker.min.css">
-  <link rel="stylesheet" type="text/css" href="./dalli_files/style.css">
-  <link rel="shortcut icon" href="https://lk.dalli-service.com/favicon.png" type="image/png">
+<html lang="ru" class=" qiwvclnt idc0_332">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Форма Далли</title>
+    <link href="./dalli_files/bootstrap.min.css" rel="stylesheet">
+    <link href="./dalli_files/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./dalli_files/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="./dalli_files/style.css">
+    <link rel="shortcut icon" href="https://lk.dalli-service.com/favicon.png" type="image/png">
     <link rel="stylesheet" type="text/css" href="./dalli_files/select2.min.css">
 
     <style>
-    button {
-        background-color: #4CAF50; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-      }
-      .bbb{
-        width: 100%;
-        display: block;
-        background-color: #1900ff; /* Green */
-        border: none;
-        border-radius: 10px;;
-        color: rgb(229, 255, 0);
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-      }
-      .bbb,.btn-ds:focus {
+        button {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .bbb {
+            width: 100%;
+            display: block;
+            background-color: #1900ff;
+            /* Green */
+            border: none;
+            border-radius: 10px;
+            ;
+            color: rgb(229, 255, 0);
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .bbb,
+        .btn-ds:focus {
             background: #0F68AA;
             color: #fff;
-    }
-    .bbb:hover{color: #FFD604;}
-      
-      
+        }
+
+        .bbb:hover {
+            color: #FFD604;
+        }
     </style>
 </head>
+
 <body>
-<nav class="navbar navbar-ds-aspect navbar-fixed-top">
-  <div class="container-fluid">
-	<div class="navbar-header">
-	  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-		<span class="sr-only">Toggle navigation</span>
-		<span class="icon-bar"></span>
-		<span class="icon-bar"></span>
-		<span class="icon-bar"></span>
-	  </button>
+    <nav class="navbar navbar-ds-aspect navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
 
-	  <a class="navbar-brand" href="https://lk.dalli-service.com/">
-		<img alt="Dalli-Service" src="./dalli_files/logotype-white.png" width="100%" style="margin-top: -10px;">
-	  </a>
-	  
-	  <!-- <a class="" href="/"><span class="navbar-brand"><span class="fa fa-paper-plane"></span> Dalli Service LK</span></a> -->
-	</div>
-  </div>
-</nav>
-<div class="content">
+                <a class="navbar-brand" href="https://lk.dalli-service.com/">
+                    <img alt="Dalli-Service" src="./dalli_files/logotype-white.png" width="100%"
+                        style="margin-top: -10px;">
+                </a>
 
-<link rel="stylesheet" href="./dalli_files/zakaz.css">
-
-<div class="container-fluid">
-    <br>
-    <br>
-    <br>
-    
-    <input type="text" id="lineNum" value="4728">
-    <button onclick="getJSON()">ввести номер строки</button>    
-    <br>
-    <div id='123'>
-    </div>
-    <br>
-    <br>
-    <!-- <h1>Оформление заказа на доставку</h1> -->
-    <!-- <p class="help-block">Все поля обязательны для заполнения.</p> -->
-    
-    <form class="form-horizontal formNewOrder" action="/APIclient.php">
-
-        <!-- Сообщение об ошибке -->
-        <div class="row newOrderError" style="display: none;">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="alert alert-danger mr" role="alert">
-                    <p></p>
-                </div>
+                <!-- <a class="" href="/"><span class="navbar-brand"><span class="fa fa-paper-plane"></span> Dalli Service LK</span></a> -->
             </div>
         </div>
-        <!-- /Сообщение об ошибке -->
+    </nav>
+    <div class="content">
 
-        <div class="row">
-            <div class="col-lg-1"></div>
-            <!-- Блок информации о покупателе-->
-            <div class="col-lg-4">
+        <link rel="stylesheet" href="./dalli_files/zakaz.css">
 
-                <blockquote>
-                    <p>Информация о получателе</p>
-                </blockquote>
+        <div class="container-fluid">
+            <br>
+            <br>
+            <br>
 
+            <input type="text" id="lineNum" value="4728">
+            <button id='getJSONBtn' onclick="getJSON()">ввести номер строки</button>
+            <script>
+                var getJSONBtn = document.getElementById('lineNum');
+                getJSONBtn.addEventListener('keyup', function (e) {
+                    if (e.keyCode === 13) {
+                        event.preventDefault();
+                        document.getElementById("getJSONBtn").click();
+                    }
+                })
+            </script>
+            <br>
+            <div id='123'>
+            </div>
+            <br>
+            <br>
+            <!-- <h1>Оформление заказа на доставку</h1> -->
+            <!-- <p class="help-block">Все поля обязательны для заполнения.</p> -->
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Получатель:</label>
-                    <div class="col-md-8">
-                        <input type="text" name="receiver[person]" class="form-control betaNewOrderInputPerson" placeholder="Иванов Иван Иванович">
+            <form class="form-horizontal formNewOrder" action="/APIclient.php">
+
+                <!-- Сообщение об ошибке -->
+                <div class="row newOrderError" style="display: none;">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="alert alert-danger mr" role="alert">
+                            <p></p>
+                        </div>
                     </div>
                 </div>
+                <!-- /Сообщение об ошибке -->
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Контактный телефон:</label>
-                    <div class="col-md-8">
-                        <input type="text" name="receiver[phone]" autocomplete="tel-national" id="phone" class="form-control betaNewOrderInputPhone" placeholder="+7 (999) 999 99 99">
-                    </div>
-                </div>
+                <div class="row">
+                    <div class="col-lg-1"></div>
+                    <!-- Блок информации о покупателе-->
+                    <div class="col-lg-4">
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Электронная почта:</label>
-                    <div class="col-md-8">
-                        <input type="text" name="receiver[email]" autocomplete="email" id="email" class="form-control betaNewOrderInputEmail" placeholder="client@domain.ru">
-                    </div>
-                </div>
+                        <blockquote>
+                            <p>Информация о получателе</p>
+                        </blockquote>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Город получателя:</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control betaNewOrderInputCity plugin-test" id="city" name="receiver[town]" autocomplete="address-level2" placeholder="Москва" value="Москва" required="required"><div class="auto-suggest" style="width: 279px;"></div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Тип отправки:</label>
-                    <div class="col-md-8">
-                        <select class="form-control betaNewOrderInputTypeDelivery" name="service">
-                            <option value="1">Обычная МСК и МО</option>
-                            <option value="2">Экспресс МСК</option>
-                            <option value="4">ПВЗ МСК</option>
-                            <option value="9">ПВЗ СДЕК</option>
-                            <option value="10">Курьерская СДЕК</option>
-                            <option value="11">Обычная СПБ и ЛО</option>
-                            <option value="12">ПВЗ СПБ</option>
-                            <option value="13">ПВЗ BOXBERRY</option>
-                            <option value="15">ПВЗ PICKPOINT</option>
-                            <option value="17">Первая миля</option>
-                            <option value="18">Первая миля +</option>
-                            <option value="20">5POST</option>
-                        </select>
-                    </div>
-                </div>
-                <!--                Типы доставок-->
-                <!-- <div class="row" style="font-size: 14px; text-align: center;"> 
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Получатель:</label>
+                            <div class="col-md-8">
+                                <input type="text" name="receiver[person]" class="form-control betaNewOrderInputPerson"
+                                    placeholder="Иванов Иван Иванович">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Контактный телефон:</label>
+                            <div class="col-md-8">
+                                <input type="text" name="receiver[phone]" autocomplete="tel-national" id="phone"
+                                    class="form-control betaNewOrderInputPhone" placeholder="+7 (999) 999 99 99">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Электронная почта:</label>
+                            <div class="col-md-8">
+                                <input type="text" name="receiver[email]" autocomplete="email" id="email"
+                                    class="form-control betaNewOrderInputEmail" placeholder="client@domain.ru">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Город получателя:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control betaNewOrderInputCity plugin-test" id="city"
+                                    name="receiver[town]" autocomplete="address-level2" placeholder="Москва"
+                                    value="Москва" required="required">
+                                <div class="auto-suggest" style="width: 279px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Тип отправки:</label>
+                            <div class="col-md-8">
+                                <select class="form-control betaNewOrderInputTypeDelivery" name="service">
+                                    <option value="1">Обычная МСК и МО</option>
+                                    <option value="2">Экспресс МСК</option>
+                                    <option value="4">ПВЗ МСК</option>
+                                    <option value="9">ПВЗ СДЕК</option>
+                                    <option value="10">Курьерская СДЕК</option>
+                                    <option value="11">Обычная СПБ и ЛО</option>
+                                    <option value="12">ПВЗ СПБ</option>
+                                    <option value="13">ПВЗ BOXBERRY</option>
+                                    <option value="15">ПВЗ PICKPOINT</option>
+                                    <option value="17">Первая миля</option>
+                                    <option value="18">Первая миля +</option>
+                                    <option value="20">5POST</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--                Типы доставок-->
+                        <!-- <div class="row" style="font-size: 14px; text-align: center;"> 
                         <div class="col-sm-4" style="display: block;">
                             <div class="thumbnail betaNewOrderTypeDelivery selected" typedelivery="1">
                                 <div class="row">
@@ -321,165 +349,170 @@
                             </div>
                         </div> -->
 
-                                    <!-- </div> -->
-                <!-- <input type="hidden" name="service">
+                        <!-- </div> -->
+                        <!-- <input type="hidden" name="service">
                                /Типы доставок -->
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Адрес:</label>
-                    <div class="col-md-8 AddressInput betaNewOrderInputAddress">
-                        <input type="text" name="receiver[address]" class="form-control" placeholder="Академика Янгеля ул., 1, корп. 2, кв. 3">
-                    </div>
-                </div>
-
-                <div class="form-group" style="display: none;">
-                    <label class="col-md-4 control-label">Пункт выдачи:</label>
-                    <div class="col-md-8 betaNewOrderChangePVZ">
-                        <p></p>
-                        <button class="btn btnChangePVZ">Выбрать ПВЗ</button>
-                    </div>
-                </div>
-                <input type="hidden" name="receiver[pvzcode]">
-
-            </div>
-
-
-
-
-            <div class="col-lg-2"></div>
-            <!--Блок информации о заказе-->
-            <div class="col-lg-4">
-
-                <blockquote>
-                    <p>Информация о заказе</p>
-                </blockquote>
-
-
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Номер заказа:</label>
-                    <div class="col-md-8">
-                        <input type="text" name="order" class="form-control betaNewOrderInputOrderno" placeholder="NO_123456">
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Общий вес:</label>
-                    <div class="col-md-8">
-                        <div class="input-group">
-                            <input type="text" name="weight" class="form-control betaNewOrderInputMass" placeholder="0.1" value="0.1">
-                            <div class="input-group-addon">кг</div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Адрес:</label>
+                            <div class="col-md-8 AddressInput betaNewOrderInputAddress">
+                                <input type="text" name="receiver[address]" class="form-control"
+                                    placeholder="Академика Янгеля ул., 1, корп. 2, кв. 3">
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Количество мест:</label>
-                    <div class="col-md-8">
-                        <input type="text" autocomplete="off" name="quantity" class="form-control betaNewOrderInputQty" placeholder="0" value="1">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Дата доставки:</label>
-                    <div class="col-md-8">
-                        <input type="text" name="receiver[date]" class="form-control datepicker-neworder" placeholder="" value="ПУСТО">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Интервал доставки:</label>
-                    <div class="col-md-8 text-center">
-                        <div class="input-group">
-                            <div class="input-group-addon">c</div>
-                            <select class="form-control" name="receiver[timeMin]">
-                                                                    <option value="08:00">08:00</option>
-                                                                    <option value="09:00">09:00</option>
-                                                                    <option value="10:00">10:00</option>
-                                                                    <option value="11:00">11:00</option>
-                                                                    <option value="12:00">12:00</option>
-                                                                    <option value="13:00">13:00</option>
-                                                                    <option value="14:00">14:00</option>
-                                                                    <option value="15:00">15:00</option>
-                                                                    <option value="16:00">16:00</option>
-                                                                    <option value="17:00">17:00</option>
-                                                                    <option value="18:00">18:00</option>
-                                                                    <option value="19:00">19:00</option>
-                                                                    <option value="20:00">20:00</option>
-                                                                    <option value="21:00">21:00</option>
-                                                                    <option value="22:00">22:00</option>
-                                                                    <option value="23:00">23:00</option>
-                                                            </select>
-                            <div class="input-group-addon">по</div>
-                            <select class="form-control" name="receiver[timeMax]">
-                                                                    <option value="08:00">08:00</option>
-                                                                    <option value="09:00">09:00</option>
-                                                                    <option value="10:00">10:00</option>
-                                                                    <option value="11:00">11:00</option>
-                                                                    <option value="12:00">12:00</option>
-                                                                    <option value="13:00">13:00</option>
-                                                                    <option value="14:00">14:00</option>
-                                                                    <option value="15:00">15:00</option>
-                                                                    <option value="16:00">16:00</option>
-                                                                    <option value="17:00">17:00</option>
-                                                                    <option value="18:00">18:00</option>
-                                                                    <option value="19:00">19:00</option>
-                                                                    <option value="20:00">20:00</option>
-                                                                    <option value="21:00">21:00</option>
-                                                                    <option value="22:00" selected="">22:00</option>
-                                                                    <option value="23:00">23:00</option>
-                                                                <option value="0:00">0:00</option>
-                            </select>
+                        <div class="form-group" style="display: none;">
+                            <label class="col-md-4 control-label">Пункт выдачи:</label>
+                            <div class="col-md-8 betaNewOrderChangePVZ">
+                                <p></p>
+                                <button class="btn btnChangePVZ">Выбрать ПВЗ</button>
+                            </div>
                         </div>
+                        <input type="hidden" name="receiver[pvzcode]">
+
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-xs-8 col-md-4 control-label">Возврат накладных:</label>
-                    <div class="col-xs-4 col-md-8">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" name="return" value="Y">
-                        </label>
+
+
+
+                    <div class="col-lg-2"></div>
+                    <!--Блок информации о заказе-->
+                    <div class="col-lg-4">
+
+                        <blockquote>
+                            <p>Информация о заказе</p>
+                        </blockquote>
+
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Номер заказа:</label>
+                            <div class="col-md-8">
+                                <input type="text" name="order" class="form-control betaNewOrderInputOrderno"
+                                    placeholder="NO_123456">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Общий вес:</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="text" name="weight" class="form-control betaNewOrderInputMass"
+                                        placeholder="0.1" value="0.1">
+                                    <div class="input-group-addon">кг</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Количество мест:</label>
+                            <div class="col-md-8">
+                                <input type="text" autocomplete="off" name="quantity"
+                                    class="form-control betaNewOrderInputQty" placeholder="0" value="1">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Дата доставки:</label>
+                            <div class="col-md-8">
+                                <input type="text" name="receiver[date]" class="form-control datepicker-neworder"
+                                    placeholder="" value="ПУСТО">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Интервал доставки:</label>
+                            <div class="col-md-8 text-center">
+                                <div class="input-group">
+                                    <div class="input-group-addon">c</div>
+                                    <select class="form-control" name="receiver[timeMin]">
+                                        <option value="08:00">08:00</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="22:00">22:00</option>
+                                        <option value="23:00">23:00</option>
+                                    </select>
+                                    <div class="input-group-addon">по</div>
+                                    <select class="form-control" name="receiver[timeMax]">
+                                        <option value="08:00">08:00</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="22:00" selected="">22:00</option>
+                                        <option value="23:00">23:00</option>
+                                        <option value="0:00">0:00</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-8 col-md-4 control-label">Возврат накладных:</label>
+                            <div class="col-xs-4 col-md-8">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="return" value="Y">
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Примечание:</label>
+                            <div class="col-md-8">
+                                <textarea name="instruction" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
 
+                    <div class="col-lg-12"></div>
+                    <div class="col-lg-1"></div>
+                    <!--            Блок товарных позиций-->
+                    <div class="col-lg-10">
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Примечание:</label>
-                    <div class="col-md-8">
-                        <textarea name="instruction" class="form-control" rows="5"></textarea>
-                    </div>
-                </div>
+                        <blockquote>
+                            <p>Товарные позиции</p>
+                        </blockquote>
 
-            </div>
-
-            <div class="col-lg-12"></div>
-            <div class="col-lg-1"></div>
-            <!--            Блок товарных позиций-->
-            <div class="col-lg-10">
-
-                <blockquote>
-                    <p>Товарные позиции</p>
-                </blockquote>
-
-                <div class="boxesContainer">
-                    <div class="table-responsive">
-                        <table class="table table-bordered BoxesTable" id="itemsTable">
-                            <thead>
-                                <tr>
-                                    <th style="max-width: 100px;">Артикул</th>
-                                    <th>Наименование</th>
-                                    <th>Штрих-код</th>
-                                    <th style="max-width: 50px;">НДС</th>
-                                    <th>Честный знак</th>
-                                    <th style="max-width: 50px;">Кол-во</th>
-                                    <th style="max-width: 50px;">Вес в кг</th>
-                                    <th>Стоимость ед.</th>
-                                    <th>Тип</th>
-                                    <th>Действие</th>
-                                </tr>
-                            </thead>
-                            <tbody id="itemsList">
-                                <!-- <tr id="boxI0">
+                        <div class="boxesContainer">
+                            <div class="table-responsive">
+                                <table class="table table-bordered BoxesTable" id="itemsTable">
+                                    <thead>
+                                        <tr>
+                                            <th style="max-width: 100px;">Артикул</th>
+                                            <th>Наименование</th>
+                                            <th>Штрих-код</th>
+                                            <th style="max-width: 50px;">НДС</th>
+                                            <th>Честный знак</th>
+                                            <th style="max-width: 50px;">Кол-во</th>
+                                            <th style="max-width: 50px;">Вес в кг</th>
+                                            <th>Стоимость ед.</th>
+                                            <th>Тип</th>
+                                            <th>Действие</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="itemsList">
+                                        <!-- <tr id="boxI0">
                                     <td><input size="10" type="text" name="items[0][article]"></td>
                                     <td><input type="text" name="items[0][name]"></td>
                                     <td><input size="10" type="text" name="items[0][barcode]"></td>
@@ -491,386 +524,295 @@
                                     <td><select name="items[0][type]" class="itmType form-control"><option value="1">Товар</option><option value="7">Забор</option></select></td>
                                     <td><a href='boxI0' class='btn btnBoxesRemove'>Удалить</a> </td>
                                 </tr> -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-lg-3 col-lg-offset-9">
-                        <input type="button" pos="1" class="mt-10 btnBoxesAdd btn btn-block btn-ds" value="Добавить товарную позицию" id="additembtm">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-lg-8 control-label">Стоимость доставки:</label>
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <input type="text" autocomplete="off" name="priced" class="form-control" placeholder="0">
-                            <div class="input-group-addon">руб.</div>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-lg-3 col-lg-offset-9">
-                        <input type="button" pos="1" class="mt-10 btnDeliveryDiff btn btn-block btn-ds" value="Условия доставки">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-lg-8 control-label">Объявленная ценность:</label>
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <input type="text" autocomplete="off" name="declaredPrice" class="form-control" placeholder="0">
-                            <div class="input-group-addon">руб.</div>
+                        <div class="form-group">
+                            <div class="col-lg-3 col-lg-offset-9">
+                                <input type="button" pos="1" class="mt-10 btnBoxesAdd btn btn-block btn-ds"
+                                    value="Добавить товарную позицию" id="additembtm">
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-lg-8 control-label">Итого на сумму:</label>
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <input type="text" readonly="readonly" name="price" class="form-control" placeholder="0">
-                            <div class="input-group-addon">руб.</div>
+                        <div class="form-group">
+                            <label class="col-lg-8 control-label">Стоимость доставки:</label>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <input type="text" autocomplete="off" name="priced" class="form-control"
+                                        placeholder="0">
+                                    <div class="input-group-addon">руб.</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-lg-8 control-label">Тип оплаты:</label>
-                    <div class="col-lg-4">
-                        <select class="form-control betaNewOrderInputPaytype" name="paytype">
-                            <option value="CASH">Наличными курьеру</option>
-                            <option value="CARD">Картой курьеру</option>
-                            <option value="NO">Курьер не должен брать деньги</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- Кнопка добавления заказа в корзину-->
-                <!-- <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-3 col-lg-offset-9">
+                                <input type="button" pos="1" class="mt-10 btnDeliveryDiff btn btn-block btn-ds"
+                                    value="Условия доставки">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-8 control-label">Объявленная ценность:</label>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <input type="text" autocomplete="off" name="declaredPrice" class="form-control"
+                                        placeholder="0">
+                                    <div class="input-group-addon">руб.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-8 control-label">Итого на сумму:</label>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <input type="text" readonly="readonly" name="price" class="form-control"
+                                        placeholder="0">
+                                    <div class="input-group-addon">руб.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-8 control-label">Тип оплаты:</label>
+                            <div class="col-lg-4">
+                                <select class="form-control betaNewOrderInputPaytype" name="paytype">
+                                    <option value="CASH">Наличными курьеру</option>
+                                    <option value="CARD">Картой курьеру</option>
+                                    <option value="NO">Курьер не должен брать деньги</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Кнопка добавления заказа в корзину-->
+                        <!-- <div class="row">
                     <div class="button-group col-lg-offset-8">
                          <button  onclick="sendJSON()" class="btn btn-ds pull-right" style="width: 49%;" ><i class="fa fa-dropbox" aria-hidden="true"></i>  Положить в корзину</button> -->
                         <!-- <a class="btn btn-danger" href="https://lk.dalli-service.com/zakaz" style="width: 100%;"><i class="fa fa-refresh" aria-hidden="true"></i>  Сбросить</a>
                     </div>
                 </div> -->
-                <div id='321'>
-                </div>
-                <button class="bbb" onclick="sendJSON()" width="100">отправить заказ</button>
-            </div>
-        </div>
-        
-<!--Модальное окно-->
-<div class="modal fade modalDeliveryDiff" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<h4 class="modal-title">Условия стоимости доставки</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<label class="col-lg-6 control-label">Стоимость при полном выкупе:</label>
-							<div class="col-lg-6">
-								<div class="input-group">
-									<input type="text" autocomplete="off" name="deliveryDiff[above_price]" pattern="^[.0-9]+$" class="form-control" placeholder="0" value="">
-									<div class="input-group-addon">руб.</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-6 control-label">Стоимость при полном возврате:</label>
-							<div class="col-lg-6">
-								<div class="input-group">
-									<input type="text" autocomplete="off" name="deliveryDiff[return_price]" class="form-control" pattern="^[.0-9]+$" placeholder="300" value="">
-									<div class="input-group-addon">руб.</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-6 control-label">НДС:</label>
-							<div class="col-lg-6">
-								<div class="input-group">
-									<input type="text" autocomplete="off" name="deliveryDiff[VATrate]" class="form-control" pattern="^[.0-9]+$" placeholder="" value="">
-									<div class="input-group-addon">%.</div>
-								</div>
-							</div>
-						</div>
-						<table class="table below">
-							<thead>
-								<tr>
-									<th>Сумма выкупа "до"</th>
-									<th>Стоимость доставки</th>
-								</tr>
-							</thead>
-							<tbody>
-																</tbody>
-						</table>
-						<a href="https://lk.dalli-service.com/zakaz#" class="addNewBelow">Добавить условие доставки</a>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-ds" data-dismiss="modal">Подтвердить</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!--/Модальное окно-->    </form>
-</div>
-<div class="modal fade modalBasketSuccess" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body bg-success"></div>
-            <div class="modal-footer">
-                <a href="https://lk.dalli-service.com/basket" class="btn btn-primary">Перейти в корзину</a>
-                <!-- <a href="/edit" class="btn btn-primary">Перейти к редактированию</a> -->
-                <a href="https://lk.dalli-service.com/zakaz" class="btn btn-primary">Оформить новую</a>
-            </div>
-        </div>
-    </div>
-</div>
-<style>
-    .points{
-        max-height: 70%;
-        overflow-y: scroll;
-    }
-    .point{
-        border: 1px solid #ddd;
-        padding-left: 20px;
-        padding-top: 10px;
-    }
-    .pointFullDescriptionDiv{display: none;margin-top: 30px;}
-</style>
-
-<!--Модальное окно-->
-<div class="modal fade modalChangePVZ" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Выберите Пункт Выдачи Заказов</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <select name="ddd" id="" class="form-control selectPoint"></select>
+                        <div id='321'>
+                        </div>
+                        <button class="bbb" onclick="sendJSON()" width="100">отправить заказ</button>
                     </div>
-                    <div class="col-md-12 pointFullDescriptionDiv mrt20">
-                        <h4 class="text-center">Выбранный ПВЗ</h4>
-                        <table class="table pointFullDescription">
-                            <tbody>
-                                                            <tr>
-                                    <td>Наименование ПВЗ</td>
-                                    <td class="pointName"></td>
-                                </tr>
-                                                            <tr>
-                                    <td>Город</td>
-                                    <td class="pointCity"></td>
-                                </tr>
-                                                            <tr>
-                                    <td>Регион</td>
-                                    <td class="pointRegion"></td>
-                                </tr>
-                                                            <tr>
-                                    <td>Адрес</td>
-                                    <td class="pointAdress"></td>
-                                </tr>
-                                                            <tr>
-                                    <td>Полный адрес</td>
-                                    <td class="pointFullAddress"></td>
-                                </tr>
-                                                            <tr>
-                                    <td><b>Максимальный вес</b></td>
-                                    <td class="pointWeightLimit"></td>
-                                </tr>
-                                                            <tr>
-                                    <td><b>Прием наложенного платежа</b></td>
-                                    <td class="pointPayment"></td>
-                                </tr>
-                                                            <tr>
-                                    <td><b>Оплата картой</b></td>
-                                    <td class="pointAcquiring"></td>
-                                </tr>
-                                                            <tr>
-                                    <td>График работы</td>
-                                    <td class="pointWorkShedule"></td>
-                                </tr>
-                                                            <tr>
-                                    <td>Описание</td>
-                                    <td class="pointDescription"></td>
-                                </tr>
-                                                        </tbody>
-                        </table>
+                </div>
+
+                <!--Модальное окно-->
+                <div class="modal fade modalDeliveryDiff" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">×</span></button>
+                                <h4 class="modal-title">Условия стоимости доставки</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="col-lg-6 control-label">Стоимость при полном выкупе:</label>
+                                            <div class="col-lg-6">
+                                                <div class="input-group">
+                                                    <input type="text" autocomplete="off"
+                                                        name="deliveryDiff[above_price]" pattern="^[.0-9]+$"
+                                                        class="form-control" placeholder="0" value="">
+                                                    <div class="input-group-addon">руб.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-6 control-label">Стоимость при полном возврате:</label>
+                                            <div class="col-lg-6">
+                                                <div class="input-group">
+                                                    <input type="text" autocomplete="off"
+                                                        name="deliveryDiff[return_price]" class="form-control"
+                                                        pattern="^[.0-9]+$" placeholder="300" value="">
+                                                    <div class="input-group-addon">руб.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-6 control-label">НДС:</label>
+                                            <div class="col-lg-6">
+                                                <div class="input-group">
+                                                    <input type="text" autocomplete="off" name="deliveryDiff[VATrate]"
+                                                        class="form-control" pattern="^[.0-9]+$" placeholder=""
+                                                        value="">
+                                                    <div class="input-group-addon">%.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table below">
+                                            <thead>
+                                                <tr>
+                                                    <th>Сумма выкупа "до"</th>
+                                                    <th>Стоимость доставки</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                        <a href="https://lk.dalli-service.com/zakaz#" class="addNewBelow">Добавить
+                                            условие доставки</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-ds" data-dismiss="modal">Подтвердить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/Модальное окно-->
+            </form>
+        </div>
+        <div class="modal fade modalBasketSuccess" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body bg-success"></div>
+                    <div class="modal-footer">
+                        <a href="https://lk.dalli-service.com/basket" class="btn btn-primary">Перейти в корзину</a>
+                        <!-- <a href="/edit" class="btn btn-primary">Перейти к редактированию</a> -->
+                        <a href="https://lk.dalli-service.com/zakaz" class="btn btn-primary">Оформить новую</a>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-ds" data-dismiss="modal">Подтвердить</button>
+        </div>
+        <style>
+            .points {
+                max-height: 70%;
+                overflow-y: scroll;
+            }
+
+            .point {
+                border: 1px solid #ddd;
+                padding-left: 20px;
+                padding-top: 10px;
+            }
+
+            .pointFullDescriptionDiv {
+                display: none;
+                margin-top: 30px;
+            }
+        </style>
+
+        <!--Модальное окно-->
+        <div class="modal fade modalChangePVZ" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Выберите Пункт Выдачи Заказов</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <select name="ddd" id="" class="form-control selectPoint"></select>
+                            </div>
+                            <div class="col-md-12 pointFullDescriptionDiv mrt20">
+                                <h4 class="text-center">Выбранный ПВЗ</h4>
+                                <table class="table pointFullDescription">
+                                    <tbody>
+                                        <tr>
+                                            <td>Наименование ПВЗ</td>
+                                            <td class="pointName"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Город</td>
+                                            <td class="pointCity"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Регион</td>
+                                            <td class="pointRegion"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Адрес</td>
+                                            <td class="pointAdress"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Полный адрес</td>
+                                            <td class="pointFullAddress"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Максимальный вес</b></td>
+                                            <td class="pointWeightLimit"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Прием наложенного платежа</b></td>
+                                            <td class="pointPayment"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Оплата картой</b></td>
+                                            <td class="pointAcquiring"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>График работы</td>
+                                            <td class="pointWorkShedule"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Описание</td>
+                                            <td class="pointDescription"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-ds" data-dismiss="modal">Подтвердить</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-	<!-- Modal -->
-	
-	<script type="text/javascript" async="" src="./dalli_files/watch.js"></script><script src="./dalli_files/jquery.min.js"></script>
-	<script src="./dalli_files/bootstrap.min.js"></script>
-	<script src="./dalli_files/bootstrap-datepicker.min.js"></script>
-	<script src="./dalli_files/bootstrap-datepicker.ru.min.js"></script>
-	<link href="./dalli_files/suggestions.css" type="text/css" rel="stylesheet">
-	<script src="./dalli_files/jquery.suggestions.min.js"></script>
-	<script type="text/javascript" src="./dalli_files/jquery.maskedinput.min.js"></script>
-    <script type="text/javascript" src="./dalli_files/jquery.autocomplete.js"></script>
-	<script type="text/javascript" src="./dalli_files/bootstrap-confirmation.min.js"></script>
-	<script src="./dalli_files/select2.min.js"></script>
-    <script src="./dalli_files/DS.js" charset="UTF-8"></script>
-	<script src="./dalli_files/basket2.js" charset="UTF-8"></script>
-    <script src="./dalli_files/myscript.js" charset="UTF-8"></script>
-    <script src="./dalli_files/myscript2.js" charset="UTF-8"></script>
-    
-    <!-- Страницы -->
-    <script src="./dalli_files/utils.js" charset="UTF-8"></script>
-    <script src="./dalli_files/submitZakaz.js" charset="UTF-8"></script>
-    <script src="./dalli_files/zakaz2.js" charset="UTF-8"></script>
-    <script src="./dalli_files/settings.delivery-diff.js" charset="UTF-8"></script>
-    <script src="./dalli_files/jquery.ac.js" charset="UTF-8"></script>
-        
-    <!-- /Страницы -->
-	<script>
-		$(function(){
-			$('[data-toggle="tooltip"]').tooltip();
-							// $("#myModal").modal();
-						// $('#myModal').on('hidden.bs.modal', function (e) {
-			// 	$.post("/json/opros.php");
-			// });
-		});
-	</script>
+        <!-- Modal -->
 
-<!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter46463817 = new Ya.Metrika({ id:46463817, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/46463817?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+        <script type="text/javascript" async="" src="./dalli_files/watch.js"></script>
+        <script src="./dalli_files/jquery.min.js"></script>
+        <script src="./dalli_files/bootstrap.min.js"></script>
+        <script src="./dalli_files/bootstrap-datepicker.min.js"></script>
+        <script src="./dalli_files/bootstrap-datepicker.ru.min.js"></script>
+        <link href="./dalli_files/suggestions.css" type="text/css" rel="stylesheet">
+        <script src="./dalli_files/jquery.suggestions.min.js"></script>
+        <script type="text/javascript" src="./dalli_files/jquery.maskedinput.min.js"></script>
+        <script type="text/javascript" src="./dalli_files/jquery.autocomplete.js"></script>
+        <script type="text/javascript" src="./dalli_files/bootstrap-confirmation.min.js"></script>
+        <script src="./dalli_files/select2.min.js"></script>
+        <script src="./dalli_files/DS.js" charset="UTF-8"></script>
+        <script src="./dalli_files/basket2.js" charset="UTF-8"></script>
+        <script src="./dalli_files/myscript.js" charset="UTF-8"></script>
+        <script src="./dalli_files/myscript2.js" charset="UTF-8"></script>
 
+        <!-- Страницы -->
+        <script src="./dalli_files/utils.js" charset="UTF-8"></script>
+        <script src="./dalli_files/submitZakaz.js" charset="UTF-8"></script>
+        <script src="./dalli_files/zakaz2.js" charset="UTF-8"></script>
+        <script src="./dalli_files/settings.delivery-diff.js" charset="UTF-8"></script>
+        <script src="./dalli_files/jquery.ac.js" charset="UTF-8"></script>
 
-<!-- 
-        <script src="https://api-maps.yandex.ru/2.1.40/?lang=ru_RU" type="text/javascript"></script>
+        <!-- /Страницы -->
         <script>
-
-            jQuery(document).ready(function(){
-            	var myMap;
-                ymaps.ready(init);
-
-                function init() {
-
-
-
-            	    $('#showpvzmap').bind({
-						        click: function () {
-						            if (!myMap) {
-
-						       $(".pvzmap").show();
-                    myMap = new ymaps.Map('map', {
-                        center: [55.76, 37.64],
-                        zoom: 3,
-                        controls: ['zoomControl', 'searchControl'],
-                        // controls: []
-                    },{
-                        searchControlProvider: 'yandex#search'
-                    });
-                    var objectManager = new ymaps.ObjectManager({
-                        clusterize: true,
-                        gridSize: 64,
-                        clusterIconLayout: "default#pieChart"
-                    });
-                    myMap.geoObjects.add(objectManager);
-
-
-                    // Создадим 5 пунктов выпадающего списка.
-                        var listBoxItems = ['Boxberry', 'SDEK'] // , 'Dalli-Service'
-                            .map(function(title) {
-                                return new ymaps.control.ListBoxItem({
-                                    data: {
-                                        content: title
-                                    },
-                                    state: {
-                                        selected: true
-                                    }
-                                })
-                            }),
-                            // Теперь создадим список, содержащий 5 пунктов.
-                            listBoxControl = new ymaps.control.ListBox({
-                                data: {
-                                    content: 'Фильтр',
-                                    title: 'Фильтр'
-                                },
-                                items: listBoxItems,
-                                state: {
-                                    // Признак, развернут ли список.
-                                    expanded: true,
-                                    filters: listBoxItems.reduce(function(filters, filter) {
-                                        filters[filter.data.get('content')] = filter.isSelected();
-                                        return filters;
-                                    }, {})
-                                }
-                            });
-                        myMap.controls.add(listBoxControl);
-
-
-
-                          // Добавим отслеживание изменения признака, выбран ли пункт списка.
-                            listBoxControl.events.add(['select', 'deselect'], function(e) {
-                                var listBoxItem = e.get('target');
-                                var filters = ymaps.util.extend({}, listBoxControl.state.get('filters'));
-                                filters[listBoxItem.data.get('content')] = listBoxItem.isSelected();
-                                listBoxControl.state.set('filters', filters);
-                            });
-
-                            var filterMonitor = new ymaps.Monitor(listBoxControl.state);
-                            filterMonitor.add('filters', function(filters) {
-                                // Применим фильтр.
-                                objectManager.setFilter(getFilterFunction(filters));
-                            });
-
-                            function getFilterFunction(categories){
-                                return function(obj){
-                                    var content = obj.properties.clusterCaption;
-                                    return categories[content]
-                                }
-                            }
-
-
-
-
-
-
-                    jQuery.getJSON('/json/getpvzlistforyamap.php?get=true', function (json) {
-                        objectManager.add(json);  
-                    });
-						                $("#showpvzmap").attr('value', 'Скрыть карту');
-						            }
-						            else {
-						            	$(".pvzmap").hide();
-						                myMap.destroy();// Деструктор карты
-						                myMap = null;
-						                $("#showpvzmap").attr('value', 'Показать карту снова');
-						            }
-						        }
-						    });
-
-
-
-
-
-
-
-
-
-                    // myMap.setBounds(myMap.geoObjects.getBounds());
-                }
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+                // $("#myModal").modal();
+                // $('#myModal').on('hidden.bs.modal', function (e) {
+                // 	$.post("/json/opros.php");
+                // });
             });
-            // var objectManager = new ymaps.ObjectManager();
-        </script> -->
+        </script>
 
-</body></html>
+        <!-- Yandex.Metrika counter -->
+        <script
+            type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function () { try { w.yaCounter46463817 = new Ya.Metrika({ id: 46463817, clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true, ut: "noindex" }); } catch (e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script>
+        <noscript>
+            <div><img src="https://mc.yandex.ru/watch/46463817?ut=noindex" style="position:absolute; left:-9999px;"
+                    alt="" /></div>
+        </noscript> <!-- /Yandex.Metrika counter -->
+
+</body>
+
+</html>

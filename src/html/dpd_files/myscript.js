@@ -174,5 +174,6 @@ function getJSON() {
         obj = JSON.parse(xhr.responseText)
         fillFields(obj)
     }
+    
 }
 

@@ -1,16 +1,20 @@
 function createAdress(order){
-    var street = order['zippack']['obj']['Customer']['Street'] 
-    var house = order['zippack']['obj']['Customer']['House'] 
-    var aps = order['zippack']['obj']['Customer']['Apartment'] 
-    var struct = order['zippack']['obj']['Customer']['Structure'] 
-    var entr = order['zippack']['obj']['Customer']['Entrance'] 
+    var district = order['zippack']['obj']['Customer']['District'];
+    var city = order['zippack']['obj']['Customer']['City'] ;
+    var street = order['zippack']['obj']['Customer']['Street'] ;
+    var house = order['zippack']['obj']['Customer']['House'] ;
+    var aps = order['zippack']['obj']['Customer']['Apartment'] ;
+    var struct = order['zippack']['obj']['Customer']['Structure'] ;
+    var entr = order['zippack']['obj']['Customer']['Entrance'];
     var floor = order['zippack']['obj']['Customer']['Floor'];
-    var addr = (street.trim() == '' ? '' : ('улица: ' + street + ';'))
-    + (house == '' ? '' : ('дом: ' + house + ';'))
-    + (aps.trim() == '' ? '' : ('квартира: ' + aps + ';'))
-    + (struct.trim() == '' ? '' : ('строение: ' + struct + ';'))
-    + (entr.trim() == '' ? '' : ('подъезд: ' + entr + ';'))
-    + (floor.trim() == '' ? '' : ('этаж: ' + floor + ';')) + ''
+    var addr = (district.trim() == '' ? '' : ('район: ' + district + ' '))
+    + (city.trim() == '' ? '' : ('город: ' + city + ' '))
+    + (street.trim() == '' ? '' : ('улица: ' + street + ' '))
+    + (house == '' ? '' : ('дом: ' + house + ' '))
+    + (aps.trim() == '' ? '' : ('квартира: ' + aps + ' '))
+    + (struct.trim() == '' ? '' : ('строение: ' + struct + ' '))
+    + (entr.trim() == '' ? '' : ('подъезд: ' + entr + ' '))
+    + (floor.trim() == '' ? '' : ('этаж: ' + floor + ' ')) + ''
     if (order['zippack']['obj']['Customer']['CustomField1']  == ''){
         return order['zippack']['obj']['Customer']['CustomField1'] + ' ' + addr;
     }

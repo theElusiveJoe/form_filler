@@ -31,7 +31,6 @@ def getCorrectAddres(badAddress):
     resp = conn.getresponse()
     a = resp.read().decode("utf-8")
     conn.close()
-    # # print("resp ", a)
     return json.loads(a)
 
 
@@ -40,14 +39,12 @@ def beautifyAddr(addrTuple):
     for i in range(5):
         addr += addrTuple[i] + ', '
 
-    addr += f'({addrTuple[5]}{addrTuple[6]})'   
+    addr += f'({addrTuple[5]}{addrTuple[6]})'
     addr = addr.replace('none', '').replace('()', '').replace(' , ', '').replace(',(', '(')
     return addr
 
 def isNoneInJson(hashmap, key, trimres = 0):
-    print(key, ': ', hashmap[key])
     if key not in hashmap.keys() or hashmap[key] is None:
-        print('return-')
         return '-'
     if trimres == 0:
         return hashmap[key]
@@ -69,6 +66,34 @@ def getTerminals(siteQuery, dadataResp = ''):
     """
 
     # for test!!!
+    m = {
+        "error": False,
+        "problems": True,
+        "description": "слишком большая посылка, либо нашлось несколько подходящих пунктов",
+        "suggestions": [
+            {
+                "code": "M11",
+                "lat": "55.827237",
+                "long": "37.659551",
+                "addr": "Москва, улица, Касаткина, 11(2)"
+            },
+            {
+                "code": "M16",
+                "lat": "55.710367",
+                "long": "37.708321",
+                "addr": "Москва, проспект, Волгоградский, 42(23)"
+            },
+            {
+                "code": "M15",
+                "lat": "55.771821",
+                "long": "37.532461",
+                "addr": "Москва, пр, Хорошёвский 2-й, 7(1)"
+            }
+        ],
+        "predicion": "превышение габарит"
+    }
+
+    return json.dumps(m)
     orderData = siteQuery
     # orderData = json.loads(siteQuery)
 
@@ -87,24 +112,20 @@ def getTerminals(siteQuery, dadataResp = ''):
     addr_obj = dadataResp
     # # print(addr_obj)
     # addr_obj = getCorrectAddres(
-    #     orderData["region"] + "  " + orderData["city"] + "  " + ('' if orderData["addr"]=='' else orderData["addr"]) 
+    #     orderData["region"] + "  " + orderData["city"] + "  " + ('' if orderData["addr"]=='' else orderData["addr"])
     # )[0]
 
 
     # проверим, адекватен ли адрес
-    # print(addr_obj["qc"])
-    # # print(orderData["region"] + "  " + orderData["city"] + "  " + ('' if orderData["addr"]=='' else orderData["addr"]) )
     if addr_obj["qc"] != 0 and addr_obj["qc"] != 3:
         codes = {
             1: """Остались «лишние» части. Пример: «109341 Тверская область Москва Верхние Поля» — здесь лишняя «Тверская область».
-    Либо в исходном адресе недостаточно данных для уверенного разбора. Пример: «Сходня Красная 12» — здесь нет региона 
+    Либо в исходном адресе недостаточно данных для уверенного разбора. Пример: «Сходня Красная 12» — здесь нет региона
     и города.""",
             2: "Адрес пустой или заведомо «мусорный»",
         }
         resp["description"] = codes[addr_obj["qc"]]
         resp["problems"] = "проблемы с адресом"
-        # print(resp['description'])
-        # print('ret1')
         return json.dumps(resp, ensure_ascii=False)
 
     # проверим, доступен ли в выбраном городе тип платежа
@@ -115,12 +136,10 @@ def getTerminals(siteQuery, dadataResp = ''):
         if len(dbresp) == 0:
             resp["error"] = True
             resp["description"] = "этого города нет в списке городов, в которых доступен наложный платёж"
-            # print('ret2')
-            # print(resp)
             return json.dumps(resp)
 
     # если все хорошо, начинаем искать по извращенной логике:
-    # для региона используем: 
+    # для региона используем:
     #       region_kladr_id[:2], region (это имя) - с ним все понятно
     # городом может быть все, что угодно:
     #       region_kladr_id[:-2] и region (например для москвы)
@@ -129,45 +148,38 @@ def getTerminals(siteQuery, dadataResp = ''):
     # [:-2] делается для обрезания последних двух цифр - актуальности адресного объекта
 
     searchParams = (
-        isNoneInJson(addr_obj,'region_kladr_id', 2), isNoneInJson(addr_obj, 'region'), 
-        isNoneInJson(addr_obj, 'region_kladr_id', 2), isNoneInJson(addr_obj,'region'), 
-        isNoneInJson(addr_obj, 'area_kladr_id', 5), isNoneInJson(addr_obj,'area'), 
-        isNoneInJson(addr_obj,'city_kladr_id', 2), isNoneInJson(addr_obj, 'city'), 
+        isNoneInJson(addr_obj,'region_kladr_id', 2), isNoneInJson(addr_obj, 'region'),
+        isNoneInJson(addr_obj, 'region_kladr_id', 2), isNoneInJson(addr_obj,'region'),
+        isNoneInJson(addr_obj, 'area_kladr_id', 5), isNoneInJson(addr_obj,'area'),
+        isNoneInJson(addr_obj,'city_kladr_id', 2), isNoneInJson(addr_obj, 'city'),
 
-        isNoneInJson(addr_obj, 'street'), 
-        
+        isNoneInJson(addr_obj, 'street'),
+
         isNoneInJson(addr_obj, 'house'), isNoneInJson(addr_obj, 'house')
     )
     print(searchParams)
-    
+
     a = isNoneInJson(addr_obj, 'region')
     print(addr_obj)
     print('a = ', a)
     sqlQuery = f"""
         SELECT code, latitude, longitude, cityName, streetAbbr, street, houseNo, ownership, building, structure
-        FROM terminalsSelfDelivery2 
+        FROM terminalsSelfDelivery2
         WHERE       (
                         regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%" OR regionName LIKE "{a}"
                     )
-                AND 
+                AND
                     (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%"
                         OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
-                    ) 
-               
+                    )
+
                 """
     print(sqlQuery)
     cur.execute(
        sqlQuery
     )
     searchResult = cur.fetchall()
-    # # if len(searchResult) >= 3:
-       
-            # # print(searchResult[:3])
-    # else:
-        # # print(searchResult)
-
-    # сразу в яблочко
     if len(searchResult) == 1:
         addrTuple = ()
         rescode, reslatitude, reslongitude, addrTuple = (
@@ -176,51 +188,41 @@ def getTerminals(siteQuery, dadataResp = ''):
             searchResult[0][2],
             searchResult[0][3:],
         )
-        print(beautifyAddr(addrTuple))
         suggestion = createSuggestionTemplate(
             rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
         )
         resp["suggestions"].append(suggestion)
-        # print('ret3')
         return json.dumps(resp)
 
     # во второй (with restrictions):
     sqlQuery = f"""
-        SELECT code, latitude, longitude, 
-        cityName, streetAbbr, street, houseNo, ownership, building, structure, 
+        SELECT code, latitude, longitude,
+        cityName, streetAbbr, street, houseNo, ownership, building, structure,
         maxWeight, maxLength, maxWidth, maxHeight
         FROM parcelShops
         WHERE       (
                         regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR regionName  LIKE "%{isNoneInJson(addr_obj,'region')}%"
                     )
-                AND 
+                AND
                     (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%"
                         OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
-                    ) 
+                    )
                 AND
                     street LIKE "%{isNoneInJson(addr_obj,'street')}%"
                 AND
                     (
                         houseNo LIKE "%{isNoneInJson(addr_obj,'house')}%" OR ownership LIKE "%{isNoneInJson(addr_obj,'house')}%"
-                    ) 
+                    )
                 """
 
-    print(sqlQuery)
     cur.execute(
        sqlQuery
     )
     searchResult = cur.fetchall()
-    # # if len(searchResult) >= 3:
-       
-            # # print(searchResult[:3])
-    # else:
-        # # print(searchResult)
 
     # со второго раза - тоже не плохо
     if len(searchResult) == 1:
-        # # print("found in table 2")
-        # addrTuple = ()
         (
             rescode,
             reslatitude,
@@ -245,14 +247,11 @@ def getTerminals(siteQuery, dadataResp = ''):
             and resMaxW >= orderData["midWidth"]
             and resMaxH >= orderData["minHeight"]
             and resMaxWeight >= orderData["maxWeight"]
-        ):  
-            print(beautifyAddr(addrTuple))
+        ):
             suggestion = createSuggestionTemplate(
                 rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
             )
-            # # print(suggestion)
             resp["suggestions"].append(suggestion)
-            # print('ret4')
             return json.dumps(resp)
 
     # if couldn't unambiguously choose address
@@ -269,23 +268,18 @@ def getTerminals(siteQuery, dadataResp = ''):
         WHERE       (
                         regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR regionName  LIKE "%{isNoneInJson(addr_obj,'region')}%"
                     )
-                AND 
+                AND
                     (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%"
                         OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
-                    ) 
+                    )
                 """
-    
+
     print(sqlQuery)
     cur.execute(
        sqlQuery
     )
     searchResult = cur.fetchall()
-    # # if len(searchResult) >= 3:
-       
-            # # print(searchResult[:3])
-    # else:
-        # # print(searchResult)
 
     for x in searchResult:
         addrTuple = ()
@@ -295,7 +289,6 @@ def getTerminals(siteQuery, dadataResp = ''):
             x[2],
             x[3:],
         )
-        print(beautifyAddr(addrTuple))
         suggestion = createSuggestionTemplate(
             rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
         )
@@ -303,17 +296,17 @@ def getTerminals(siteQuery, dadataResp = ''):
 
     # in table 2
     sqlQuery = f"""
-        SELECT code, latitude, longitude, 
+        SELECT code, latitude, longitude,
         cityName, streetAbbr, street, houseNo, ownership, building, structure
         FROM parcelShops
         WHERE       (
                         regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR regionName  LIKE "%{isNoneInJson(addr_obj,'region')}%"
                     )
-                AND 
+                AND
                     (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%"
                         OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
-                    ) 
+                    )
                 AND (
                         {orderData["maxWeight"]} <= maxWeight AND {orderData["maxLength"]} <= maxLength AND
                         {orderData["midWidth"]} <= maxWidth AND {orderData["minHeight"]} <= maxHeight
@@ -332,19 +325,11 @@ def getTerminals(siteQuery, dadataResp = ''):
             x[2],
             x[3:],
         )
-        print(beautifyAddr(addrTuple))
         suggestion = createSuggestionTemplate(
             rescode, reslatitude, reslongitude, beautifyAddr(addrTuple)
         )
         resp["suggestions"].append(suggestion)
-        # if len(searchResult) >= 3:
-       
-            # # print(searchResult[:3])
-        # else::
-       
-            # # print(searchResult)
-    
-    # print('ret5')
+
     return json.dumps(resp)
 
 
@@ -353,14 +338,11 @@ def updateDadataResps():
     tests = json.load(f)
     adresses = []
     for test in tests:
-        orderData = test    
-        # # print(orderData)
-        # print(orderData["region"] + "  " + orderData["city"] + "  " + (' ' if orderData["addr"]=='' else orderData["addr"]) )
+        orderData = test
         addr_obj = getCorrectAddres(
-            orderData["region"] + "  " + orderData["city"] + "  " + (' ' if orderData["addr"]=='' else orderData["addr"]) 
+            orderData["region"] + "  " + orderData["city"] + "  " + (' ' if orderData["addr"]=='' else orderData["addr"])
         )[0]
         adresses.append(addr_obj)
-    # print(adresses)
     f = open('./test/dadataResps.json', 'w').write(json.dumps(adresses, ensure_ascii=False))
 
 def createManyDadataResps():
@@ -373,8 +355,6 @@ def createManyDadataResps():
         'ленинградская область, питербург'
     ]
     for test in tests:
-        # # print(orderData)
-        # print(test)
         addr_obj = getCorrectAddres(
             test
         )[0]
@@ -398,24 +378,11 @@ if __name__ == "__main__":
     results = []
 
     nums = range(len(tests))
-    # nums = [6]
-    # print(tests[6], resps[6])
 
     for i in nums:
-        # print('_________' ,i ,'_________')
+        print('_________' ,i ,'_________')
         a = json.loads(getTerminals(tests[i], dadataResp=resps[i]))
         a['predicion'] = tests[i]['prediction']
         results.append(a)
 
-    # print('ended')
     json.dump(results, fresults, ensure_ascii=False)
-
-    # for test in testsList:
-    #     # a = getTerminals(test)
-    #     # a = json.loads(a)
-    #     # a = json.dumps(a, ensure_ascii=False)
-    #     # f.write(a)
-
-    #     testMap = json.loads(test)
-    #     a = getCorrectAddres(testMap['region'] + '  ' + testMap['city'] + ' ' + testMap['addr'])[0]
-    #     # print(a['qc'], ' : ' + a['result'])
