@@ -65,7 +65,7 @@ def send_order(data_xml):
     simply sends the xml-string to dpd soap server
     """
     print('connection opened')
-    conn = http.client.HTTPConnection("ws.dpd.ru")
+    conn = http.client.HTTPConnection("wstest.dpd.ru")
     headers = {"Encoding": "utf-8"}
     conn.request("POST", "/services/order2?wsdl", data_xml, headers)
     print('sent')
