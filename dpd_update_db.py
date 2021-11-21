@@ -2,7 +2,6 @@ import sqlite3
 import xml.etree.ElementTree as ET
 import json
 import http.client
-import asyncio
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
@@ -85,9 +84,6 @@ def getQueryTextFromXML(queryNum):
 
 
 def getQueryText(queryNum):
-    # queryToXMLs()
-    return getQueryTextFromXML(queryNum)
-
     conn = http.client.HTTPConnection("wstest.dpd.ru")
     headers = {"Encoding": "utf-8"}
     body = queries[queryNum]
@@ -202,7 +198,7 @@ def updateParcelShops():
         latitude = parcelShop.find("geoCoordinates").find("latitude").text
         longitude = parcelShop.find("geoCoordinates").find("longitude").text
         if parcelShop.find("limits") is None:
-            print(code)
+            # print(code)
             limits = ("none", "none", "none", "none", "none", "none")
         else:
             limits = parseLimits(parcelShop.find("limits"))
@@ -346,6 +342,13 @@ def parseLimits(limitsElem):
 
     return tuple(res)
 
+def updateAll():
+    print('******updating CitiesCashPay******')
+    updateCitiesCashPay()
+    print('******updating ParcelShops******')
+    updateParcelShops()
+    print('******updating TerminalsSelfDelivery******')
+    updateTerminalsSelfDelivery2()
 
 if __name__ == "__main__":
     updateCitiesCashPay()

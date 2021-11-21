@@ -1,76 +1,87 @@
-function parseTerminals(points){
+function parseTerminals(points) {
     // document.getElementById('')
-    myMap.setCenter([points[0]['lat'],points[0]['long']], 11)
+    myMap.setCenter([points[0]['lat'], points[0]['long']], 11)
 
-    for (var i = 0; i < points.length; i++){
+    for (var i = 0; i < points.length; i++) {
         var lat = points[i]['lat'];
         var long = points[i]['long'];
         var myPlacemark = new ymaps.Placemark([lat, long], {
             balloonContent: points[i]['addr'],
-            hintContent: 'пункт',
+            hintContent: points[i]['addr'],
             id: points[i]['code'],
             addr: points[i]['addr']
         }, {});
-        myPlacemark.events.add('click', function(e){
+        myPlacemark.events.add('click', function (e) {
             var target = e.get('target');
+            choosen = target.properties.get('id')
             document.getElementById('choosenTerminal').innerHTML = target.properties.get('addr')
         })
 
         myMap.geoObjects.add(myPlacemark);
     }
+
+    // if (points.length == 1) {
+    //     myMap.geoObjects.get(0).click;
+    // }
 }
 
-
+var choosen = ''
 
 function getDPDTerminals() {
+    document.querySelector("#terminalList").innerHTML = '';
+    document.querySelector("#serverResp").innerHTML = '';
+    document.querySelector("#findTerminalResp").innerHTML = '<h3>Ищем...</h3>';
+
+    myMap.geoObjects.removeAll()
+
     var size = ziplusheets['gsheets']['size'].split('/')
     var intSize = [Number(size[0]), Number(size[1]), Number(size[2])].sort()
     var obj = {
-        'region':   document.querySelector("#terminalRegion").value,
-        'city':  document.querySelector("#terminalCity").value,
+        'region': document.querySelector("#terminalRegion").value,
+        'city': document.querySelector("#terminalCity").value,
         'addr': document.querySelector("#cf1").value,
         'maxLength': intSize[2],
         'midWidth': intSize[1],
         'minHeight': intSize[0],
-        'maxWeight': Math.ceil(Number(ziplusheets['gsheets']['weight']) / Number(ziplusheets['gsheets']['positions'])),
+        'maxWeight': Math.ceil(Number(ziplusheets['gsheets']['weight'].replace(/[^\d.]/g, '').replace(',', '.')) / Number(ziplusheets['gsheets']['positions'])),
         'payType': ziplusheets['gsheets']['payment_method']
     }
     var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState != 4) {
-          return
+            return
         }
+        document.querySelector("#findTerminalResp").innerHTML = '';
         var resp = xhr.responseText
         var terminals = JSON.parse(resp);
         console.log(terminals);
-        tlist = document.querySelector("#terminalList")
-        for(var i = 0; i < terminals['suggestions'].length; i++){
-            tlist.innerHTML += `<option value="${terminals['suggestions'][i]['addr']}" >${terminals['suggestions'][i]['addr']}</option>`
+        tlist = document.getElementById('terminalList')
+        for (var i = 0; i < terminals['suggestions'].length; i++) {
+            tlist.innerHTML += `<option value="${terminals['suggestions'][i]['code']}" >${terminals['suggestions'][i]['addr']}</option>`
         }
-        document.getElementById('serverResp').innerHTML += `<b>${terminals['description']}</b>`
+        if (terminals['suggestions'].length == 1){
+            choosen = terminals['suggestions'][0]['code']
+            document.querySelector("#choosenTerminal").innerHTML = terminals['suggestions'][0]['addr'] 
+        }
+        document.getElementById('serverResp').innerHTML += `${terminals['description']}`
         parseTerminals(terminals["suggestions"])
     }
     xhr.open('POST', 'http://localhost:8040/' + 'getDPDTerminals.func', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     body = JSON.stringify(obj)
+    console.log(body)
     xhr.send(body);
 }
 
-function chooseDeliveryType(){
-    if (document.querySelector("#serviceVariant").value == "ДТ"){
-        buttonTerminalDelivery();
-    }
-    return;
-    alert('на доработке');
-    buttonAddressDelivery();
-}
-
-function buttonAddressDelivery(){
+function buttonAddressDelivery() {
+    document.getElementsByName("terminalDelivery")[0].style.display='none';
+    document.getElementsByName("doorShipment")[0].style.display='block';
     return;
 }
 
-function buttonTerminalDelivery(){
-    // document.querySelector("#terminalDeliveryContainer").style.display='block';
+function buttonTerminalDelivery() {
+    document.getElementsByName("terminalDelivery")[0].style.display='block';
+    document.getElementsByName("doorShipment")[0].style.display='none';
 
     // заполняем поля адреса терминала
     document.querySelector("#terminalRegion").value = GetByPath(ziplusheets, 'zippack.obj.Customer.Region');

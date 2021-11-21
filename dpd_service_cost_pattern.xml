@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:tns="http://dpd.ru/ws/calculator/2012-03-20">
+    <soapenv:Body>
+        <tns:getServiceCostByParcels2>
+            <request>
+                <auth>
+                    <clientNumber></clientNumber>
+                    <clientKey></clientKey>
+                </auth>
+                <pickup>
+                    <cityId>49694102</cityId>
+                </pickup>
+                <delivery>
+                    <cityId></cityId>
+                </delivery>
+
+                <selfPickup>false</selfPickup>
+
+                <selfDelivery></selfDelivery>
+                <parcel>
+                    <weight></weight>
+                    <length></length>
+                    <width></width>
+                    <height></height>
+                    <quantity></quantity>
+                </parcel>
+            </request>
+        </tns:getServiceCostByParcels2>
+    </soapenv:Body>
+</soapenv:Envelope>

@@ -1,60 +1,62 @@
 import xml.etree.ElementTree as ET
 import json
 import http.client
+import sqlite3
+
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
     client_number = tokens["dpd_number"]
     client_key = tokens["dpd_key"]
-   
+    dadata_token = tokens["dadata_token"]
+    dadata_key = tokens["dadata_key"]
 
 
 def create_xml(data):
     """
     parses template file and fills data from 'data' parametr(string)
     """
-    parsed_data = json.loads(data)
-    # print(parsed_data)
-    order = parsed_data["data"]["orders"][0]
-    # print(order)
+    order = json.loads(data)
 
-    tree = ET.parse("dalli_order_pattern.xml")
-    root = tree.getroot()
-    root.find("auth").set("token", TOKEN)
-    root.find("order").set("number", order["order"])
+    ns = {
+        'soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
+        'tns': 'http://dpd.ru/ws/order2/2012-04-04',
+        'S': 'http://schemas.xmlsoap.org/soap/envelope/',
+        'ns2': 'http://dpd.ru/ws/order2/2012-04-04'
+    }
+    tree = ET.parse("dpd_order_pattern.xml")
+    theRoot = tree.getroot()
 
-    rec = root.find("order").find("receiver")
-    rec.find("town").text = order["receiver"]["town"] + " город"
-    rec.find("address").text = order["receiver"]["address"]
-    rec.find("person").text = order["receiver"]["person"]
-    rec.find("phone").text = order["receiver"]["phone"]
-    date = order["receiver"]["date"].split(".")
-    rec.find("date").text = date[2] + "-" + date[1] + "-" + date[0]
-    rec.find("time_min").text = order["receiver"]["timeMin"]
-    rec.find("time_max").text = order["receiver"]["timeMax"]
+    root = theRoot.find('soapenv:Body', ns).find('tns:createOrder', ns).find('orders')
+
+    root.find("auth").find('clientNumber').text = client_number
+    root.find("auth").find('clientKey').text = client_key
+
+    root.find('header').find('datePickup').text = order['header']['datePickup']
+    root.find('header').find('pickupTimePeriod').text = order['header']['pickupTimePeriod']
 
     ord = root.find("order")
-    ord.find("service").text = order["service"]
-    ord.find("weight").text = order["weight"]
-    ord.find("quantity").text = order["quantity"]
-    ord.find("paytype").text = order["paytype"]
-    ord.find("priced").text = order["priced"]
-    ord.find("price").text = order["price"]
-    # ord.find('upsnak').text = order
-    ord.find("inshprice").text = order["declaredPrice"]
-    ord.find("instruction").text = order["instruction"]
+    ord.find("orderNumberInternal").text = order['order']["orderNumberInternal"]
+    ord.find("serviceCode").text = order['order']["serviceCode"]
+    ord.find("serviceVariant").text = order['order']["serviceVariant"]
+    ord.find("cargoNumPack").text = order['order']["cargoNumPack"]
+    ord.find("cargoWeight").text = order['order']["cargoWeight"]
+    ord.find("cargoCategory").text = order['order']["cargoCategory"]
+    ord.find("cargoValue").text = order['order']["cargoValue"]
 
-    for i in range(len(order["items"])):
-        it = ET.SubElement(ord.find("items"), "item")
-        it.set("quantity", order["items"][f"{i}"]["quantity"])
-        it.set("weight", order["items"][f"{i}"]["mass"])
-        it.set("retprice", order["items"][f"{i}"]["retprice"])
-        it.set("article", order["items"][f"{i}"]["article"])
-        it.text = order["items"][f"{i}"]["name"]
+    ord.find("receiverAddress").find('name').text = order['order']['receiverAddress']['name']
+    ord.find("receiverAddress").find('terminalCode').text = order['order']['receiverAddress']['terminalCode']
+    ord.find("receiverAddress").find('contactFio').text = order['order']['receiverAddress']['contactFio']
+    ord.find("receiverAddress").find('contactPhone').text = order['order']['receiverAddress']['contactPhone']
+    
+    for i in range(len(order['order']['unitLoad'])):
+        it = ET.SubElement(root.find('order'), "unitLoad")
+        for x in ['article', 'descript', 'npp_amount', 'count']:
+            a =ET.SubElement(it, x)
+            a.text = str(order['order']['unitLoad'][i][x])
 
     tree.write("parsed_data.xml", encoding="utf-8")
-    ans = ET.tostring(root, encoding="utf-8")
-    # print(ans)
+    ans = ET.tostring(theRoot)
     return ans
 
 
@@ -62,33 +64,43 @@ def send_order(data_xml):
     """
     simply sends the xml-string to dpd soap server
     """
-    conn = http.client.HTTPConnection("wstest.dpd.ru")
+    print('connection opened')
+    conn = http.client.HTTPConnection("ws.dpd.ru")
     headers = {"Encoding": "utf-8"}
-    conn.request("POST", "/services/order2?wsdl", data_xml.encode("utf-8"), headers)
-
+    conn.request("POST", "/services/order2?wsdl", data_xml, headers)
+    print('sent')
     resp = conn.getresponse()
-    return resp.read().decode("utf-8")
+    print(resp.status)
+    return parseResp(resp.read().decode("utf-8"))
 
+def parseResp(xmlString):
+    print(xmlString)
+    tree = ET.ElementTree(ET.fromstring(xmlString))
+    root = tree.getroot()
+    ns = {
+        'S': "http://schemas.xmlsoap.org/soap/envelope/",
+        'ns2' : "http://dpd.ru/ws/order2/2012-04-04"
+    }
+    root = root.find('S:Body', ns)
+    root = root.find('ns2:createOrderResponse', ns)
+    root = root.find('return')
+ 
+    if root.find('status').text == 'OK':
+        m = {
+            'status' : 'OK',
+            'errorMessage': 'Заказ успешно добавлен'
+        }
+    else:
+        m = {
+            'status' : 'error',
+            'errorMessage': root.find('errorMessage').text
+        }
 
-def create_dpd_order():
-    """
-    works incorrect now
-    """
-    # print("--------------------ОТСЫЛАЮ В DPD--------------------")
-    # print(data)
-    # data_xml = create_xml(data)
-    data_xml = open("dpd_order_pattern.xml", "r").read()
-    # print('created xml:')
-    # print(data_xml)
+    return json.dumps(m)
 
-    resp = send_order(data_xml)
-    # print(resp)
-    open("smth.xml", "w").write(resp)
-    # errors = {}
-    # root = ET.fromstring(resp)
-    # for i, child in enumerate(root.find('order')):
-    #     err = child.get('errorMessage')
-    #     errors[i] = err
-    #     # print('ОШИБКА:', err)
-
-    # return json.dumps(errors)
+def create_dpd_order(data):
+    xmlString = create_xml(data)
+    resp = send_order(xmlString)
+    print(resp)
+    return resp 
+   

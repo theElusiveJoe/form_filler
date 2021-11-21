@@ -4,105 +4,47 @@
 		<tns:createOrder>
 			<orders>
 				<auth>
-					<clientNumber>1002017398</clientNumber>
-					<clientKey>6D4216831E84FE7DE86BBDC4B5E9C97CE3E0E21D</clientKey>
+					<clientNumber></clientNumber>
+					<clientKey></clientKey>
 				</auth>
 				<header>
-					<datePickup>2021-11-15</datePickup>
-					<payer>1002017398</payer>
+					<datePickup></datePickup>
 					<senderAddress>
-						<!-- <code>?</code> -->
-						<name>имя</name>
-						<!-- <terminalCode>?</terminalCode> -->
-						<!-- <addressString>?</addressString> -->
+						<name>ИП Лихачев</name>
 						<countryName>Россия</countryName>
-						<!-- <index>?</index> -->
-						<!-- <region>?</region> -->
+						<index>101000</index>
 						<city>Москва</city>
-						<street>Авиаторов</street>
-						<!-- <streetAbbr>?</streetAbbr> -->
-						<!-- <house>?</house>
-						<houseKorpus>?</houseKorpus>
-						<str>?</str>
-						<vlad>?</vlad>
-						<extraInfo>?</extraInfo>
-						<office>?</office>
-						<flat>?</flat>
-						<workTimeFrom>?</workTimeFrom>
-						<workTimeTo>?</workTimeTo>
-						<dinnerTimeFrom>?</dinnerTimeFrom>
-						<dinnerTimeTo>?</dinnerTimeTo>
-						<contactFio>?</contactFio>
-						<contactPhone>?</contactPhone>
-						<contactEmail>?</contactEmail>
-						<instructions>?</instructions>
-						<needPass>?</needPass> -->
+						<street>Складочная</street>
+						<streetAbbr>ул</streetAbbr>
+						<house>1</house>
+						<!-- <houseKorpus>?</houseKorpus> -->
+						<str>1</str>
+						<!-- <vlad>?</vlad> -->
+						<extraInfo>1б/1</extraInfo>
+						<workTimeFrom>10:00</workTimeFrom>
+						<workTimeTo>18:00</workTimeTo>
+						<contactFio>Алексей, Михаил</contactFio>
+						<contactPhone>89261672339, 89680914603</contactPhone>
+						<instructions>подъезд 10, СитиРент</instructions>
 					</senderAddress>
-					<pickupTimePeriod>9-18</pickupTimePeriod>
-					<!-- <regularNum>?</regularNum> -->
+					<pickupTimePeriod></pickupTimePeriod>
 				</header>
 				<order>
-					<orderNumberInternal>123</orderNumberInternal>
-					<serviceCode>PCL</serviceCode>
-					<serviceVariant>ДД</serviceVariant>
-					<cargoNumPack>1</cargoNumPack>
-					<cargoWeight>4</cargoWeight>
-					<!-- <cargoVolume>?</cargoVolume> -->
+					<orderNumberInternal></orderNumberInternal>
+					<serviceCode></serviceCode>
+					<serviceVariant></serviceVariant>
+					<cargoNumPack></cargoNumPack>
+					<cargoWeight></cargoWeight>
 					<cargoRegistered>false</cargoRegistered>
-					<cargoValue>1200</cargoValue>
-					<cargoCategory>Товар</cargoCategory>
-					<!-- <deliveryTimePeriod>?</deliveryTimePeriod>
-					<paymentType>?</paymentType>
-					<extraParam>
-						<name>?</name>
-						<value>?</value>
-					</extraParam>
-					<dataInt>
-						<currency>?</currency>
-						<currencyDeclaredValue>?</currencyDeclaredValue>
-					</dataInt> -->
+					<cargoValue></cargoValue>
+					<cargoCategory></cargoCategory>
+					<!-- <paymentType></paymentType> -->
 					<receiverAddress>
-						<!-- <code>?</code> -->
-						<name>имя2</name>
-						<!-- <terminalCode>?</terminalCode> -->
-						<!-- <addressString>?</addressString> -->
-						<countryName>Россия</countryName>
-						<!-- <index>?</index> -->
-						<!-- <region>?</region> -->
-						<city>Москва</city>
-						<street>Авиаторов2</street>
+						<name></name>
+						<terminalCode></terminalCode>
+						<contactFio></contactFio>
+						<contactPhone></contactPhone>
 					</receiverAddress>
-					<!-- <extraService>
-						<esCode>?</esCode>
-						<param>
-							<name>?</name>
-							<value>?</value>
-						</param>
-					</extraService> -->
-					<!-- <parcel>
-						<number>?</number>
-						<dpdParcelNumber>?</dpdParcelNumber>
-						<number_for_print>?</number_for_print>
-						<box_needed>?</box_needed>
-						<weight>?</weight>
-						<length>?</length>
-						<width>?</width>
-						<height>?</height>
-						<insuranceCost>?</insuranceCost>
-						<insuranceCostVat>?</insuranceCostVat>
-						<codAmount>?</codAmount>
-					</parcel> -->
-					<!--
-					<unitLoad>
-						<article>?</article>
-						<descript>?</descript>
-						<declared_value>?</declared_value>
-						<parcel_num>?</parcel_num>
-						<npp_amount>?</npp_amount>
-						<vat_percent>?</vat_percent>
-						<without_vat>?</without_vat>
-						<count>?</count>
-					</unitLoad> -->
 				</order>
 			</orders>
 		</tns:createOrder>

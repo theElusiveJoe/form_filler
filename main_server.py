@@ -14,8 +14,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 from compose_info import get_order_info
 from dalii_order import create_dalli_order
 from dpd_pick_terminal import getTerminals as get_dpd_terminals
-# from dpd_order import find_terminal as find_dpd_terminal
-
+from dpd_service_cost import getServiceCostByParcels2 as get_dpd_cost
+from dpd_order import create_dpd_order
 
 
 class S(BaseHTTPRequestHandler):
@@ -103,7 +103,7 @@ class S(BaseHTTPRequestHandler):
 
     def do_POST(self):
         # парсим аргументы
-        print('new post')
+        # print('new post')
 
         url = urlparse(self.path)
         query = url.query
@@ -128,8 +128,19 @@ class S(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(result, "utf-8"))
         elif 'getDPDTerminals.func' in self.path:
-            print(post_body, ' - post body')
             result = get_dpd_terminals(post_body)
+            self.send_response(200)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(bytes(result, "utf-8"))
+        elif 'getServiceCost.func' in self.path:
+            result = get_dpd_cost(post_body)
+            self.send_response(200)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(bytes(result, "utf-8"))
+        elif 'createOrder.func' in self.path:
+            result = create_dpd_order(post_body)
             self.send_response(200)
             self.send_header("Content-type", "application/json")
             self.end_headers()

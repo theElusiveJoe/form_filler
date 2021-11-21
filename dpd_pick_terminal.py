@@ -2,7 +2,9 @@ import json
 import sqlite3
 import http.client
 import os
+import time
 
+from dpd_update_db import updateAll
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
@@ -65,40 +67,47 @@ def getTerminals(siteQuery, dadataResp = ''):
         problems - не находит такой пункт самовывоза, или не подходит по габаритам
     """
 
-    # for test!!!
-    m = {
-        "error": False,
-        "problems": True,
-        "description": "слишком большая посылка, либо нашлось несколько подходящих пунктов",
-        "suggestions": [
-            {
-                "code": "M11",
-                "lat": "55.827237",
-                "long": "37.659551",
-                "addr": "Москва, улица, Касаткина, 11(2)"
-            },
-            {
-                "code": "M16",
-                "lat": "55.710367",
-                "long": "37.708321",
-                "addr": "Москва, проспект, Волгоградский, 42(23)"
-            },
-            {
-                "code": "M15",
-                "lat": "55.771821",
-                "long": "37.532461",
-                "addr": "Москва, пр, Хорошёвский 2-й, 7(1)"
-            }
-        ],
-        "predicion": "превышение габарит"
-    }
 
-    return json.dumps(m)
-    orderData = siteQuery
+
+    # for test!!!
+    # m = {
+    #     "error": False,
+    #     "problems": True,
+    #     "description": "слишком большая посылка, либо нашлось несколько подходящих пунктов",
+    #     "suggestions": [
+    #         {
+    #             "code": "M11",
+    #             "lat": "55.827237",
+    #             "long": "37.659551",
+    #             "addr": "Москва, улица, Касаткина, 11(2)"
+    #         }
+    #     ],
+    #     "predicion": "превышение габарит"
+    # }
+
+    # return json.dumps(m)
+    # orderData = siteQuery
     # orderData = json.loads(siteQuery)
 
     conn = sqlite3.connect(r"./db/dpd.db")
     cur = conn.cursor()
+    
+    cur.execute("""
+        SELECT * FROM lastUpdate
+    """)
+
+    lastUpdateTime = cur.fetchone()[0]
+    nowtime = round(time.time())
+    if nowtime - lastUpdateTime > 5*60*60:
+        print('******updating BD******')
+        # updateAll()
+        cur.execute(f"""
+            DELETE FROM lastUpdate;
+        """)
+        cur.execute(f"""
+            INSERT INTO lastUpdate (time) VALUES ({nowtime});
+        """)
+        conn.commit()
 
     resp = {
         "error": False,
@@ -107,13 +116,17 @@ def getTerminals(siteQuery, dadataResp = ''):
         "suggestions": [],
     }
 
-    # анализируем адрес
     # for test!!!
-    addr_obj = dadataResp
-    # # print(addr_obj)
-    # addr_obj = getCorrectAddres(
-    #     orderData["region"] + "  " + orderData["city"] + "  " + ('' if orderData["addr"]=='' else orderData["addr"])
-    # )[0]
+    if dadataResp != '': 
+        addr_obj = dadataResp
+    else :
+        orderData = json.loads(siteQuery)
+        addr_obj = getCorrectAddres(
+            orderData["region"] + "  " + orderData["city"] + "  " + ('' if orderData["addr"]=='' else orderData["addr"])
+        )[0]
+        
+    print('--------------------ПРИШЛО С DADATA   :--------------------')
+    print(addr_obj)
 
 
     # проверим, адекватен ли адрес
@@ -159,14 +172,11 @@ def getTerminals(siteQuery, dadataResp = ''):
     )
     print(searchParams)
 
-    a = isNoneInJson(addr_obj, 'region')
-    print(addr_obj)
-    print('a = ', a)
     sqlQuery = f"""
         SELECT code, latitude, longitude, cityName, streetAbbr, street, houseNo, ownership, building, structure
         FROM terminalsSelfDelivery2
         WHERE       (
-                        regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%" OR regionName LIKE "{a}"
+                        regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%" OR regionName LIKE "{isNoneInJson(addr_obj, 'region')}"
                     )
                 AND
                     (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
@@ -175,7 +185,7 @@ def getTerminals(siteQuery, dadataResp = ''):
                     )
 
                 """
-    print(sqlQuery)
+    # print(sqlQuery)
     cur.execute(
        sqlQuery
     )
@@ -275,7 +285,7 @@ def getTerminals(siteQuery, dadataResp = ''):
                     )
                 """
 
-    print(sqlQuery)
+    # print(sqlQuery)
     cur.execute(
        sqlQuery
     )
@@ -312,7 +322,7 @@ def getTerminals(siteQuery, dadataResp = ''):
                         {orderData["midWidth"]} <= maxWidth AND {orderData["minHeight"]} <= maxHeight
                     )
                 """
-    print(sqlQuery)
+    # print(sqlQuery)
     cur.execute(
        sqlQuery
     )

@@ -9,7 +9,6 @@ with open('tokens.json', 'r') as f:
 
 def create_xml(data):
     parsed_data = json.loads(data)
-    print(parsed_data)
     order = parsed_data['data']['orders'][0]
     # print(order)
 

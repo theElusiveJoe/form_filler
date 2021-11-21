@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: Arial;
-            font-size: 17px;
+            font-size: 22px;
             padding: 8px;
         }
 
@@ -22,6 +22,7 @@
             padding: 0 1em 0 0;
             margin: 0;
             width: 100%;
+            /* height: 50px; */
             font-family: inherit;
             font-size: 25px;
             cursor: inherit;
@@ -132,8 +133,8 @@
             padding: 12px;
             margin: 10px 0;
             border: none;
-            width: 33%;
-            height: 100%;
+            width: 45%;
+            height: 80%;
             border-radius: 55px;
             cursor: pointer;
             font-size: 25px;
@@ -186,41 +187,30 @@
 
     <script type="text/javascript" src="./dpd_files/myscript.js"></script>
     <script type="text/javascript" src="./dpd_files/deliveryFillScript.js"></script>
-
+    <script type="text/javascript" src="./dpd_files/getServiceCost.js"></script>
+    <script type="text/javascript" src="./dpd_files/createOrder.js"></script>
 </head>
 
 <body>
-    <!-- скрипт для отладки
-    ПОТОМ УДАЛИТЬ -->
-    <script>
-        function ready() {
-            document.querySelector("body > div:nth-child(4) > div.col-25 > button").click();
-        }
-
-        document.addEventListener("DOMContentLoaded", ready);
-    </script>
-
     <h1>Создание заказа dpd</h1>
-
-    <p>не забывайте обновлять бд</p>
-
-    <!-- <div class="row">
-        <div class="col-50">
-            <div class="container">
-
-            </div>
-        </div>
-    </div> -->
 
     <div class="row">
         <div class="col-25">
             <br>
-            <input type="text" id="lineNum" value="4935" />
+            <input type="text" id="lineNum" value="4900" />
             <button onclick="getJSON()" class="btn2">ввести номер строки</button>
+            <div id='getJsonResp'></div>
+            <div id='zippackLink'></div>
+            <script>
+                getJSONBtn = document.getElementById('lineNum').addEventListener('keyup', function (e) {
+                    if (e.keyCode === 13) {
+                        event.preventDefault();
+                        document.getElementById("getJSONBtn").click();
+                    }
+                })
+            </script>
         </div>
-        <div class="col-2">
-            <button class="btn" onclick="getJSON()">обновить БД</button>
-
+        <div class="col-75">
         </div>
         <div class="col-50">
             <!-- <div class="container">
@@ -232,7 +222,7 @@
 
     </div>
     <br>
-    <div class="row" >
+    <div class="row">
         <div class="col-50">
             <h3>Данные о заказе</h3>
             <div class="container">
@@ -241,18 +231,7 @@
                 <label class="description">Выбор услуги</label>
                 <div class="row">
                     <div class="col-75">
-                        <select class="select-css" id="serviceCode" value="ECN">
-                            <option value="BZN">DPD 18:00</option>
-                            <option value="ECN">DPD ECONOMY </option>
-                            <option value="ECU">DPD ECONOMY CU</option>
-                            <option value="CUR">DPD CLASSIC</option>
-                            <option value="NDY">DPD EXPRESS</option>
-                            <option value="CSM">DPD Online Express</option>
-                            <option value="PCL">DPD OPTIMUM</option>
-                            <option value="PUP">DPD SHOP(только для ТТ)</option>
-                            <option value="MAX">DPD MAX domestic</option>
-                            <option value="MXO">DPD STANDART</option>
-                        </select>
+
                     </div>
                     <div class="col-50">
                     </div>
@@ -288,193 +267,180 @@
                 </div>
                 <label class="description">Содержимое отправки</label>
                 <input id="cargoCategory" type="text" />
-                <label class="description">Интервал времени доставки груза</label>
-                <div class="row">
-                    <div class="col-25">
-                        <select class="select-css" id="pickupTimePeriod" value="1">
-                            <option value="9-18">9-18</option>
-                            <option value="9-14">9-14</option>
-                            <option value="13-18>">13-18</option>
-                            <option value="18-2>">18-22</option>
-                            <option value="9-22>">9-22 (только по услугам DPD Online Express, DPD OPTIMUM)</option>
-                        </select>
-                    </div>
-                    <div class="col-75">
-                    </div>
-                </div>
+
             </div>
 
-            <h3>Приём груза</h3>
-            <div class="container">
-                <!-- <label class="description">Дата приема груза</label> -->
-                <input id="datePickup" type="date" placeholder="YYYY-MM-DD" value="">
-                <!-- <label class="description" for="element_13">Интервал времени приёма груза</label> -->
-                <br> <br> <br>
-                <select class="select-css" id="pickupTimePeriod" value="9-13">
-                    <option value="9-18">9-18</option>
-                    <option value="9-13">9-13</option>
-                    <option value="13-18>">13-18</option>
-                </select>
-                <br>
-            </div>
+
         </div>
 
         <div class="col-50">
-            <h3>Создание получателя</h3>
+            <h3>Приём груза</h3>
+            <div class="container row">
+                <!-- <label class="description">Дата приема груза</label> -->
+                <div class="col-50">
+                    <input id="datePickup" type="date" placeholder="YYYY-MM-DD" value="">
+                    <!-- <label class="description" for="element_13">Интервал времени приёма груза</label> -->
+
+                </div><br> <br> <br>
+                <div class="col-50">
+                    <select class="select-css" id="pickupTimePeriod" value="9-13">
+                        <option value="9-18">9-18</option>
+                        <option value="9-13">9-13</option>
+                        <option value="13-18>">13-18</option>
+                    </select>
+                </div>
+                <br>
+            </div>
+
+            <h3>Товары</h3>
             <div class="container">
-                <label class="description">Компания / Имя Получателя</label>
-                <input id="receiverName" type="text" />
-                <label class="description">Регион</label>
-                <input id="receiverRegion" type="text" />
-                <label class="description">Город</label>
-                <input id="receiverCity" type="text" />
-                <div class="row">
-                    <div class="col-25">
-                        <label class="description">Аббревиатура улицы</label>
-                        <input id="receiverStreetAbbr" type="text" />
-                    </div>
-                    <div class="col-75">
-                        <label class="description">Улица</label>
-                        <input id="receiverStreet" type="text" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-25">
-                        <label class=" description">дом</label>
-                        <input id="receiverHouse" type="text" />
-                        <label class=" description">корпус</label>
-                        <input id="receiverKorpus" type="text" />
-                    </div>
-                    <div class="col-25">
-                        <label class=" description">строение</label>
-                        <input id="receiverStr" type="text" />
-                        <label class="description">владение</label>
-                        <input id="receiverVlad" type="text" />
-                    </div>
-                    <div class="col-25">
-                        <label class="description">квартира</label>
-                        <input id="receiverFlat" type="text" />
-                        <label class="description">офис</label>
-                        <input id="receiverOffice" type="text" />
-                        <label class="description">павильон</label>
-                        <input id="receiverExtrainfo" type="text" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-25">
-                        <label class="description">Контактное лицо</label>
-                        <input id="receiverContactFio" type="text" />
-                    </div>
-                    <div class="col-25">
-                        <label class="description">Телефон</label>
-                        <input id="receiverContactPhone" type="text" />
-                        <label class="description">Почта</label>
-                        <input id="receiverEmail" type="text" />
+                <div class="boxesContainer">
+                    <div class="table-responsive">
+                        <table class="table table-bordered BoxesTable" id="itemsTable">
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Артикул</th>
+                                    <th>Наименование</th>
+                                    <th>Кол-во</th>
+                                    <th>Стоимость ед.</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemsList">
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <h3>Товары</h3>
-    <div class="container">
-        <div class="boxesContainer">
-            <div class="table-responsive">
-                <table class="table table-bordered BoxesTable" id="itemsTable">
-                    <thead>
-                        <tr>
-                            <th>№</th>
-                            <th>Артикул</th>
-                            <th>Наименование</th>
-                            <th>Кол-во</th>
-                            <th>Стоимость ед.</th>
-                        </tr>
-                    </thead>
-                    <tbody id="itemsList">
-                        <!-- <tr id="boxI0">
-                            <td><input size="10" type="text" name="items[0][article]"></td>
-                            <td><input type="text" name="items[0][name]"></td>
-                            <td><input size="10" type="text" name="items[0][barcode]"></td>
-                            <td><input size="2" type="number" name="items[0][VATrate]"></td>
-                            <td><input type="text" placeholder="01...21..." name="items[0][governmentCode]"></td>
-                            <td class="boxesCalcInput boxQty"><input type="number" name="items[0][quantity]"></td>
-                            <td><input size="2" type="text" name="items[0][mass]" step="0.01"></td>
-                            <td class="boxesCalcInput"><input type="text" name="items[0][retprice]" class="retprice"></td>
-                            <td><select name="items[0][type]" class="itmType form-control"><option value="1">Товар</option><option value="7">Забор</option></select></td>
-                            <td><a href='boxI0' class='btn btnBoxesRemove'>Удалить</a> </td>
-                        </tr> -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+
 
     <br>
-    <button style="height: 400px;" onclick="buttonTerminalDelivery();" class="btn">доставка до пункта пвз</button>
-    <button onclick="chooseDeliveryType();" class="btn">Довериться автоматике</button>
-    <button onclick="buttonAddressDelivery();" class="btn">доставка до двери</button>
+    <div style="text-align:center">
+        <button onclick="buttonTerminalDelivery();" class="btn" style="height: 100px;">доставка до пункта пвз</button>
+        <button onclick="buttonAddressDelivery();" class="btn" style="height: 100px;">доставка до двери</button>
+    </div>
     <br>
-    <button onclick="getDPDTerminals();" class="btn">Поищем терминал!"</button>
-    <div id="terminalDeliveryContainer" >
-        <h3>Давайте подыщем терминал</h3>
-        <h4>Что вы знаете о клиенте?</h4>
+
+    <div name="terminalDelivery">
+        <div id="terminalDeliveryContainer" class="row">
+            <div class="col-50">
+                <h3>Давайте подыщем терминал</h3>
+                <h4>Что вы знаете о клиенте?</h4>
+                <div class="container">
+                    <label class="description">Адекватно?</label>
+                    <input id="cf1" type="text">
+                    <label class="description">Регион</label>
+                    <input id="terminalRegion" type="text" />
+                    <label class="description">Город</label>
+                    <input id="terminalCity" type="text" />
+                </div>
+            </div>
+            <div class="col-50">
+                <br>
+                <div id="findTerminalResp"><br><br></div>
+                <button onclick="getDPDTerminals();" class="btn">Поищем терминал!"</button>
+            </div>
+        </div>
+
+        <br><br>
+
         <div class="container">
-            <label class="description">Адекватно?</label>
-            <input id="cf1" type="text">
+            <div class="row">
+                <div class="col-25" style="margin-left: auto; margin-right: auto;">
+                    <div id="serverResp" style="margin-left: auto; margin-right: auto;">ответ сервера: </div>
+                    <div id="map" style="width: 900px; height: 800px;"></div>
+                </div>
+                <div class="col-50" style="margin-left: auto; margin-right: auto;">
+                    <br>
+                    <select id="terminalList" size="15" multiple="multiple" class="select-css">
+                    </select>
+                    <script>
+                        document.getElementById('terminalList').addEventListener('change', function () {
+                            document.getElementById('choosenTerminal').innerHTML = this.options[this.selectedIndex].innerHTML;
+                            choosen = this.value;
+                        })
+                    </script>
+                    <h3>
+                        Вы выбрали:
+                    </h3>
+                    <h2>
+                        <div id="choosenTerminal"></div>
+                    </h2>
+                    <div class="row">
+                        <button class="btn col-25" onclick="getServiceCost()">Рассчитать стоимость</button>
+                        <select class="select-css col-25" id="serviceCode"></select>
+                        <div class="col-50"></div>
+                    </div>
+                    <div id='countServiceResp'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div name="doorShipment" style="display: none;">
+        <h1>ПОКА НЕ РАБОТАЕТ</h1>
+        <h3>Создание получателя</h3>
+        <div class="container">
+            <label class="description">Компания / Имя Получателя</label>
+            <input id="receiverName" type="text" />
             <label class="description">Регион</label>
-            <input id="terminalRegion" type="text" />
+            <input id="receiverRegion" type="text" />
             <label class="description">Город</label>
-            <input id="terminalCity" type="text" />
+            <input id="receiverCity" type="text" />
             <div class="row">
                 <div class="col-25">
                     <label class="description">Аббревиатура улицы</label>
-                    <input id="terminalStreetAbbr" type="text" />
+                    <input id="receiverStreetAbbr" type="text" />
                 </div>
                 <div class="col-75">
                     <label class="description">Улица</label>
-                    <input id="terminalStreet" type="text" />
+                    <input id="receiverStreet" type="text" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-25">
                     <label class=" description">дом</label>
-                    <input id="terminalHouse" type="text" />
+                    <input id="receiverHouse" type="text" />
                     <label class=" description">корпус</label>
-                    <input id="terminalKorpus" type="text" />
+                    <input id="receiverKorpus" type="text" />
                 </div>
                 <div class="col-25">
                     <label class=" description">строение</label>
-                    <input id="terminalStr" type="text" />
+                    <input id="receiverStr" type="text" />
                     <label class="description">владение</label>
-                    <input id="terminalVlad" type="text" />
+                    <input id="receiverVlad" type="text" />
+                </div>
+                <div class="col-25">
+                    <label class="description">квартира</label>
+                    <input id="receiverFlat" type="text" />
+                    <label class="description">офис</label>
+                    <input id="receiverOffice" type="text" />
+                    <label class="description">павильон</label>
+                    <input id="receiverExtrainfo" type="text" />
                 </div>
             </div>
-            <button onclick="getDPDTerminals();" class="btn">Поищем терминал!"</button>
+            <div class="row">
+                <div class="col-25">
+                    <label class="description">Контактное лицо</label>
+                    <input id="receiverContactFio" type="text" />
+                </div>
+                <div class="col-25">
+                    <label class="description">Телефон</label>
+                    <input id="receiverContactPhone" type="text" />
+                    <label class="description">Почта</label>
+                    <input id="receiverEmail" type="text" />
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-25" style="margin-left: auto; margin-right: auto;">
-                <div id="map" style="width: 900px; height: 800px;"></div>
-            </div>
-            <div class="col-50" style="margin-left: auto; margin-right: auto;">
-                <div id="serverResp" style="margin-left: auto; margin-right: auto;">ответ сервера: </div>
-                <h3>
-                    Вы выбрали:
-                </h3>
-                <h2>
-                    <div id="choosenTerminal"></div>
-                </h2>
-                <select id="terminalList" size="15" multiple="multiple" class="select-css">
-                </select>
-                <script>
-                    document.getElementById('terminalList').addEventListener('change', function(){
-                        document.getElementById('choosenTerminal').innerHTML = this.value
-                    })
-                </script>
-            </div>
-        </div>
+    <div class="row">
+        <div id='createOrderResp' class='col-75'></div>
+        <button class="btn col-25" style="height: 100px;" onclick="createOrder()">Создать заказ</button>
     </div>
     <script type="text/javascript">
         ymaps.ready(function () {
