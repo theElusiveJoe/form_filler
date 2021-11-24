@@ -67,10 +67,6 @@ def getTerminals(siteQuery, dadataResp = ''):
     or suggests list of affordable terminals
 
     returns json string ready to respond to website
-
-    структура ответа на сервер:
-        error - если вообще невозможно отправить посылку
-        problems - не находит такой пункт самовывоза, или не подходит по габаритам
     """
 
     # for test!!!
@@ -118,6 +114,7 @@ def getTerminals(siteQuery, dadataResp = ''):
         "problems": False,
         "description": "",
         "suggestions": [],
+        "ymapSearch": ""
     }
 
     # for test!!!
@@ -156,6 +153,9 @@ def getTerminals(siteQuery, dadataResp = ''):
             resp["error"] = True
             resp["description"] = "этого города нет в списке городов, в которых доступен наложный платёж"
             return json.dumps(resp)
+
+    # создаем адрес для поиска на карте
+    resp['ymapSearch'] = f'{addr_obj["result"]}'
 
     # если все хорошо, начинаем искать по извращенной логике:
     # для региона используем:
@@ -285,7 +285,8 @@ def getTerminals(siteQuery, dadataResp = ''):
                         regionCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR regionName  LIKE "%{isNoneInJson(addr_obj,'region')}%"
                     )
                 AND
-                    (   cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
+                    (   
+                        cityCode  LIKE "%{isNoneInJson(addr_obj,'region_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'region')}%"
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%"
                         OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%"OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%"
                     )

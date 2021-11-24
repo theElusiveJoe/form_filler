@@ -7,7 +7,8 @@
     <title>Заказ в dpd</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        h2, h3{
+        h2,
+        h3 {
             margin: 2px;
         }
 
@@ -197,13 +198,13 @@
     <script type="text/javascript" src="./dpd_files/createOrder.js"></script>
 </head>
 
-<body >
+<body>
     <h2>Создание заказа dpd</h2>
 
     <div class="row">
         <div class="col-25">
-            
-            <input type="text" id="lineNum" value="4900" style="margin: 2px;"/>
+
+            <input type="text" id="lineNum" value="4900" style="margin: 2px;" />
             <div id='getJsonResp'></div>
             <div id='zippackLink'></div>
         </div>
@@ -219,10 +220,10 @@
             </script>
         </div>
     </div>
-    
+
 
     </div>
-    
+
     <div class="row">
         <div class="col-50">
             <div class="container">
@@ -280,7 +281,7 @@
                     <input id="datePickup" type="date" placeholder="YYYY-MM-DD" value="">
                     <!-- <label class="description" for="element_13">Интервал времени приёма груза</label> -->
 
-                </div>  
+                </div>
                 <div class="col-50">
                     <select class="select-css" id="pickupTimePeriod" value="9-13">
                         <option value="9-18">9-18</option>
@@ -288,7 +289,7 @@
                         <option value="13-18>">13-18</option>
                     </select>
                 </div>
-                
+
             </div>
 
             <h3>Товары</h3>
@@ -313,13 +314,13 @@
                 </div>
             </div>
             <div style="text-align:center">
-                <button onclick="buttonTerminalDelivery();" class="btn" >доставка до пункта пвз</button>
-                <button onclick="buttonAddressDelivery();" class="btn" >доставка до двери</button>
+                <button onclick="buttonTerminalDelivery();" class="btn">доставка до пункта пвз</button>
+                <button onclick="buttonAddressDelivery();" class="btn">доставка до двери</button>
             </div>
         </div>
     </div>
 
-    
+
 
     <div name="terminalDelivery">
         <div id="terminalDeliveryContainer" class="row">
@@ -334,13 +335,13 @@
                 </div>
             </div>
             <div class="col-50">
-                
+
                 <div id="findTerminalResp"></div>
                 <button onclick="getDPDTerminals();" class="btn">Поищем терминал!"</button>
             </div>
         </div>
 
-        
+
 
         <div class="container">
             <div class="row">
@@ -349,7 +350,7 @@
                     <div id="map" style="width: 900px; height: 800px;"></div>
                 </div>
                 <div class="col-50" style="margin-left: auto; margin-right: auto;">
-                    
+
                     <select id="terminalList" size="15" multiple="multiple" class="select-css">
                     </select>
                     <script>
@@ -370,8 +371,9 @@
                         <div class="col-50"></div>
                     </div>
                     <div id='countServiceResp'></div>
-                        <div id='createOrderResp' ></div>
-                        <button class="btn " style="height: 100px; margin-right: 30px;" onclick="createOrder()">Создать заказ</button>
+                    <div id='createOrderResp'></div>
+                    <button class="btn " style="height: 100px; margin-right: 30px;" onclick="createOrder()">Создать
+                        заказ</button>
                 </div>
             </div>
         </div>
@@ -434,13 +436,19 @@
         </div>
     </div>
 
-    
+
     <script type="text/javascript">
         ymaps.ready(function () {
             myMap = new ymaps.Map("map", {
                 center: [55.76, 37.64],
                 zoom: 10
             });
+            searchControl = new ymaps.control.SearchControl({
+                options: {
+                    provider: 'yandex#search'
+                }
+            });
+            myMap.controls.add(searchControl);
         });
     </script>
 
