@@ -8,7 +8,7 @@ function createAdress(order){
     var entr = order['zippack']['obj']['Customer']['Entrance'];
     var floor = order['zippack']['obj']['Customer']['Floor'];
     var addr = (district.trim() == '' ? '' : ('район: ' + district + ' '))
-    + (city.trim() == '' ? '' : ('город: ' + city + ' '))
+    + ((city.trim() == '' || city.trim() == 'Москва') ? '' : ('город: ' + city + ' '))
     + (street.trim() == '' ? '' : ('улица: ' + street + ' '))
     + (house == '' ? '' : ('дом: ' + house + ' '))
     + (aps.trim() == '' ? '' : ('квартира: ' + aps + ' '))
