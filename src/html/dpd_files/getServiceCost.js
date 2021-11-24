@@ -8,9 +8,9 @@ function getServiceCost() {
 
     d = {
         'terminalId': choosen,
-        'positions': ziplusheets['gsheets']['positions'].replace(',', '.'),
-        'weight': ziplusheets['gsheets']['weight'].replace(',', '.').replace(/[^\d.]/g, ''),
-        'size': ziplusheets['gsheets']['size'].replace(',', '.').replace(/\s/g, '').replace('\\', '/').split('/')
+        'positions': ziplusheets['gsheets']['positions'].replace(/[^\d.,]/g, '').replace(',', '.'),
+        'weight': ziplusheets['gsheets']['weight'].replace(/[^\d.,]/g, '').replace(',', '.'),
+        'size': ziplusheets['gsheets']['size'].replace('\\', '/').replace(/[^\d.,/]/, '').replace(',', '.').split('/')
     }
     body = JSON.stringify(d)
 

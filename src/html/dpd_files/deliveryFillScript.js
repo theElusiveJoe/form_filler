@@ -42,7 +42,7 @@ function parseTerminals(points) {
             'maxLength': intSize[2],
             'midWidth': intSize[1],
             'minHeight': intSize[0],
-            'maxWeight': Math.ceil(Number(ziplusheets['gsheets']['weight'].replace(/[^\d.]/g, '').replace(',', '.')) / Number(ziplusheets['gsheets']['positions'])),
+            'maxWeight': Math.ceil(Number(ziplusheets['gsheets']['weight'].replace(/[^\d.,]/, '').replace(',', '.')) / Number(ziplusheets['gsheets']['positions'])),
             'payType': ziplusheets['gsheets']['payment_method']
         }
         var xhr = new XMLHttpRequest();

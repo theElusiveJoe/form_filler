@@ -15,7 +15,7 @@ function createOrder() {
     data['order']['serviceCode'] = document.querySelector("#serviceCode").value
     data['order']['serviceVariant'] = document.querySelector("#serviceVariant").value
     data['order']['cargoNumPack'] = document.querySelector("#cargoNumPack").value
-    data['order']['cargoWeight'] = document.querySelector("#cargoWeight").value.replace(/[^\d.]/g, '').replace(',', '.')
+    data['order']['cargoWeight'] = document.querySelector("#cargoWeight").value.replace(/[^\d.,]/g, '').replace(',', '.')
     data['order']['cargoValue'] = document.querySelector("#cargoValue").value
     data['order']['cargoCategory'] = document.querySelector("#cargoCategory").value
 

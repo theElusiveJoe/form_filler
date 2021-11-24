@@ -192,7 +192,7 @@ def getTerminals(siteQuery, dadataResp = ''):
                     )
 
                 """
-    # print(sqlQuery)
+    print(sqlQuery)
     cur.execute(
        sqlQuery
     )
@@ -232,7 +232,7 @@ def getTerminals(siteQuery, dadataResp = ''):
                         houseNo LIKE "%{isNoneInJson(addr_obj,'house')}%" OR ownership LIKE "%{isNoneInJson(addr_obj,'house')}%"
                     )
                 """
-
+    print(sqlQuery)
     cur.execute(
        sqlQuery
     )
@@ -293,7 +293,7 @@ def getTerminals(siteQuery, dadataResp = ''):
                     )
                 """
 
-    # print(sqlQuery)
+    print(sqlQuery)
     cur.execute(
        sqlQuery
     )
@@ -330,7 +330,7 @@ def getTerminals(siteQuery, dadataResp = ''):
                         {orderData["midWidth"]} <= maxWidth AND {orderData["minHeight"]} <= maxHeight
                     )
                 """
-    # print(sqlQuery)
+    print(sqlQuery)
     cur.execute(
        sqlQuery
     )
