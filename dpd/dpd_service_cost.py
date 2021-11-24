@@ -60,7 +60,7 @@ def getServiceCostByParcels2(siteQuery):
 
     myXml = ET.tostring(theRoot)
 
-    conn = http.client.HTTPConnection('ws.dpd.ru')
+    conn = http.client.HTTPConnection(serverURL)
     headers = {
         "Encoding": "utf-8",
     }

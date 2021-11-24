@@ -49,7 +49,6 @@ def create_xml(data):
         it.set('article', order['items'][f'{i}']['article'])
         it.text = order['items'][f'{i}']['name']
 
-    tree.write('parsed_data.xml', encoding='utf-8')
     ans =  ET.tostring(root, encoding='utf-8')
     print(ans)
     return ans

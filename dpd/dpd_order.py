@@ -59,7 +59,6 @@ def create_xml(data):
             a =ET.SubElement(it, x)
             a.text = str(order['order']['unitLoad'][i][x])
 
-    tree.write("parsed_data.xml", encoding="utf-8")
     ans = ET.tostring(theRoot)
     return ans
 
