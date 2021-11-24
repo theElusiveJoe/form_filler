@@ -146,7 +146,8 @@ def getTerminals(siteQuery, dadataResp = ''):
 
     # проверим, доступен ли в выбраном городе тип платежа
     if orderData["payType"] == "наложный":
-        query1 = f"""SELECT * FROM citiesCashPay Where cityName='{orderData['city']}'"""
+        query1 = f"""SELECT * FROM citiesCashPay Where cityName='{orderData['city'].strip().title()}'"""
+        print(query1)
         cur.execute(query1)
         dbresp = cur.fetchall()
         if len(dbresp) == 0:
