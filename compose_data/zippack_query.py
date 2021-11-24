@@ -6,7 +6,7 @@ import json
 
 with open('tokens.json', 'r') as f:
     tokens = json.load(f)
-    TOKEN = tokens['zippack_token']
+    TOKEN = tokens['zippack']['zippack_token']
 
 def get_order_from_zippack(order_id):
     conn = http.client.HTTPConnection('www.zippack.ru')

@@ -4,12 +4,18 @@ import http.client
 import os
 import time
 
-from dpd_update_db import updateAll
+from dpd.dpd_update_db import updateAll
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
-    dadata_token = tokens["dadata_token"]
-    dadata_key = tokens["dadata_key"]
+    testMode = ''
+    if tokens['settings']['mode'] == 'test':
+        testMode = 'test_'
+    serverURL = tokens['dpd'][f"{testMode}server"]
+    client_number = tokens['dpd']["dpd_number"]
+    client_key = tokens['dpd']["dpd_key"]
+    dadata_token = tokens['dadata']["dadata_token"]
+    dadata_key = tokens['dadata']["dadata_key"]
 
 def getCorrectAddres(badAddress):
     """
@@ -89,7 +95,7 @@ def getTerminals(siteQuery, dadataResp = ''):
     # orderData = siteQuery
     # orderData = json.loads(siteQuery)
 
-    conn = sqlite3.connect(r"./db/dpd.db")
+    conn = sqlite3.connect(r"db/dpd.db")
     cur = conn.cursor()
     
     cur.execute("""
@@ -100,7 +106,7 @@ def getTerminals(siteQuery, dadataResp = ''):
     nowtime = round(time.time())
     if nowtime - lastUpdateTime > 5*60*60:
         print('******updating BD******')
-        # updateAll()
+        updateAll()
         cur.execute(f"""
             DELETE FROM lastUpdate;
         """)
@@ -117,13 +123,99 @@ def getTerminals(siteQuery, dadataResp = ''):
     }
 
     # for test!!!
+    dadataResp = """{
+    "source": "Волгоградская область  Волжский  Мира 42м",
+        "result": "Волгоградская обл, г Волжский, ул Мира, д 42М",
+        "postal_code": "404127",
+        "country": "Россия",
+        "country_iso_code": "RU",
+        "federal_district": "Южный",
+        "region_fias_id": "da051ec8-da2e-4a66-b542-473b8d221ab4",
+        "region_kladr_id": "3400000000000",
+        "region_iso_code": "RU-VGG",
+        "region_with_type": "Волгоградская обл",
+        "region_type": "обл",
+        "region_type_full": "область",
+        "region": "Волгоградская",
+        "area_fias_id": null,
+        "area_kladr_id": null,
+        "area_with_type": null,
+        "area_type": null,
+        "area_type_full": null,
+        "area": null,
+        "city_fias_id": "bc5ed788-84c8-493e-9598-7a15a9f1e4c1",
+        "city_kladr_id": "3400000200000",
+        "city_with_type": "г Волжский",
+        "city_type": "г",
+        "city_type_full": "город",
+        "city": "Волжский",
+        "city_area": null,
+        "city_district_fias_id": null,
+        "city_district_kladr_id": null,
+        "city_district_with_type": null,
+        "city_district_type": null,
+        "city_district_type_full": null,
+        "city_district": null,
+        "settlement_fias_id": null,
+        "settlement_kladr_id": null,
+        "settlement_with_type": null,
+        "settlement_type": null,
+        "settlement_type_full": null,
+        "settlement": null,
+        "street_fias_id": "41390b6b-9019-4faa-ba42-1776697d8f84",
+        "street_kladr_id": "34000002000003100",
+        "street_with_type": "ул Мира",
+        "street_type": "ул",
+        "street_type_full": "улица",
+        "street": "Мира",
+        "house_fias_id": "5082f8fd-554b-475a-bf7d-0485d1266603",
+        "house_kladr_id": "3400000200000310399",
+        "house_type": "д",
+        "house_type_full": "дом",
+        "house": "42М",
+        "block_type": null,
+        "block_type_full": null,
+        "block": null,
+        "entrance": null,
+        "floor": null,
+        "flat_fias_id": null,
+        "flat_type": null,
+        "flat_type_full": null,
+        "flat": null,
+        "flat_area": null,
+        "square_meter_price": null,
+        "flat_price": null,
+        "postal_box": null,
+        "fias_id": "5082f8fd-554b-475a-bf7d-0485d1266603",
+        "fias_code": "34000002000000000310399",
+        "fias_level": "8",
+        "fias_actuality_state": "0",
+        "kladr_id": "3400000200000310399",
+        "capital_marker": "0",
+        "okato": "18410000000",
+        "oktmo": "18710000001",
+        "tax_office": "3435",
+        "tax_office_legal": "3435",
+        "timezone": "UTC+3",
+        "geo_lat": "48.775275",
+        "geo_lon": "44.799226",
+        "beltway_hit": null,
+        "beltway_distance": null,
+        "qc_geo": 0,
+        "qc_complete": 5,
+        "qc_house": 2,
+        "qc": 0,
+        "unparsed_parts": null,
+        "metro": null
+        }"""
+    orderData = json.loads(siteQuery)
+    
     if dadataResp != '': 
-        addr_obj = dadataResp
+        addr_obj = json.loads(dadataResp)
     else :
-        orderData = json.loads(siteQuery)
-        addr_obj = getCorrectAddres(
-            orderData["region"] + "  " + orderData["city"] + "  " + ('' if orderData["addr"]=='' else orderData["addr"])
-        )[0]
+        print(orderData)
+
+        addr_obj = getCorrectAddres( orderData["region"] + "  " + orderData["city"] + "  " + ('' if orderData["addr"]=='' else orderData["addr"]))[0]
         
     print('--------------------ПРИШЛО С DADATA   :--------------------')
     print(addr_obj)
@@ -372,27 +464,22 @@ def createManyDadataResps():
     f = open('./test/dadataRespExamples.json', 'w').write(json.dumps(adresses, ensure_ascii=False))
 
 if __name__ == "__main__":
-    # updateDadataResps()
-    # createManyDadataResps()
+    conn = sqlite3.connect(r"db/dpd.db")
+    cur = conn.cursor()
+    
+    cur.execute("""
+        SELECT * FROM lastUpdate
+    """)
 
-
-    ftests = open('test/dpdAddressTests.json')
-    tests = json.load(ftests)
-    ftests.close()
-
-    fresps = open('test/dadataResps.json')
-    resps = json.load(fresps)
-    fresps.close()
-
-    fresults = open('test/results.json', 'w')
-    results = []
-
-    nums = range(len(tests))
-
-    for i in nums:
-        print('_________' ,i ,'_________')
-        a = json.loads(getTerminals(tests[i], dadataResp=resps[i]))
-        a['predicion'] = tests[i]['prediction']
-        results.append(a)
-
-    json.dump(results, fresults, ensure_ascii=False)
+    lastUpdateTime = cur.fetchone()[0]
+    nowtime = round(time.time())
+    if nowtime - lastUpdateTime > 5*60*60:
+        print('******updating BD******')
+        updateAll()
+        cur.execute(f"""
+            DELETE FROM lastUpdate;
+        """)
+        cur.execute(f"""
+            INSERT INTO lastUpdate (time) VALUES ({nowtime});
+        """)
+        conn.commit()

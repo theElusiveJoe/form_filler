@@ -5,8 +5,14 @@ import http.client
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
-    client_number = tokens["dpd_number"]
-    client_key = tokens["dpd_key"]
+    testMode = ''
+    if tokens['settings']['mode'] == 'test':
+        testMode = 'test_'
+    serverURL = tokens['dpd'][f"{testMode}server"]
+    client_number = tokens['dpd']["dpd_number"]
+    client_key = tokens['dpd']["dpd_key"]
+    dadata_token = tokens['dadata']["dadata_token"]
+    dadata_key = tokens['dadata']["dadata_key"]
 
 # для обновления базы нужно реализовать 3 функции:
 #   1 getCitiesCashPay - Получить список городов свозможностью доставки сналоженным платежом
@@ -64,7 +70,7 @@ prefix_map = {
 
 def queryToXMLs():
     for queryNum in [1, 2, 3]:
-        conn = http.client.HTTPConnection("wstest.dpd.ru")
+        conn = http.client.HTTPConnection(serverURL)
         headers = {"Encoding": "utf-8"}
         body = queries[queryNum]
         conn.request("POST", "/services/geography2?wsdl", body, headers)
@@ -84,7 +90,7 @@ def getQueryTextFromXML(queryNum):
 
 
 def getQueryText(queryNum):
-    conn = http.client.HTTPConnection("wstest.dpd.ru")
+    conn = http.client.HTTPConnection(serverURL)
     headers = {"Encoding": "utf-8"}
     body = queries[queryNum]
     conn.request("POST", "/services/geography2?wsdl", body, headers)
@@ -97,7 +103,7 @@ def getQueryText(queryNum):
 
 def updateCitiesCashPay():
     tableName = "citiesCashPay"
-    conn = sqlite3.connect(r"./db/dpd.db")
+    conn = sqlite3.connect(r"db/dpd.db")
     cur = conn.cursor()
     cur.execute(
         f"""CREATE TABLE IF NOT EXISTS {tableName}(
@@ -137,7 +143,7 @@ def updateCitiesCashPay():
 
 def updateParcelShops():
     tableName = "parcelShops"
-    conn = sqlite3.connect(r"./db/dpd.db")
+    conn = sqlite3.connect(r"db/dpd.db")
     cur = conn.cursor()
 
     columns = [
@@ -230,7 +236,7 @@ def updateParcelShops():
 
 def updateTerminalsSelfDelivery2():
     tableName = "terminalsSelfDelivery2"
-    conn = sqlite3.connect(r"./db/dpd.db")
+    conn = sqlite3.connect(r"db/dpd.db")
     cur = conn.cursor()
 
     columns = [

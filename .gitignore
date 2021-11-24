@@ -24,3 +24,7 @@ tokens.json
 result.txt
 tokens.json
 tokens.json
+chechDBLastUpdate.py
+*__pycache__*
+
+/tests

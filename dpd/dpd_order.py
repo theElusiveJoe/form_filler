@@ -2,14 +2,18 @@ import xml.etree.ElementTree as ET
 import json
 import http.client
 import sqlite3
-
+import os
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
-    client_number = tokens["dpd_number"]
-    client_key = tokens["dpd_key"]
-    dadata_token = tokens["dadata_token"]
-    dadata_key = tokens["dadata_key"]
+    testMode = ''
+    if tokens['settings']['mode'] == 'test':
+        testMode = 'test_'
+    serverURL = tokens['dpd'][f"{testMode}server"]
+    client_number = tokens['dpd']["dpd_number"]
+    client_key = tokens['dpd']["dpd_key"]
+    dadata_token = tokens['dadata']["dadata_token"]
+    dadata_key = tokens['dadata']["dadata_key"]
 
 
 def create_xml(data):
@@ -24,7 +28,7 @@ def create_xml(data):
         'S': 'http://schemas.xmlsoap.org/soap/envelope/',
         'ns2': 'http://dpd.ru/ws/order2/2012-04-04'
     }
-    tree = ET.parse("dpd_order_pattern.xml")
+    tree = ET.parse("dpd"+os.sep+"dpd_order_pattern.xml")
     theRoot = tree.getroot()
 
     root = theRoot.find('soapenv:Body', ns).find('tns:createOrder', ns).find('orders')
@@ -65,7 +69,8 @@ def send_order(data_xml):
     simply sends the xml-string to dpd soap server
     """
     print('connection opened')
-    conn = http.client.HTTPConnection("wstest.dpd.ru")
+    conn = http.client.HTTPConnection(serverURL)
+    print(serverURL)
     headers = {"Encoding": "utf-8"}
     conn.request("POST", "/services/order2?wsdl", data_xml, headers)
     print('sent')

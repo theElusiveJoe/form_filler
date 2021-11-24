@@ -1,0 +1,51 @@
+<ns0:Envelope xmlns:ns0="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://dpd.ru/ws/order2/2012-04-04">
+	<ns0:Body>
+		<ns1:createOrder>
+			<orders>
+				<auth>
+					<clientNumber>1002017398</clientNumber>
+					<clientKey>6D4216831E84FE7DE86BBDC4B5E9C97CE3E0E21D</clientKey>
+				</auth>
+				<header>
+					<datePickup>2021-11-24</datePickup>
+					<senderAddress>
+						<name>ИП Лихачев</name>
+						<countryName>Россия</countryName>
+						<index>101000</index>
+						<city>Москва</city>
+						<street>Складочная</street>
+						<streetAbbr>ул</streetAbbr>
+						<house>1</house>
+						
+						<str>1</str>
+						
+						<extraInfo>1б/1</extraInfo>
+						<workTimeFrom>10:00</workTimeFrom>
+						<workTimeTo>18:00</workTimeTo>
+						<contactFio>Алексей, Михаил</contactFio>
+						<contactPhone>89261672339, 89680914603</contactPhone>
+						<instructions>подъезд 10, СитиРент</instructions>
+					</senderAddress>
+					<pickupTimePeriod>9-13</pickupTimePeriod>
+				</header>
+				<order>
+					<orderNumberInternal>Z-12729</orderNumberInternal>
+					<serviceCode>MXO</serviceCode>
+					<serviceVariant>ДТ</serviceVariant>
+					<cargoNumPack>1</cargoNumPack>
+					<cargoWeight>27</cargoWeight>
+					<cargoRegistered>false</cargoRegistered>
+					<cargoValue>4047</cargoValue>
+					<cargoCategory>пакеты</cargoCategory>
+					
+					<receiverAddress>
+						<name>Антон</name>
+						<terminalCode>VIV</terminalCode>
+						<contactFio>Антон</contactFio>
+						<contactPhone>89296467609</contactPhone>
+					</receiverAddress>
+				<unitLoad><article>ZIP100.4x6</article><descript>ГРИППЕР ZIP-LOCK 4х6 см плотность 100 мкм</descript><npp_amount>1.42</npp_amount><count>3000</count></unitLoad></order>
+			</orders>
+		</ns1:createOrder>
+	</ns0:Body>
+</ns0:Envelope>

@@ -11,12 +11,11 @@ import json
 import os 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-from compose_info import get_order_info
-from dalii_order import create_dalli_order
-from dpd_pick_terminal import getTerminals as get_dpd_terminals
-from dpd_service_cost import getServiceCostByParcels2 as get_dpd_cost
-from dpd_order import create_dpd_order
-
+from compose_data.compose_info import get_order_info
+from dalli.dalii_order import create_dalli_order
+from dpd.dpd_pick_terminal import getTerminals as get_dpd_terminals
+from dpd.dpd_service_cost import getServiceCostByParcels2 as get_dpd_cost
+from dpd.dpd_order import create_dpd_order
 
 class S(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
@@ -154,7 +153,6 @@ def run(server_class=HTTPServer, handler_class=S, addr="localhost", port=8000):
     httpd.serve_forever()
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description="Run a simple HTTP server")
     parser.add_argument(
         "-l",
@@ -174,3 +172,4 @@ if __name__ == "__main__":
     
 
     run(addr=args.listen, port=args.port)
+

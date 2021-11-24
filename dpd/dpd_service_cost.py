@@ -2,17 +2,23 @@ import xml.etree.ElementTree as ET
 import http.client 
 import sqlite3
 import json
+import os
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
-    client_number = tokens["dpd_number"]
-    client_key = tokens["dpd_key"]
+    testMode = ''
+    if tokens['settings']['mode'] == 'test':
+        testMode = 'test_'
+    serverURL = tokens['dpd'][f"{testMode}server"]
+    client_number = tokens['dpd']["dpd_number"]
+    client_key = tokens['dpd']["dpd_key"]
+    dadata_token = tokens['dadata']["dadata_token"]
+    dadata_key = tokens['dadata']["dadata_key"]
 
 def getServiceCostByParcels2(siteQuery):
     orderData = json.loads(siteQuery)
-    # print(orderData)
 
-    dbConn = sqlite3.connect(r"./db/dpd.db")
+    dbConn = sqlite3.connect(r"db/dpd.db")
     cur = dbConn.cursor()
     cur.execute(f"""
         SELECT cityId
@@ -32,7 +38,7 @@ def getServiceCostByParcels2(siteQuery):
         'S': 'http://schemas.xmlsoap.org/soap/envelope/',
         'ns2': 'http://dpd.ru/ws/calculator/2012-03-20'
     }
-    tree = ET.parse("dpd_service_cost_pattern.xml")
+    tree = ET.parse("dpd"+os.sep+"dpd_service_cost_pattern.xml")
     theRoot = tree.getroot()
     
     root = theRoot.find('soapenv:Body', ns).find('tns:getServiceCostByParcels2', ns).find('request')
@@ -53,8 +59,8 @@ def getServiceCostByParcels2(siteQuery):
     parcel.find('quantity').text = orderData['positions'] 
 
     myXml = ET.tostring(theRoot)
-    # print(myXml)
-    conn = http.client.HTTPConnection('wstest.dpd.ru')
+
+    conn = http.client.HTTPConnection('ws.dpd.ru')
     headers = {
         "Encoding": "utf-8",
     }
@@ -62,7 +68,6 @@ def getServiceCostByParcels2(siteQuery):
 
     resp = conn.getresponse()
     a = resp.read().decode("utf-8")
-    # print(a)
     tree =  ET.ElementTree(ET.fromstring(a))
     root = tree.getroot()
     root = root.find('S:Body', ns).find('ns2:getServiceCostByParcels2Response', ns)

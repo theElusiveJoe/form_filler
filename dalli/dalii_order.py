@@ -1,18 +1,21 @@
 import xml.etree.ElementTree as ET
 import json
 import http.client
+import os
 
-# TOKEN = '608333adc72f545078ede3aad71bfe74'
 with open('tokens.json', 'r') as f:
     tokens = json.load(f)
-    TOKEN = tokens['dalli_token']
+    if tokens['settings']['mode'] == 'test':
+        TOKEN = tokens['dalli']['test_dalli_token']
+    else:
+        TOKEN = tokens['dalli']['dalli_token']
 
 def create_xml(data):
     parsed_data = json.loads(data)
     order = parsed_data['data']['orders'][0]
     # print(order)
 
-    tree = ET.parse('dalli_order_pattern.xml')
+    tree = ET.parse('dalli'+os.sep+'dalli_order_pattern.xml')
     root = tree.getroot()
     root.find('auth').set('token', TOKEN)
     root.find('order').set('number', order['order'])
