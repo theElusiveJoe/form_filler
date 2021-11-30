@@ -33,7 +33,7 @@ function parseTerminals(points) {
         
         myMap.geoObjects.removeAll()
         
-        var size = ziplusheets['gsheets']['size'].split('/')
+        var size = ziplusheets['gsheets']['size'].replace('\\', '/').replace(/[^\d.,/]/g, '').replace(',', '.').split('/')
         var intSize = [Number(size[0]), Number(size[1]), Number(size[2])].sort()
         var obj = {
             'region': document.querySelector("#terminalRegion").value,
