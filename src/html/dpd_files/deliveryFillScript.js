@@ -74,12 +74,14 @@ function parseTerminals(points) {
 }
 
 function buttonAddressDelivery() {
+    document.querySelector("#serviceVariant").value = 'ДД';
     document.getElementsByName("terminalDelivery")[0].style.display='none';
     document.getElementsByName("doorShipment")[0].style.display='block';
     return;
 }
 
 function buttonTerminalDelivery() {
+    document.querySelector("#serviceVariant").value = 'ДТ';
     document.getElementsByName("terminalDelivery")[0].style.display='block';
     document.getElementsByName("doorShipment")[0].style.display='none';
 

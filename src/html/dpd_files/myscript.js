@@ -69,6 +69,7 @@ function fillFields(order) {
     document.getElementById('datePickup').value = getTodayDate();
     document.getElementById('pickupTimePeriod').value = '9-13';
 
+    document.getElementById('gsheetCommments').innerHTML = order['gsheets']['comments']
 
     // заполнение информации о заказе
 

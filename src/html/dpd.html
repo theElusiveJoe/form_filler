@@ -126,6 +126,7 @@
         label {
             /* margin-bottom: 10px; */
             display: block;
+            font-size: 17px;
         }
 
         .icon-container {
@@ -209,9 +210,9 @@
             <div id='zippackLink'></div>
         </div>
         <div class="col-75">
-            <button onclick="getJSON()" class="btn2">ввести номер строки</button>
+            <button onclick="getJSON()" id='getJSONBtn' class="btn2">ввести номер строки</button>
             <script>
-                getJSONBtn = document.getElementById('lineNum').addEventListener('keyup', function (e) {
+                document.getElementById('lineNum').addEventListener('keyup', function (e) {
                     if (e.keyCode === 13) {
                         event.preventDefault();
                         document.getElementById("getJSONBtn").click();
@@ -226,50 +227,37 @@
 
     <div class="row">
         <div class="col-50">
-            <div class="container">
-                <label class="description">Номер заказа</label>
-                <input id="orderNumberInternal" type="text" />
-                <div class="row">
-                    <div class="col-75">
-
-                    </div>
-                    <div class="col-50">
-                    </div>
+            <div class="container row">
+                <div class="col-50">
+                    <label class="description">Номер заказа</label>
+                    <input id="orderNumberInternal" type="text" style="width: 50%;"/>
+                    <label class="description">Количество посылок</label>
+                    <input id="cargoNumPack" type="text" />
+                    <label class="description">Вес посылки</label>
+                    <input id="cargoWeight" type="text" />
+                    
                 </div>
-
-                <label class="description">Вариант доставки</label>
-                <div class="row">
-                    <div class="col-25">
-                        <select class="select-css" id="serviceVariant">
-                            <option value="ДД">ДД</option>
-                            <option value="ДТ">ДТ</option>
-                            <option value="ТД">ТД</option>
-                            <option value="ТТ">ТТ</option>
-                        </select>
-                    </div>
-                    <div class="col-75">
-                    </div>
+                <div class="col-50">
+                    <label class="description">Вариант доставки</label>
+                    <select class="select-css" id="serviceVariant"  style="width: 50%;">
+                        <option value="ДТ">дверь-ПВЗ</option>
+                        <option value="ДД">дверь-дверь</option>
+                        <option value="ТД">ТД</option>
+                        <option value="ТТ">ТТ</option>
+                    </select>
+                    <label class="description">Сумма объявленной стоимости</label>
+                    <input id="cargoValue" type="text" />
+                    <label class="description">Содержимое отправки</label>
+                    <input id="cargoCategory" type="text" />
                 </div>
-
-                <div class="row">
-                    <div class="col-50">
-                        <label class="description">Количество посылок</label>
-                        <input id="cargoNumPack" type="text" />
-                        <label class="description">Вес посылки</label>
-                        <input id="cargoWeight" type="text" />
-                    </div>
-                    <div class="col-50">
-                        <!-- <label class="description">Объём</label>
-                        <input id="cargoVolume" type="text" /> -->
-                        <label class="description">Сумма объявленной стоимости</label>
-                        <input id="cargoValue" type="text" />
-                    </div>
-                </div>
-                <label class="description">Содержимое отправки</label>
-                <input id="cargoCategory" type="text" />
-
             </div>
 
+
+
+
+
+
+            
 
         </div>
 
@@ -316,6 +304,7 @@
             <div style="text-align:center">
                 <button onclick="buttonTerminalDelivery();" class="btn">доставка до пункта пвз</button>
                 <button onclick="buttonAddressDelivery();" class="btn">доставка до двери</button>
+                <div id="gsheetCommments"></div>
             </div>
         </div>
     </div>
@@ -326,18 +315,18 @@
         <div id="terminalDeliveryContainer" class="row">
             <div class="col-50">
                 <div class="container">
-                    <label class="description">Адекватно?</label>
-                    <input id="cf1" type="text">
                     <label class="description">Регион</label>
                     <input id="terminalRegion" type="text" />
                     <label class="description">Город</label>
                     <input id="terminalCity" type="text" />
+                    <label class="description">Адекватно?</label>
+                    <input id="cf1" type="text">
                 </div>
             </div>
             <div class="col-50">
 
                 <div id="findTerminalResp"></div>
-                <button onclick="getDPDTerminals();" class="btn">Поищем терминал!"</button>
+                <button onclick="getDPDTerminals();" class="btn" style="height: 50px;">Поищем терминал!"</button>
             </div>
         </div>
 

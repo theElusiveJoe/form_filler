@@ -59,7 +59,8 @@ def create_xml(data):
             a =ET.SubElement(it, x)
             a.text = str(order['order']['unitLoad'][i][x])
 
-    ans = ET.tostring(theRoot)
+    ans = ET.tostring(theRoot, encoding='utf-8')
+    print(ans.decode('utf-8'))
     return ans
 
 

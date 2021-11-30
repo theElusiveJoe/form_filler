@@ -42,6 +42,7 @@
 					<receiverAddress>
 						<name></name>
 						<terminalCode></terminalCode>
+						<countryName>Россия</countryName>
 						<contactFio></contactFio>
 						<contactPhone></contactPhone>
 					</receiverAddress>
