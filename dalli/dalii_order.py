@@ -13,7 +13,7 @@ with open('tokens.json', 'r') as f:
 def create_xml(data):
     parsed_data = json.loads(data)
     order = parsed_data['data']['orders'][0]
-    # print(order)
+    print(order)
 
     tree = ET.parse('dalli'+os.sep+'dalli_order_pattern.xml')
     root = tree.getroot()
@@ -50,7 +50,6 @@ def create_xml(data):
         it.text = order['items'][f'{i}']['name']
 
     ans =  ET.tostring(root, encoding='utf-8')
-    print(ans)
     return ans
 
 def send_order(data_xml):

@@ -34,7 +34,7 @@ function sendJSON() {
         order['data']['orders'][0]['items'][i.toString()]['VATrate'] = document.getElementsByName('items['+j+'][VATrate]')[0].value
         order['data']['orders'][0]['items'][i.toString()]['governmentCode'] = document.getElementsByName('items['+j+'][governmentCode]')[0].value
         order['data']['orders'][0]['items'][i.toString()]['quantity'] = document.getElementsByName('items['+j+'][quantity]')[0].value
-        order['data']['orders'][0]['items'][i.toString()]['mass'] = document.getElementsByName('items['+j+'][mass]')[0].value
+        order['data']['orders'][0]['items'][i.toString()]['mass'] = '0'//document.getElementsByName('items['+j+'][mass]')[0].value
         order['data']['orders'][0]['items'][i.toString()]['retprice'] = document.getElementsByName('items['+j+'][retprice]')[0].value
         order['data']['orders'][0]['items'][i.toString()]['type'] = document.getElementsByName('items['+ j + '][type]')[0].value
     }
