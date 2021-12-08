@@ -36,6 +36,10 @@ function createOrder() {
         data['order']['unitLoad'].push(unit)
     }
 
+
+    console.log('заказ: ')
+    console.log(data)
+
     body = JSON.stringify(data)
 
     var xhr = new XMLHttpRequest();
