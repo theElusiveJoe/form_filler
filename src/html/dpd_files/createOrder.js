@@ -34,6 +34,12 @@ function createOrder() {
             unit['descript'] = ziplusheets['zippack']['obj']['Items'][i]['Name']
             unit['npp_amount'] = ziplusheets['zippack']['obj']['Items'][i]['Price']
             unit['count'] = ziplusheets['zippack']['obj']['Items'][i]['Amount']
+
+            if (Number(unit['count']) >= 5000){
+                unit['descript'] = 'набор из ' + unit['count'] + 'шт. : ' + unit['descript'];
+                unit['npp_amount'] = unit['npp_amount'] * unit['count'];
+                unit['count'] = 1;
+            }
             data['order']['unitLoad'].push(unit)
         }
     }
