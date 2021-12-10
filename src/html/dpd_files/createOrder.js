@@ -1,4 +1,5 @@
 function createOrder() {
+    console.log('lol')
     if (choosen == ''){
         document.getElementById('createOrderResp').innerHTML = `<h2>Вы не выбрали пункт ПВЗ</h2>`;
         return;
