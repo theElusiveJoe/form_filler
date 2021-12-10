@@ -1,5 +1,4 @@
 function createOrder() {
-    console.log('lol')
     if (choosen == ''){
         document.getElementById('createOrderResp').innerHTML = `<h2>Вы не выбрали пункт ПВЗ</h2>`;
         return;
@@ -28,13 +27,15 @@ function createOrder() {
     data['order']['receiverAddress']['contactPhone'] = ziplusheets['zippack']['obj']['Customer']['Phone']
 
     data['order']['unitLoad'] = []
-    for (var i = 0; i < ziplusheets['zippack']['obj']['Items'].length; i++) {
-        var unit = {}
-        unit['article'] = ziplusheets['zippack']['obj']['Items'][i]['ArtNo']
-        unit['descript'] = ziplusheets['zippack']['obj']['Items'][i]['Name']
-        unit['npp_amount'] = ziplusheets['zippack']['obj']['Items'][i]['Price']
-        unit['count'] = ziplusheets['zippack']['obj']['Items'][i]['Amount']
-        data['order']['unitLoad'].push(unit)
+    if (ziplusheets['gsheets']['paid'] != 'оплачено'){
+        for (var i = 0; i < ziplusheets['zippack']['obj']['Items'].length; i++) {
+            var unit = {}
+            unit['article'] = ziplusheets['zippack']['obj']['Items'][i]['ArtNo']
+            unit['descript'] = ziplusheets['zippack']['obj']['Items'][i]['Name']
+            unit['npp_amount'] = ziplusheets['zippack']['obj']['Items'][i]['Price']
+            unit['count'] = ziplusheets['zippack']['obj']['Items'][i]['Amount']
+            data['order']['unitLoad'].push(unit)
+        }
     }
 
 

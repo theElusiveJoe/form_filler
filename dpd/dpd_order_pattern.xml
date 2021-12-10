@@ -38,7 +38,6 @@
 					<cargoRegistered>false</cargoRegistered>
 					<cargoValue></cargoValue>
 					<cargoCategory></cargoCategory>
-					<!-- <paymentType></paymentType> -->
 					<receiverAddress>
 						<name></name>
 						<terminalCode></terminalCode>
