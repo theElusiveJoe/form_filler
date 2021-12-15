@@ -84,7 +84,7 @@ function getJSON() {
             var one_price = Math.trunc(price*disc*100)/100;
             sum += one_price*amm;
             document.getElementsByName('items['+i+'][retprice]')[0].value = one_price;
-            document.getElementsByName('items['+i+'][mass]')[0].value = 1;
+            document.getElementsByName('items['+i+'][mass]')[0].value = 0;
         }
             
         document.getElementsByName('priced')[0].value = order['zippack']['obj']['ShippingCost']
