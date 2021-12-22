@@ -190,7 +190,12 @@ def getTerminals(siteQuery, dadataResp = ''):
                         OR cityCode LIKE "%{isNoneInJson(addr_obj,'area_kladr_id', 5)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area')}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'area').replace('ё', 'е')}%"
                         OR cityCode  LIKE "%{isNoneInJson(addr_obj,'city_kladr_id', 2)}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'city')}%" OR cityName LIKE "%{isNoneInJson(addr_obj,'city').replace('ё', 'е')}%"
                     )
-
+                AND
+                    street LIKE "%{isNoneInJson(addr_obj,'street')}%"
+                AND
+                    (
+                        houseNo LIKE "%{isNoneInJson(addr_obj,'house')}%" OR ownership LIKE "%{isNoneInJson(addr_obj,'house')}%"
+                    )
                 """
     print(sqlQuery)
     cur.execute(
