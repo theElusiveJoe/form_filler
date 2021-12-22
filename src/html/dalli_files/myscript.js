@@ -1,4 +1,5 @@
 function createAdress(order){
+
     var district = order['zippack']['obj']['Customer']['District'];
     var city = order['zippack']['obj']['Customer']['City'] ;
     var street = order['zippack']['obj']['Customer']['Street'] ;
@@ -7,7 +8,7 @@ function createAdress(order){
     var struct = order['zippack']['obj']['Customer']['Structure'] ;
     var entr = order['zippack']['obj']['Customer']['Entrance'];
     var floor = order['zippack']['obj']['Customer']['Floor'];
-    var addr = (district.trim() == '' ? '' : ('район: ' + district + ' '))
+    var addr = ((district == null || district.trim()) == '' ? '' : ('район: ' + district + ' '))
     + ((city.trim() == '' || city.trim() == 'Москва') ? '' : ('город: ' + city + ' '))
     + (street.trim() == '' ? '' : ('улица: ' + street + ' '))
     + (house == '' ? '' : ('дом: ' + house + ' '))
