@@ -87,7 +87,6 @@ function getJSON() {
             document.getElementsByName('items['+i+'][retprice]')[0].value = one_price;
             document.getElementsByName('items['+i+'][mass]')[0].value = 0;
         }
-            
         document.getElementsByName('priced')[0].value = order['zippack']['obj']['ShippingCost']
         document.getElementsByName('declaredPrice')[0].value = sum + order['zippack']['obj']['ShippingCost']; //order['zippack']['obj']['Sum']                
         document.getElementsByName('price')[0].value = sum + order['zippack']['obj']['ShippingCost']; //order['zippack']['obj']['Sum']  

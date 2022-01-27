@@ -17,11 +17,12 @@ testResults.json
 'testSts copy.json'
 testSts.json
 todo
-tokens.json
 result.txt
-tokens.json
 tokens.json
 chechDBLastUpdate.py
 *__pycache__*
 
 /tests
+
+*.ipynb
+/compose_data/client_secret*
