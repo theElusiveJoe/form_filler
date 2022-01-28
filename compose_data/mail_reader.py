@@ -48,7 +48,7 @@ def get_order_from_mail(order_raw_num):
             pl = part.get_payload(decode='base64')
             soup = BeautifulSoup(pl, 'html.parser')
             break
-
+    
     # находим таблички с товарами
     itemtables = soup.find_all('table', attrs = {'cellspacing': '1'})
     items = []
@@ -66,10 +66,10 @@ def get_order_from_mail(order_raw_num):
                 m[name] = item[nameru] if nameru in item.keys() else None
             m['Price'] = float(price_to_num(m['Price']))
             m['Amount'] = int(m['Amount'])
+            m['ArtNo'] = str(m['ArtNo']) 
             items.append(m)
     obj['Items'] = items
 
-   
     # находим табличку с итоговой ценой
     pricetable = soup.find_all('table', attrs = {'cellspacing': '2'})
     # sum = pd.read_html(str(pricetable))[1].iloc[0]['Итого c учетом доставки и скидок']
@@ -129,7 +129,7 @@ def get_order_from_mail(order_raw_num):
     obj['PaymentName'] = strs[strs.index('Способ оплаты:')+1] 
 
     the_json['obj'] = obj
-    
+
     return json.dumps(the_json, ensure_ascii=False)
 
 if __name__ == '__main__':
