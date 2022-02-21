@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Рассортировать</title>
+    <style>
+        body {
+            background-color: rgb(255, 239, 255);
+        }
+
+        .row {
+            display: flex;
+        }
+
+        .column {
+            flex: 50%;
+        }
+
+        .container {
+            background-color: #f2f2f2;
+            padding: 0px 0px 0px 20px;
+            border: 1px solid lightgrey;
+            border-radius: 3px;
+            margin-bottom: 5px;
+        }
+
+        .item {
+            margin: 5px;
+            border: 1px solid lightgrey;
+            border-radius: 3px;
+            background-color: rgb(255, 171, 230)
+        }
+
+        input[type=text] {
+            width: 25px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        label {
+            /* margin-bottom: 10px; */
+            display: block;
+            font-size: 17px;
+        }
+
+        .btn {
+            background-color: #d6deff;
+            color: rgb(0, 0, 0);
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            width: 45%;
+            height: 80%;
+            border-radius: 55px;
+            cursor: pointer;
+            font-size: 25px;
+        }
+
+        .btn2 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            /* margin: 10px 0; */
+            border: none;
+            width: 40%;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .btn:hover {
+            background-color: #97aaff;
+        }
+
+        .btn3 {
+            background-color: #77004f;
+            color: white;
+            padding: 12px;
+            /* margin: 10px 0; */
+            border: none;
+            width: 40%;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .btnh {
+            width: 50px;
+            height: 50px;
+            top: 50%;
+            position: fixed;
+            left: 50%;
+            margin-top: -45px;
+            margin-left: -50px;
+            border-radius: 5px;
+        }
+
+        .itemsbox {
+            width: 90%;
+            border: 1px solid #aaaaaa;
+            padding: 10px;
+        }
+    </style>
+    <script type="text/javascript" src="./src/getOrder.js"></script>
+    <script type="text/javascript" src="./src/dragAndDrop.js"></script>
+    <script type="text/javascript" src="./src/collectData.js"></script>
+</head>
+
+<body>
+    <div>
+        <input type="text" style="width:100px" id="lineNum" value="12">
+        <button class="btn2" id="getJSON" onclick="getJSON()">найти строку</button>
+        <div id="orderNum"></div>
+    </div>
+    <!-- <script>
+        var b = document.getElementById("getJSON")
+        b.click()
+    </script> -->
+    <br>
+    <hr>
+    <div class="row">
+        <div class="column">
+            <!-- <div id="packages">
+                <div class="itemsbox" style="height: 100px;" ondrop="drop(event);" ondragover="allowDrop(event);">
+                    вес (кг)
+                    <input type="text">
+                    размеры(см)
+                    <input type="text">
+                    <input type="text">
+                    <input type="text">
+                </div> 
+            </div> -->
+            <div id="packages">
+            </div>
+            <button class="bubton btn3" onclick="addItemsbox()">добавить</button>
+        </div>
+        <div class="column">
+            <div class="itemsbox" id="toSort" ondrop="drop(event);" ondragover="allowDrop(event);">
+                <!-- <div id="drag1" class="item" draggable="true" ondragstart="drag_item(event)">
+                    артикул1
+                    <br>
+                    наименование1
+                    <br>
+                    кол-во1
+                </div>
+                <div id="drag2" class="item" draggable="true" ondragstart="drag_item(event)">
+                    артикул2
+                    <br>
+                    наименование2
+                    <br>
+                    кол-во2
+                </div> -->
+            </div>
+            <br>
+            <button onclick="collectData()" class="btn3">Рассортировать!</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

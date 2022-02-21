@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .row {
+            display: flex;
+        }
+
+        .column {
+            flex: 50%;
+        }
+
+        .container {
+            background-color: #f2f2f2;
+            padding: 0px 0px 0px 20px;
+            border: 1px solid lightgrey;
+            border-radius: 3px;
+            margin-bottom: 5px;
+        }
+
+        .item {
+            margin: 5px;
+            border: 1px solid lightgrey;
+            border-radius: 3px;
+            background-color: rgb(171, 187, 255)
+        }
+
+        input[type=text] {
+            width: 25px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        label {
+            /* margin-bottom: 10px; */
+            display: block;
+            font-size: 17px;
+        }
+
+        .btn {
+            background-color: #d6deff;
+            color: rgb(0, 0, 0);
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            width: 45%;
+            height: 80%;
+            border-radius: 55px;
+            cursor: pointer;
+            font-size: 25px;
+        }
+
+        .btn2 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            /* margin: 10px 0; */
+            border: none;
+            width: 40%;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .btn:hover {
+            background-color: #97aaff;
+        }
+
+        .itemsbox {
+            width: 90%;
+            border: 1px solid #aaaaaa;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        function heights() {
+            var boxes = document.querySelectorAll(".itemsbox")
+            console.log(boxes)
+            for (var i = 0; i < boxes.length; i++) {
+                console.log(boxes[i])
+                items = boxes[i].querySelectorAll(".item").length;
+                boxes[i].style.height = String(60 * (items + 1)) + "px";
+            }
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag_item(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+            console.log('drag', ev.target.className)
+        }
+
+        function drop(ev) {
+            console.log('drop')
+            ev.preventDefault();
+            if (ev.target.className != 'itemsbox') {
+                return
+            }
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data))
+            heights()
+        }
+
+        var boxes = 1;
+
+        function addbox() {
+            boxes++
+            // document.querySelector(".column").innerHTML += ("<br>посылка " + boxes)
+            var newbox = document.createElement("div")
+            newbox.className = "itemsbox"
+            newbox.style.height = "100px"
+            newbox.addEventListener("drop", () => { drop(event) })
+            newbox.addEventListener("dragover", () => { allowDrop(event) })
+            newbox.innerHTML = `
+            вес (кг)
+                <input type="text">
+                размеры(см)
+                <input type="text">
+                <input type="text">
+                <input type="text">    
+            `
+            document.querySelector('.column').insertBefore(newbox, document.querySelector(".bubton"))
+        }
+
+        function getJSON() {
+            // отпраляем запрос
+            var xhr = new XMLHttpRequest();
+            var linenum = document.getElementById("lineNum").value
+            xhr.open('GET', 'http://localhost:8040/' + linenum + '.json', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send();
+            document.getElementById('getJsonResp').innerHTML = 'Подождите'
+            // после загрузки заполняем поля
+            xhr.onloadend = () => {
+                obj = JSON.parse(xhr.responseText)
+                fillFields(obj)
+            }
+
+        }
+
+    </script>
+</head>
+
+<body>
+    <div>
+        <input type="text" style="width:100px" id="lineNum">
+        <button class="btn2" onclick="getJson()">найти строку</button>
+    </div>
+    <br>
+    <div class="row">
+        <div class="column">
+            <!-- посылка 1 -->
+            <div class="itemsbox" style="height: 100px;" ondrop="drop(event);" ondragover="allowDrop(event);">
+                вес (кг)
+                <input type="text">
+                размеры(см)
+                <input type="text">
+                <input type="text">
+                <input type="text">
+            </div>
+            <button class="bubton btn2" onclick="addbox()">добавить</button>
+        </div>
+        <div class="column">
+            <div>
+                заказ номер
+                <div id="orderNum">aboba</div>
+            </div>
+            рассортировать
+            <div class="itemsbox" style="height: 300px;" ondrop="drop(event);" ondragover="allowDrop(event);">
+                <div id="drag1" class="item" draggable="true" ondragstart="drag_item(event)">
+                    артикул1
+                    <br>
+                    наименование1
+                    <br>
+                    кол-во1
+                </div>
+                <div id="drag2" class="item" draggable="true" ondragstart="drag_item(event)">
+                    артикул2
+                    <br>
+                    наименование2
+                    <br>
+                    кол-во2
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
