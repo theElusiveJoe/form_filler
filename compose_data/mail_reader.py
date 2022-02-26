@@ -67,6 +67,8 @@ def get_order_from_mail(order_raw_num):
             m['Price'] = float(price_to_num(m['Price']))
             m['Amount'] = int(m['Amount'])
             m['ArtNo'] = str(m['ArtNo']) 
+            if m['Name'] is None:
+                m['Name'] = item['Описание'] if 'Описание' in item.keys() else "название не нашлось. сообщите в тех поддержку"
             items.append(m)
     obj['Items'] = items
 
