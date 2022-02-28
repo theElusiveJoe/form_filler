@@ -25,4 +25,5 @@ chechDBLastUpdate.py
 /tests
 
 *.ipynb
-/compose_data/client_secret*
+warehouse/*/*secret*
+*secret*

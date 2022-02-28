@@ -25,8 +25,18 @@ function getServiceCost() {
             return
         }
         document.getElementById('countServiceResp').innerHTML = '';
-        var resp = xhr.responseText
-        resp = JSON.parse(resp);
+        if (xhr.status === 500){
+            console.log('ошибка на сервере')
+            alert('произошла ошибка на сервере')
+            return
+        }
+        try {
+            var resp = xhr.responseText
+            resp = JSON.parse(resp);
+        } catch (err){
+            alert('произошла ошибка при разборе данных, прибывших с сервера')
+            return
+        }
         resp.sort(function (a, b) {
             if (Number(a['cost']) > Number(b['cost'])) {
                 return 1;

@@ -129,8 +129,19 @@ function getJSON() {
     document.getElementById('getJsonResp').innerHTML = 'Подождите'
     // после загрузки заполняем поля
     xhr.onloadend = () =>{
-        obj = JSON.parse(xhr.responseText)
-        fillFields(obj)
+        if (xhr.status === 500){
+            console.log('ошибка на сервере')
+            alert('произошла ошибка на сервере')
+            return
+        }
+        try {
+            obj = JSON.parse(xhr.responseText)
+            fillFields(obj)
+        } catch (err){
+            alert('произошла ошибка при разборе данных, прибывших с сервера')
+            return
+        }
+
     }
     
 }

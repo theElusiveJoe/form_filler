@@ -19,15 +19,22 @@ httpAuth = credentials.authorize(httplib2.Http())
 service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
 sheet = service.spreadsheets()
 
-columns_to_xmlels = {'Число': 'date', 'Заказ': 'id',
-        'Номер счета': 'account_number', 'Нал': 'cash',
-        'Безнал': 'emoney', 'Оплачено (число)': 'paid',
-        'Форма оплаты': 'payment_method', 'Время': 'payment_time',
-        'Примечание': 'comments', 'Вывоз': 'delivery_service',
+columns_to_xmlels = {'Число': 'date',
+        'Заказ': 'id',
+        'Номер счета': 'account_number', 
+        'Нал': 'cash',
+        'Безнал': 'emoney', 
+        'Оплачено (число)': 'paid',
+        'Форма оплаты': 'payment_method', 
+        'Время': 'payment_time',
+        'Примечание': 'comments', 
+        'Вывоз': 'delivery_service',
         'Письмо на склад': 'mail_on_warehouse',
         'Доставка на': 'delivery_arranged_on',
-        'Мест': 'positions', 'габариты': 'size',
-        'вес': 'weight', 'Списано со склада': 'decommisioned',
+        'Мест': 'positions', 
+        'габариты': 'size',
+        'вес': 'weight', 
+        'Списано со склада': 'decommisioned',
         'Статус': 'status', 'примечания': 'comments2'}
 
 def get_titles():

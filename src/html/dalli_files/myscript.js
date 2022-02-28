@@ -44,7 +44,21 @@ function getJSON() {
     var xhr = new XMLHttpRequest();
     
     xhr.onloadend = () => {
-        var order = JSON.parse(xhr.responseText)
+        document.getElementById('321').innerHTML = "";
+        document.getElementById('123').innerHTML = "";
+        
+        if (xhr.status === 500){
+            console.log('ошибка на сервере')
+            alert('произошла ошибка на сервере')
+            return
+        }
+        try {
+            var order = JSON.parse(a)
+        } catch (err){
+            alert('произошла ошибка при разборе данных, прибывших с сервера')
+            return
+        }
+
         document.getElementsByName('receiver[person]')[0].value = order['zippack']['obj']['Customer']['FirstName'];
         document.getElementsByName('receiver[phone]')[0].value = order['zippack']['obj']['Customer']['Phone'];
         document.getElementsByName('receiver[email]')[0].value = order['zippack']['obj']['Customer']['Email'];
@@ -102,6 +116,9 @@ function getJSON() {
     var linenum = document.getElementById("lineNum").value
     xhr.open('GET', '/'+linenum+'.json', true);
     
+    document.getElementById('123').innerHTML = "скачиваем данные";
+    document.getElementById('321').innerHTML = "скачиваем данные";
+
     xhr.send();
     
 }

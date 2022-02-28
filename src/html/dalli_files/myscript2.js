@@ -55,9 +55,21 @@ function sendJSON() {
     var xhr = new XMLHttpRequest()
 
     xhr.onloadend = () => {
-        var dalli_resp = JSON.parse(xhr.responseText);
         document.getElementById('123').innerHTML = "";
         document.getElementById('321').innerHTML = "";
+
+        if (xhr.status === 500){
+            console.log('ошибка на сервере')
+            alert('произошла ошибка на сервере')
+            return
+        }
+        try {
+            var dalli_resp = JSON.parse(xhr.responseText);
+        } catch (err){
+            alert('произошла ошибка при разборе данных, прибывших с сервера')
+            return
+        }
+
         if (dalli_resp[0] == null){
             document.getElementById('123').innerHTML = "Успешно добавлен!!"; 
             for (var i = 0; i <  document.getElementsByClassName("btnBoxesRemove").length; i++){
@@ -77,5 +89,7 @@ function sendJSON() {
     xhr.open('POST', '/sendDalli.json', true);
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(JSON.stringify(order));
+    document.getElementById('123').innerHTML = "<h1>отправляем заказ</h1>";
+    document.getElementById('321').innerHTML = "<h1>отправляем заказ</h1>";
     
 }

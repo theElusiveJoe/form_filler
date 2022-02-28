@@ -51,8 +51,20 @@ function parseTerminals(points) {
                 return
             }
             document.querySelector("#findTerminalResp").innerHTML = '';
-            var resp = xhr.responseText
-            var terminals = JSON.parse(resp);
+            
+            if (xhr.status === 500){
+                console.log('ошибка на сервере')
+                alert('произошла ошибка на сервере')
+                return
+            }
+            try {
+                var resp = xhr.responseText
+                var terminals = JSON.parse(resp);
+            } catch (err){
+                alert('произошла ошибка при разборе данных, прибывших с сервера')
+                return
+            }
+            
             console.log(terminals);
             searchControl.search(terminals['ymapSearch'])
             tlist = document.getElementById('terminalList')
