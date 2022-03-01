@@ -16,8 +16,6 @@ from dalli.dalii_order import create_dalli_order
 from dpd.dpd_pick_terminal import getTerminals as get_dpd_terminals
 from dpd.dpd_service_cost import getServiceCostByParcels2 as get_dpd_cost
 from dpd.dpd_order import create_dpd_order
-from sdek.sdek_queries import getSDEKOffices as get_sdek_offices
-from sdek.send_order import send_SDEK_order
 
 class S(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
@@ -151,26 +149,7 @@ class S(BaseHTTPRequestHandler):
                 self.send_response(200)
                 self.send_header("Content-type", "application/json")
                 self.end_headers()
-                self.wfile.write(bytes(result, "utf-8"))
-            # SDEK
-            elif 'getSDEKTerminals.func' in self.path:
-                result = get_sdek_offices(post_body)
-                self.send_response(200)
-                self.send_header("Content-type", "application/json")
-                self.end_headers()
-                self.wfile.write(bytes(result, "utf-8"))
-            elif 'countSDEKDelivery.func' in self.path:
-                result = get_sdek_offices(post_body)
-                self.send_response(200)
-                self.send_header("Content-type", "application/json")
-                self.end_headers()
-                self.wfile.write(bytes(result, "utf-8"))
-            elif 'createSDEKOrder.func' in self.path:
-                result = send_SDEK_order(post_body)
-                self.send_response(200)
-                self.send_header("Content-type", "application/json")
-                self.end_headers()
-                self.wfile.write(bytes(result, "utf-8"))
+                self.wfile.write(bytes(result, "utf-8"))           
         except:
              self.send_error(500, "Error on server")
 
