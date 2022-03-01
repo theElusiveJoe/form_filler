@@ -53,7 +53,7 @@ function getJSON() {
             return
         }
         try {
-            var order = JSON.parse(a)
+            var order = JSON.parse(xhr.responseText)
         } catch (err){
             alert('произошла ошибка при разборе данных, прибывших с сервера')
             return
