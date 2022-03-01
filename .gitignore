@@ -27,3 +27,6 @@ chechDBLastUpdate.py
 *.ipynb
 warehouse/*/*secret*
 *secret*
+
+/testvenv
+/.idea

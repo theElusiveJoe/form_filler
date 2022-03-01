@@ -8,7 +8,7 @@ git clone https://github.com/theElusiveJoe/form_filler.git
 ```
 pip install -r requirements.txt
 ```
-#Запуск
+# Запуск
 
 из корневой директории
 ```
