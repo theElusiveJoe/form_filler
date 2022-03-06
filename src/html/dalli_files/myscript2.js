@@ -64,6 +64,7 @@ function sendJSON() {
             return
         }
         try {
+            console.log(xhr.responseText)
             var dalli_resp = JSON.parse(xhr.responseText);
         } catch (err){
             alert('произошла ошибка при разборе данных, прибывших с сервера')

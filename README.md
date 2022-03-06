@@ -33,7 +33,8 @@ pip install -r requirements.txt
     ```
     pip install -r requirements.txt
     ```
-4) создаем ярлык для файла mainserver.py в папке form_filler (которая лежит на рабочем столе)
+4) копируем файлы с токенами, не забываем включить боевой режим 
+5) создаем ярлык для файла mainserver.py в папке form_filler (которая лежит на рабочем столе)
 
 # Запуск
 

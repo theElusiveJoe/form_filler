@@ -29,7 +29,7 @@ function resetInnerHTML(){
     document.querySelector("#serviceCode").innerHTML = ''
     choosen = ''
     document.querySelector("#choosenTerminal").innerHTML = ''
-    document.getElementById('getJsonResp').innerHTML = ''
+   document.querySelector('.hover_bkgr_fricc').style.display = "none"
     document.getElementById('zippackLink').innerHTML = ''
 }
 

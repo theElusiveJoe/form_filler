@@ -48,7 +48,7 @@ def get_order_from_mail(order_raw_num):
             pl = part.get_payload(decode='base64')
             soup = BeautifulSoup(pl, 'html.parser')
             break
-    
+    print(soup)
     # находим таблички с товарами
     itemtables = soup.find_all('table', attrs = {'cellspacing': '1'})
     items = []
