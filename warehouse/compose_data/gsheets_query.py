@@ -36,37 +36,13 @@ columns_to_xmlels = {'Число': 'date',
         'габариты': 'size',
         'вес': 'weight', 
         'Списано со склада': 'decommisioned',
-        'Статус': 'status', 'примечания': 'comments2'}
+        'Статус': 'status', 'примечания': 'comments2', 'warehouse' : 'warehouse'}
 
 def get_titles():
     return sheet.values().get(spreadsheetId=SHEET_ID, range='Лист1!A2:Z2').execute()['values'][0]
 
 def get_string(num):
     return sheet.values().get(spreadsheetId=SHEET_ID, range=f'Лист1!A{num}:Z{num}').execute()['values'][0]
-
-def create_hash_cols_to_elems():
-    # cols_to_elems = {}
-    # titles = parse_titles()
-    # elems = ['date', 'id', 'account_number',
-    #   'cash', 'emoney', 'paid', 'payment_method',
-    #   'payment_time', 'comments', 
-    #   'delivery_service', 'mail_on_warehouse', 
-    #   'delivery_arranged_on', 'positions', 'size', 
-    #   'weight', 'decommisioned', 'status', 'comments2']
-    # for i, title in enumerate(titles):
-    #     cols_to_elems[title] = elems[i]
-    columns_to_xmlels = {'Число': 'date', 'Заказ': 'id',
-        'Номер счета': 'account_number', 'Нал': 'cash',
-        'Безнал': 'emoney', 'Оплачено (число)': 'paid',
-        'Форма оплаты': 'payment_method', 'Время': 'payment_time',
-        'Примечание': 'comments', 'Вывоз': 'delivery_service',
-        'Письмо на склад': 'mail_on_warehouse',
-        'Доставка на': 'delivery_arranged_on',
-        'Мест': 'positions', 'габариты': 'size',
-        'вес': 'weight', 'Списано со склада': 'decommisioned',
-        'Статус': 'status', 'примечания': 'comments2'}
-    
-    return columns_to_xmlels
 
 def get_order_from_gsheetstring(ordernum):
     titles = get_titles()

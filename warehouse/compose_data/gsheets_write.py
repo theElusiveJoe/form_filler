@@ -29,7 +29,7 @@ def warehouse_to_gsheets(post_body):
     results = service.spreadsheets().values().batchUpdate(spreadsheetId=SHEET_ID, body={
         "valueInputOption": "USER_ENTERED",
         "data": [
-            {"range": f"Лист1!R{rowNum}",
+            {"range": f"Лист1!S{rowNum}",
              "majorDimension": "ROWS",
              "values": [[str(pkg_info['packages']).replace("'", '"')]]
              }

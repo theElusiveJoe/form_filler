@@ -4,14 +4,14 @@ function compareNumeric(a, b) {
     if (a < b) return 1;
 }
 
-function cmparr(a,b){
-    for(var i = 0; i < a.length; i++){
-        if (a[i] < b[i]){
+function cmparr(a, b) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] < b[i]) {
             return -1
-        } 
-        if (a[i] > b[i]){
+        }
+        if (a[i] > b[i]) {
             return 1
-        } 
+        }
     }
     return -1
 }
@@ -41,7 +41,7 @@ function collectData() {
         var l3 = package.querySelector(".l3").value
         var sarr = [l1, l2, l3].sort(compareNumeric)
         var sstr = String(sarr[0]) + "/" + String(sarr[1]) + "/" + String(sarr[2])
-        if (cmparr(sarr, maxSizes) == 1){
+        if (cmparr(sarr, maxSizes) == 1) {
             maxSizes = sarr
             maxSizeStr = sstr
         }
@@ -70,24 +70,29 @@ function collectData() {
     toSend["size"] = maxSizeStr
     toSend["id"] = document.getElementById("orderNum").innerHTML
     toSend["lineNum"] = lineNum
-    
+
     console.log(toSend)
     sendData(toSend)
 }
 
-function sendData(data){
+function sendData(data) {
     body = JSON.stringify(data)
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:8041/' + 'sendToGsheets.func', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(body);
-    document.getElementById("orderNum").innerHTML = "Отсылаем"
+    document.querySelector('.hover_bkgr_fricc').style.display = "inline-block"
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState != 4) {
-            document.getElementById("orderNum").innerHTML = xhr.responseText
-            resetPage()
+    xhr.onloadend = () => {
+        document.querySelector('.hover_bkgr_fricc').style.display = "none"
+        console.log('status:', xhr.status)
+        if (xhr.status === 500) {
+            console.log('ошибка на сервере')
+            alert('произошла ошибка на сервере')
+            return
         }
+        document.getElementById("orderNum").innerHTML = xhr.responseText
+        resetPage()
     }
 }

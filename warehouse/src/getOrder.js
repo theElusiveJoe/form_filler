@@ -41,10 +41,22 @@ function getJSON() {
     xhr.open('GET', 'http://localhost:8041/' + lineNum + '.json', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
-    document.querySelector("#orderNum").innerHTML = "собираем данные...";
+    document.querySelector('.hover_bkgr_fricc').style.display = "inline-block"
     // после загрузки заполняем поля
     xhr.onloadend = () => {
-        obj = JSON.parse(xhr.responseText)
+        document.querySelector('.hover_bkgr_fricc').style.display = "none"
+        console.log('status:', xhr.status)
+        if (xhr.status === 500) {
+            console.log('ошибка на сервере')
+            alert('произошла ошибка на сервере')
+            return
+        }
+        try {
+            var obj = JSON.parse(xhr.responseText)
+        } catch (err) {
+            alert('произошла ошибка при разборе данных, прибывших с сервера')
+            return
+        }
         ziplusheets = obj
         fillFields(obj)
     }
@@ -73,7 +85,8 @@ function fillFields(order) {
         addItem(item["Name"], item["ArtNo"], item["Amount"], item["Price"], "item_" + String(i))
         addItemsbox("itemsbox_" + String(i))
     }
-
+    
+    heights()
 }
 
 function resetPage() {
