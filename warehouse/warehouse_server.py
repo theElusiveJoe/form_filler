@@ -46,7 +46,7 @@ class S(BaseHTTPRequestHandler):
                 self.send_header("Content-type", "text/html")
                 self.send_header("Encoding", "utf-8")
                 self.end_headers()
-                data = open("./src/index.html", "r").read()
+                data = open("./src/index.html", "r", encoding='utf-8').read()
                 self.wfile.write(bytes(data, "utf-8"))
             elif url.path.endswith('html'):
                 self.send_response(200)
