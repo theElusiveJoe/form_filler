@@ -33,7 +33,15 @@ pip install -r requirements.txt
     ```
     pip install -r requirements.txt
     ```
-4) копируем файлы с токенами, не забываем включить боевой режим 
+4) не забываем добавлять файлы аутентификации:
+    + ./tokens.json
+    + ./form-filler-329419-cdcaa2a0d92a.json
+    + ./compose_data/client_secret_631167030062-r92ma42enmb8vg3evkdo0ltvit1ecf1h.apps.googleusercontent.com.json
+    + ./warehouse/tokens.json
+    + ./warehouse/form-filler-329419-cdcaa2a0d92a.json
+    + ./compose_data/client_secret_631167030062-r92ma42enmb8vg3evkdo0ltvit1ecf1h.apps.googleusercontent.com.json
+
+
 5) создаем ярлык для файла mainserver.py в папке form_filler (которая лежит на рабочем столе)
 
 # Запуск

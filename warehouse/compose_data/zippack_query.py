@@ -19,13 +19,8 @@ def get_order_from_zippack(order_id):
         return
 
     json_data = readfromstring(resp.read().decode('utf-8)'))
-    # print(json_data)
     
     conn.close()
-    # open('zippack.json', 'w+').write(json_data)
-    # tree = ET.ElementTree(ET.fromstring(json2xml.Json2xml(json_data).to_xml()))
-    # open('zippack.xml', 'w+').write(json2xml.Json2xml(json_data).to_xml())
-    # return tree
     try:
         res = json.dumps(json_data, ensure_ascii=False)
     except BaseException:

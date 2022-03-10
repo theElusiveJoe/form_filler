@@ -47,22 +47,13 @@ def get_string(num):
 
 def get_order_from_gsheetstring(ordernum):
     titles = get_titles()
-    # print(len(titles))
     values = get_string(ordernum)
     for i in range(len(titles)-len(values) + 1):
         values.append('')
-    # print(len(values))
-    # tree = ET.parse('/home/fsociety/Programming/projects/form_filler/create_unixml/unixml_template.xml')
-    # root = tree.getroot()
     m = {}
     for i, title in enumerate(titles):
         m[columns_to_xmlels[title]] = values[i]
-        # root.find(columns_to_xmlels[title]).text = values[i]
-        # print()
-    # tree.write("gsheets.xml", encoding='UTF-8')
     return json.dumps(m, ensure_ascii=False), m['id']
-    # return tree
-    # ET.ElementTree(tree).write("xml.xml", encoding='UTF-8')
 
 if __name__ == '__main__':
     get_order_from_gsheetstring(4416)
