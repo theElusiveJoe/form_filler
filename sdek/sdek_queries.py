@@ -7,7 +7,7 @@ import time
 THE_TOKEN = ''
 token_upd_time = 0
 token_expiration_time = 0
-order_constants = json.load(open('sdek/order_constants.json', 'r'))
+order_constants = json.load(open('sdek/order_constants.json', 'r', encoding='utf-8'))
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
