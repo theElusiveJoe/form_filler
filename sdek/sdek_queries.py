@@ -187,10 +187,11 @@ def getSDEKOffices(post_body):
             break
 
     offices_list = []
-    print('cities:', cities)
     for city in cities:
-        print('city: ', city)
+        print('city:', city['city'])
+        print('maxweight: ', addr_obj['weight'])
         offices = get_offices_by_citycode(city['code'], addr_obj['weight'])
+        print('offices:', offices)
         for office in offices:
             print(office['type'])
             offices_list.append({

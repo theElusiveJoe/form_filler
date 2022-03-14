@@ -156,7 +156,7 @@ function fillFields(order) {
     document.getElementById('gsheetCommments').innerHTML = order['gsheets']['comments']
 
     // адрес доставки
-    if (order['zippack']['obj']['ShippingName'].includes('выдачи')) {
+    if (order['zippack']['obj']['ShippingName'].includes('выдачи') || order['zippack']['obj']['ShippingName'].includes('Самовывоз')) {
         console.log("to terminal")
         document.querySelector("#terminal_rb").checked = true
         var addr = GetByPath(order, 'zippack.obj.Customer.Region')
