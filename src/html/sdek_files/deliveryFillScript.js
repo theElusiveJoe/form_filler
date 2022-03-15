@@ -4,9 +4,9 @@ var choosen_city_code = 504
 var choosen_type
 
 function getMaxWeight(){
-    max = 0
+    var max = 0
     for (var i = 0; i < gpackages.length; i++) {
-        w = Number(gpackages[i]["weight"])
+        var w = Number(gpackages[i]["weight"])
         if (w > max){
             max = w
         }
@@ -101,9 +101,9 @@ function count_delivery(){
     }
 
     for (var i = 0; i < gpackages.length; i++){
-        gabs = gpackages[i]['size'].split('/')
+        var gabs = gpackages[i]['size'].split('/')
         obj["packages"].push({
-            "weight": parseInt(gpackages[i]["weight"]),
+            "weight": parseInt(Number(gpackages[i]["weight"])*1000),
             "length": gabs[0],
             "width": gabs[1],
             "height": gabs[2],
@@ -138,14 +138,15 @@ function count_delivery(){
             return -1;
         })
         console.log(resp);
-
+        
+        var tariffs
         if (document.querySelector('input[name="delivery_type"]:checked').value == "door"){
-            tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 1)
+            tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 3)
         } else { 
             if (choosen_type == "PVZ"){
-                tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 2)
+                tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 4)
             } else { 
-                tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 6)
+                tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 7)
             }
         }
         console.log(tariffs)
@@ -158,7 +159,7 @@ function count_delivery(){
 
     xhr.open('POST', 'http://localhost:8040/' + 'countSDEKDelivery.func', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    body = JSON.stringify(obj)
+    var body = JSON.stringify(obj)
     console.log(obj) 
     xhr.send(body);
     document.querySelector('.hover_bkgr_fricc').style.display = "inline-block"
@@ -193,7 +194,7 @@ function justParseAddress(){
     }
     xhr.open('POST', 'http://localhost:8040/' + 'parseSDEKAddress.func', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    body = JSON.stringify(obj)
+    var body = JSON.stringify(obj)
     console.log(body) 
     xhr.send(body);
     document.querySelector('.hover_bkgr_fricc').style.display = "inline-block"

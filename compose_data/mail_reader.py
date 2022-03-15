@@ -110,7 +110,7 @@ def get_order_from_mail(order_raw_num):
     # информация о доставке
     shipping_type = order_info.loc['Способ получения:']
     obj['ShippingName'] = shipping_type
-    if shipping_type == 'Самовывоз. 1-2 дня' or  shipping_type.startswith('DPD') or hipping_type == 'Самовывоз':
+    if shipping_type == 'Самовывоз. 1-2 дня' or  shipping_type.startswith('DPD') or shipping_type == 'Самовывоз':
         obj['Customer']['CustomField1'] = order_info.loc['Выбранный пункт самовывоза:']
     elif shipping_type.startswith('Курьер - ДО АДРЕСА.') or shipping_type.startswith('СДЭК'):
         obj['Customer']['CustomField1'] = order_info.loc['Адрес доставки, Ф.И.О. и телефоны контактного лица:']

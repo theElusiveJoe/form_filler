@@ -34,7 +34,7 @@ function createOrder() {
 
     // получатель
     data['recipient'] = {}
-    simpleFields = [
+    var simpleFields = [
         'company', 'name', 'email',
     ]
     for (var i = 0; i < simpleFields.length; i++) {
@@ -52,6 +52,11 @@ function createOrder() {
         data['delivery_point'] = document.querySelector("#door_address").value;
     }
 
+    // доп сбор
+    data['delivery_recipient_cost'] = {
+        "value": Number(ziplusheets['zippack']['obj']['ShippingCost'])
+    }
+
     // упаковки
     data['packages'] = []
 
@@ -60,16 +65,17 @@ function createOrder() {
 
         package['number'] = i
 
-        package['weight'] = Number(gpackages[i]['weight'].replace(',', '.')) * 1000
-        var amm_of_items_in_this_package = 0
+        package['weight'] = parseInt(Number(gpackages[i]['weight'].replace(',', '.')) * 1000) // общий вес в граммах для каждой упаковки
+        var amm_of_items_in_this_package = 0 // количество единиц тавара в упаковке, причем паки по 1000+ считаются за один
         for (var j = 0; j < gpackages[i]['items'].length; j++) {
             amm_of_items_in_this_package += Number(gpackages[i]['items'][j]['ammount']) < 1000 ? Number(gpackages[i]['items'][j]['ammount']) : 1
         }
+        console.log('gpackages: ', gpackages)
         console.log('amount: ', amm_of_items_in_this_package)
-        var avg_weight = package['weight'] / amm_of_items_in_this_package
+        var avg_weight = package['weight'] / amm_of_items_in_this_package // средний вес единицы товара в упаковки [в граммах]
         console.log('avg weight ', avg_weight)
 
-        gabs = gpackages[i]['size'].split('/')
+        var gabs = gpackages[i]['size'].split('/')
         package['length'] = gabs[0]
         package['width'] = gabs[1]
         package['height'] = gabs[2]
@@ -82,11 +88,11 @@ function createOrder() {
                     + gpackages[i]['items'][j]['name']
                 items[j]['amount'] = 1
                 items[j]['cost'] = Number(gpackages[i]['items'][j]['price']) * Number(gpackages[i]['items'][j]['ammount'])
-                items[j]['weight'] = avg_weight * Number(gpackages[i]['items'][j]['ammount'])
+                items[j]['weight'] = parseInt(avg_weight)
             } else {
                 items[j]['name'] = gpackages[i]['items'][j]['name']
                 items[j]['amount'] = Number(gpackages[i]['items'][j]['ammount'])
-                items[j]['weight'] = avg_weight
+                items[j]['weight'] = parseInt(avg_weight)
 
             }
             items[j]['ware_key'] = gpackages[i]['items'][j]['artNo']
@@ -108,7 +114,7 @@ function createOrder() {
     console.log('заказ: ')
     console.log(data)
 
-    body = JSON.stringify(data)
+    var body = JSON.stringify(data)
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:8040/' + 'createSDEKOrder.func', true);

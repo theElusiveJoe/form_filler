@@ -38,7 +38,10 @@ function resetInnerHTML() {
         'gsheetCommments',
         'delivery_point_address',
         'zippackLink',
-        'createOrderResp'
+        'createOrderResp',
+        'terminal_addr',
+        'door_address',
+        'serviceCodeList'
     ]
     for (var i = 0; i < clearHTML.length; i++) {
         document.querySelector('#' + clearHTML[i]).innerHTML = ''
