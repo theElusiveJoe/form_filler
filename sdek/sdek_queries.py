@@ -105,7 +105,7 @@ def get_offices_by_citycode(city_code, max_weight):
     headers = {'Authorization': token}
     params = {"country_code": "RU",
               "city_code": city_code,
-              'weight_max': max_weight,
+              'weight_max': int(max_weight),
               'type': 'ALL'
               }
 
@@ -193,7 +193,7 @@ def getSDEKOffices(post_body):
         offices = get_offices_by_citycode(city['code'], addr_obj['weight'])
         print('offices:', offices)
         for office in offices:
-            print(office['type'])
+            # print(office['type'])
             offices_list.append({
                 'code': office['code'],
                 'latitude': office['location']['latitude'],
