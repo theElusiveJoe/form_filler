@@ -209,6 +209,7 @@ def getSDEKOffices(post_body):
 
 def countSDEKDelivery(body):
     check_token_relevance()
+    print(body)
     
     token = THE_TOKEN
     headers = {'Authorization': token,

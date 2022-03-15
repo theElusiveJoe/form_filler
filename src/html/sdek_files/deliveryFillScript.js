@@ -11,7 +11,7 @@ function getMaxWeight(){
             max = w
         }
     }
-    return max
+    return parseInt(max)
 }
 
 function parseTerminals(points) {
@@ -103,7 +103,7 @@ function count_delivery(){
     for (var i = 0; i < gpackages.length; i++){
         gabs = gpackages[i]['size'].split('/')
         obj["packages"].push({
-            "weight": gpackages[i]["weight"],
+            "weight": parseInt(gpackages[i]["weight"]),
             "length": gabs[0],
             "width": gabs[1],
             "height": gabs[2],
