@@ -117,7 +117,7 @@ function fillFields(order) {
     }
 
     // цена = сумма - доставка
-    var cost = Number(order['zippack']['obj']['Sum']) - Number(order['zippack']['obj']['ShippingCost'])
+    var cost = Number(order['zippack']['obj']['Sum'])
     document.getElementById('cargoValue').value = cost
     // номер заказа
     document.getElementById('number').value = order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim();
