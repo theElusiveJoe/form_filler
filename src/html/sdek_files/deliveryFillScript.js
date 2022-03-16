@@ -1,7 +1,7 @@
 var choosen_id  
 // ПОТОМ УДАЛИТЬ _ ЭТО ДЛЯ ТЕСТОВ
 var choosen_city_code = 504
-var choosen_type
+var choosen_type = ''
 
 function getMaxWeight(){
     var max = 0
@@ -24,7 +24,8 @@ function parseTerminals(points) {
             hintContent: points[i]['addr'],
             id: points[i]['code'],
             addr: points[i]['addr'],
-            city_code: points[i]['city_code']
+            city_code: points[i]['city_code'],
+            type: points[i]['type']
         }, {});
         
         myPlacemark.events.add('click', function (e) {
@@ -33,6 +34,7 @@ function parseTerminals(points) {
             target.options.set("preset", "islands#redDotIcon")
             choosen_id = target.properties.get('id')
             choosen_city_code = target.properties.get('city_code')
+            console.log(target.properties)
             choosen_type = target.properties.get('type')
             document.querySelector("#terminal_id").innerHTML = choosen_id
             document.getElementById('terminal_addr').innerHTML = target.properties.get('addr')
@@ -140,17 +142,19 @@ function count_delivery(){
         console.log(resp);
         
         var tariffs
+        console.log('choosen type: ', choosen_type)
         if (document.querySelector('input[name="delivery_type"]:checked').value == "door"){
             tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 3)
         } else { 
             if (choosen_type == "PVZ"){
                 tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 4)
-            } else { 
+            } else if (choosen_type == "POSTAMAT"){ 
                 tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 7)
             }
         }
         console.log(tariffs)
         var chooseDeliveryServiceList = document.querySelector("#serviceCodeList")
+        chooseDeliveryServiceList.innerHTML = ''
         for (var i = 0; i < tariffs.length; i++) {
             chooseDeliveryServiceList.innerHTML += `<option value="${tariffs[i]["tariff_code"]}" >` +
                 `${tariffs[i]['tariff_name']} ${tariffs[i]['delivery_sum']} руб (${tariffs[i]['period_min']} дня)</option>`

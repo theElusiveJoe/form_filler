@@ -66,43 +66,47 @@ function createOrder() {
         package['number'] = i
 
         package['weight'] = parseInt(Number(gpackages[i]['weight'].replace(',', '.')) * 1000) // общий вес в граммах для каждой упаковки
-        var amm_of_items_in_this_package = 0 // количество единиц тавара в упаковке, причем паки по 1000+ считаются за один
-        for (var j = 0; j < gpackages[i]['items'].length; j++) {
-            amm_of_items_in_this_package += Number(gpackages[i]['items'][j]['ammount']) < 1000 ? Number(gpackages[i]['items'][j]['ammount']) : 1
-        }
-        console.log('gpackages: ', gpackages)
-        console.log('amount: ', amm_of_items_in_this_package)
-        var avg_weight = package['weight'] / amm_of_items_in_this_package // средний вес единицы товара в упаковки [в граммах]
-        console.log('avg weight ', avg_weight)
-
         var gabs = gpackages[i]['size'].split('/')
         package['length'] = gabs[0]
         package['width'] = gabs[1]
         package['height'] = gabs[2]
 
+        var amm_of_items_in_this_package = 0 // количество единиц таваров в упаковке, причем паки по 1000+ считаются за один
+        for (var j = 0; j < gpackages[i]['items'].length; j++) {
+            amm_of_items_in_this_package += Number(gpackages[i]['items'][j]['ammount']) < 1000 ? Number(gpackages[i]['items'][j]['ammount']) : 1
+        }
+
+        console.log('gpackages: ', gpackages)
+        console.log('amount: ', amm_of_items_in_this_package)
+        var avg_weight = package['weight'] / amm_of_items_in_this_package // средний вес единицы товара в упаковки [в граммах]
+        console.log('avg weight ', avg_weight)
+
         var items = []
         for (var j = 0; j < gpackages[i]['items'].length; j++) {
             items[j] = {}
-            if (Number(gpackages[i]['items'][j]['ammount']) >= 1000) {
-                items[j]['name'] = 'Набор ' + gpackages[i]['items'][j]['ammount'] + "шт "
-                    + gpackages[i]['items'][j]['name']
-                items[j]['amount'] = 1
-                items[j]['cost'] = Number(gpackages[i]['items'][j]['price']) * Number(gpackages[i]['items'][j]['ammount'])
-                items[j]['weight'] = parseInt(avg_weight)
-            } else {
-                items[j]['name'] = gpackages[i]['items'][j]['name']
-                items[j]['amount'] = Number(gpackages[i]['items'][j]['ammount'])
-                items[j]['weight'] = parseInt(avg_weight)
 
-            }
-            items[j]['ware_key'] = gpackages[i]['items'][j]['artNo']
-            items[j]['cost'] = Number(gpackages[i]['items'][j]['price'])
             if (ziplusheets['gsheets']['paid'] == 'оплачено') {
                 var payval = 0
             } else {
                 var disc = (100 - ziplusheets['zippack']['obj']['OrderDiscount']) / 100;
                 var payval = Number(gpackages[i]['items'][j]['price']) * disc
             }
+            
+            if (Number(gpackages[i]['items'][j]['ammount']) >= 1000) {
+                items[j]['name'] = 'Набор ' + gpackages[i]['items'][j]['ammount'] + "шт "
+                    + gpackages[i]['items'][j]['name']
+                items[j]['amount'] = 1
+                items[j]['cost'] = Number(gpackages[i]['items'][j]['price']) * Number(gpackages[i]['items'][j]['ammount'])
+                payval = payval * Number(gpackages[i]['items'][j]['ammount'])
+            } else {
+                items[j]['name'] = gpackages[i]['items'][j]['name']
+                items[j]['amount'] = Number(gpackages[i]['items'][j]['ammount'])
+                items[j]['cost'] = Number(gpackages[i]['items'][j]['price'])
+            }
+
+            items[j]['weight'] = parseInt(avg_weight)
+            items[j]['ware_key'] = gpackages[i]['items'][j]['artNo']
+            
             items[j]['payment'] = { 'value': payval }
             items[j]['value'] = payval
         }
