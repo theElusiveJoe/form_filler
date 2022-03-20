@@ -1,5 +1,6 @@
 var ziplusheets = {}
 var lineNum = 0
+var item_id = 1
 
 function addItemsbox(i) {
     var newbox = document.createElement("div")
@@ -19,9 +20,10 @@ function addItemsbox(i) {
     document.querySelector('#packages').appendChild(newbox)
 }
 
-function addItem(name, artNo, ammount, price, id) {
+function addItem(name, artNo, ammount, price) {
     var newitem = document.createElement("div")
-    newitem.id = id
+    newitem.id = item_id++
+    newitem.price = price
     newitem.className = "item"
     newitem.draggable = "true"
     newitem.addEventListener("dragstart", (event) => { drag_item(event) })
@@ -29,7 +31,7 @@ function addItem(name, artNo, ammount, price, id) {
     <div class="name">${name}</div> 
     артикул: <b><div class="artNo">${artNo}</div></b>
     кол-во: <b> <div class="ammount">${ammount}</div></b>
-    <div style="display:none" class="price">${price}</div>
+    <button class="btn2" onclick="addItem(${name}, ${artNo}, ${ammount})">клонировать</button>
     `
     document.querySelector('#toSort').appendChild(newitem)
 }
