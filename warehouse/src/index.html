@@ -7,7 +7,7 @@
     <title>Рассортировать</title>
     <style>
         body {
-            background-color: rgb(255, 239, 255);
+            background-color: rgb(235, 235, 235);
         }
 
         .row {
@@ -30,7 +30,7 @@
             margin: 5px;
             border: 1px solid lightgrey;
             border-radius: 3px;
-            background-color: rgb(255, 171, 230)
+            background-color: rgb(218, 218, 218);
         }
 
         input[type=text] {
@@ -73,11 +73,9 @@
         }
 
         .btn22 {
-            background-color: #4CAF50;
+            background-color: #949393;
             color: white;
-            padding: 12px;
             /* margin: 10px 0; */
-            border: none;
             width: 20%;
             height: 30%;
             border-radius: 3px;
@@ -116,6 +114,8 @@
             width: 90%;
             border: 1px solid #aaaaaa;
             padding: 10px;
+            margin-down: 10%;
+            min-height: 100px;
         }
          /* Popup box BEGIN */
          .hover_bkgr_fricc {
@@ -174,7 +174,7 @@
         b.click()
     </script> -->
     <br>
-    <button onclick="collectData()" class="btn3">Рассортировать!</button>
+    
     <hr>
     <div class="row">
         <div class="column">
@@ -210,10 +210,11 @@
                 </div> -->
             </div>
             <br>
-            <button class="bubton btn3" onclick="addItem('', '', '', '')">добавить позицию</button>
+            <button class="bubton btn3" onclick="addItem('Пакет', 'пакет', '', '')">добавить позицию</button>
+            <button onclick="collectData()" class="btn" style="width:100%">Рассортировать!</button>
         </div>
     </div>
-
+    <br>
 </body>
 
 </html>

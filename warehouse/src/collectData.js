@@ -33,7 +33,7 @@ function collectData() {
             continue
         }
         var pinfo = {}
-        w = package.querySelector(".weight").value
+        w = package.querySelector(".weight").value.replace(',', '.')
         pinfo["weight"] = w
         weight += Number(w)
         var l1 = package.querySelector(".l1").value

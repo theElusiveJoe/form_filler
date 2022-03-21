@@ -10,12 +10,14 @@ function addItemsbox(i) {
     newbox.addEventListener("drop", (event) => { drop(event) })
     newbox.addEventListener("dragover", (event) => { allowDrop(event) })
     newbox.innerHTML = `
+    
     вес (кг)
         <input type="text" class="weight">
         размеры(см)
         <input type="text" class="l1">
         <input type="text" class="l2">
-        <input type="text" class="l3">    
+        <input type="text" class="l3">  
+     
     `
     document.querySelector('#packages').appendChild(newbox)
 }
@@ -27,33 +29,36 @@ function addItem(name, artNo, ammount, price) {
     newitem.draggable = "true"
     newitem.addEventListener("dragstart", (event) => { drag_item(event) })
     newitem.innerHTML = `
+    <div style="display: inline; margin-left: 5px">
     название:
-    <input type="text" style="width:40%" class="name" value=${name}>
-    <br>
+    <input type="text" style="width:25%" class="name" value=${name}>
     артикул:
-    <input type="text" style="width:40%" class="artNo" value=${artNo}>
-    <br>
+    <input type="text" style="width:35%" class="artNo" value=${artNo}>
     кол-во:
-    <input type="text" style="width:15%" class="ammount" value=${ammount}>
-    <br>
+    <input type="text" style="width:5%" class="ammount" value=${ammount}>
+    </div> 
     `
 
+    var d = document.createElement("div")
+    
     var bubton = document.createElement("button")
     bubton.className = "btn22"
+    bubton.style.margin = "10px"
     bubton.onclick = () => addItem(name, artNo, ammount)
     bubton.innerHTML = "клонировать"
-
     var bubton2 = document.createElement("button")
     bubton2.className = "btn22"
-    // bubton2.onclick = () => {this.parentNode.remove();}
+    bubton2.style.margin = "10px"
     bubton2.addEventListener('click', function(e) {
         e.currentTarget.parentNode.remove();
         heights()
     }, false);
     bubton2.innerHTML = "удалить"
 
-    newitem.appendChild(bubton)
-    newitem.appendChild(bubton2)
+    d.appendChild(bubton)
+    // d.appendChild(document.createElement("div"))
+    d.appendChild(bubton2)
+    newitem.appendChild(d)
     document.querySelector('#toSort').appendChild(newitem)
 
     heights()
