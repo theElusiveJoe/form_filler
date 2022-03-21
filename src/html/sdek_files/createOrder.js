@@ -29,7 +29,7 @@ function createOrder() {
     // console.log('delivery type:', delivery_type)
     // console.log('aaaa', document.querySelector('#terminal_rb').checked)
     if (document.querySelector('#terminal_rb').checked) {
-        data['delivery_point'] = document.querySelector("#terminal_id").innerHTML;
+        data['delivery_point'] = document.querySelector("#terminal_id").value;
     }
 
     // получатель

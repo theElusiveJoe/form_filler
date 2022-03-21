@@ -36,7 +36,7 @@ function parseTerminals(points) {
             choosen_city_code = target.properties.get('city_code')
             console.log(target.properties)
             choosen_type = target.properties.get('type')
-            document.querySelector("#terminal_id").innerHTML = choosen_id
+            document.querySelector("#terminal_id").value = choosen_id
             document.getElementById('terminal_addr').innerHTML = target.properties.get('addr')
         })
 
