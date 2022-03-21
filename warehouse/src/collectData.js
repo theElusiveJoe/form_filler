@@ -55,10 +55,9 @@ function collectData() {
                 continue
             }
             var item_obj = {
-                "artNo": item.querySelector(".artNo").innerHTML,
-                "name": item.getElementsByClassName("name")[0].innerHTML,
-                "ammount": item.getElementsByClassName("ammount")[0].innerHTML,
-                "price": item.getElementsByClassName("price")[0].innerHTML,
+                "artNo": item.querySelector(".artNo").value,
+                "name": item.getElementsByClassName("name")[0].value,
+                "ammount": item.getElementsByClassName("ammount")[0].value,
             }
             pinfo["items"].push(item_obj)
         }

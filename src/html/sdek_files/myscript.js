@@ -1,5 +1,6 @@
 var ziplusheets = {}
 var gpackages
+var numitems = 0
 
 function getTodayDate() {
     var now = new Date();
@@ -30,6 +31,7 @@ function resetInnerHTML() {
     choosen_id = -1
     choosen_city_code = -1
     choosen_type = -1
+    numitems = 0
 
 
     var clearHTML = [
@@ -101,7 +103,7 @@ function fillFields(order) {
     // начинаем заполнять поля
 
     // данные по заказу
-    simpleFields = {
+    var simpleFields = {
         'cargoNumPack': 'gsheets.positions', // количество посылок
         'cargoWeight': 'gsheets.weight',
     }
@@ -116,9 +118,11 @@ function fillFields(order) {
         document.querySelector("#cargoWeight").value = '????'
     }
 
-    // цена = сумма - доставка
+    // цены всякие
     var cost = Number(order['zippack']['obj']['Sum'])
-    document.getElementById('cargoValue').value = cost
+    document.getElementById('cargoValue').value = order['gsheets']['paid'] == "оплачено" ? 0 : Number(order['zippack']['obj']['Sum'])
+    console.log('paooaooaoa', order['gsheets']['paid'] == "оплачено", order['gsheets']['paid'])
+    document.getElementById('shippingValue').value = Number(order['zippack']['obj']['ShippingCost']) 
     // номер заказа
     document.getElementById('number').value = order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim();
     console.log(order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim())
@@ -132,29 +136,37 @@ function fillFields(order) {
         'phone1': 'zippack.obj.Customer.Phone', // телефон
         'email': 'zippack.obj.Customer.Email', // почта
     }
-    for (key in simpleFields) {
+    for (var key in simpleFields) {
         document.getElementById(key).value = GetByPath(order, simpleFields[key])
     }
     // товары
     gpackages = JSON.parse(ziplusheets['gsheets']['warehouse'])
     document.getElementById('itemsList').innerHTML = ''
-    for (i = 0; i < GetByPath(order, 'zippack.obj.Items').length; i++) {
-        item = GetByPath(order, 'zippack.obj.Items')[i];
-        document.getElementById('itemsList').innerHTML += '<tr id="box' + i + '">' +
-            '<td>' + (i + 1) + '</td>' +
-            '<td><input size="15" type="text" id="items[' + i + '][article]"></td>' +
-            '<td><input size="100" style.width="100%" type="text" id="items[' + i + '][name]"></td>' +
-            '<td><input type="text" id="items[' + i + '][quantity]"></td>' +
-            '<td><input type="text" id="items[' + i + '][price]"></td>' +
-            '</tr> '
+
+    var gitems = []
+    for (var i = 0; i < gpackages.length; i++) {
+        for (var j = 0; j < gpackages[i]["items"].length; j++) {
+            gpackages[i]["items"][j]['numpack'] = i
+            gitems.push(gpackages[i]["items"][j])
+        }
     }
-    for (i = 0; i < GetByPath(order, 'zippack.obj.Items').length; i++) {
-        item = GetByPath(order, 'zippack.obj.Items')[i];
-        document.getElementById('items[' + i + '][article]').value = item['ArtNo']
-        document.getElementById('items[' + i + '][name]').value = item['Name']
-        document.getElementById('items[' + i + '][quantity]').value = item['Amount']
-        document.getElementById('items[' + i + '][price]').value = item['Price']
+    numitems = gitems.length
+    for (var i = 0; i < numitems; i++) {
+        var item = gitems[i];
+        console.log(item)
+        document.getElementById('itemsList').innerHTML += `<tr id="box${i}">` +
+            `<td>${i}</td>` + 
+            `<td><input size="15" type="text" id="items[${i}][article]" value="${item['artNo']}"></td>` +
+            `<td><input size="100" style="width:100%" type="text" id="items[${i}][name]" value="Набор ${item['ammount']}шт: ${item['name']}"></td>` +
+            `<td><input style="display:none" size="15" type="text" id="items[${i}][numpack]" value="${item['numpack']}"></td>` +
+        `</tr>`
     }
+    // for (i = 0; i < GetByPath(order, 'zippack.obj.Items').length; i++) {
+    //     item = GetByPath(order, 'zippack.obj.Items')[i];
+    //     document.getElementById('items[' + i + '][article]').value = item['ArtNo']
+    //     document.getElementById('items[' + i + '][name]').value = item['Name']
+    //     document.getElementById('items[' + i + '][quantity]').value = item['Amount']
+    // }
     // комментарии
     document.getElementById('gsheetCommments').innerHTML = order['gsheets']['comments']
 
@@ -172,6 +184,7 @@ function fillFields(order) {
         document.querySelector("#door_address").value = createAdress(order)
     }
 }
+
 // получаем первичные данные по заказу с сервера и заполняем поля формы
 function getJSON() {
     // отпраляем запрос

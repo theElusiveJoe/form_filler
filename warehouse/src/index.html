@@ -72,6 +72,19 @@
             font-size: 17px;
         }
 
+        .btn22 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            /* margin: 10px 0; */
+            border: none;
+            width: 20%;
+            height: 30%;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
         .btn:hover {
             background-color: #97aaff;
         }
@@ -161,6 +174,7 @@
         b.click()
     </script> -->
     <br>
+    <button onclick="collectData()" class="btn3">Рассортировать!</button>
     <hr>
     <div class="row">
         <div class="column">
@@ -176,7 +190,7 @@
             </div> -->
             <div id="packages">
             </div>
-            <button class="bubton btn3" onclick="addItemsbox()">добавить</button>
+            <button class="bubton btn3" onclick="addItemsbox()">добавить упаковку</button>
         </div>
         <div class="column">
             <div class="itemsbox" id="toSort" ondrop="drop(event);" ondragover="allowDrop(event);">
@@ -196,7 +210,7 @@
                 </div> -->
             </div>
             <br>
-            <button onclick="collectData()" class="btn3">Рассортировать!</button>
+            <button class="bubton btn3" onclick="addItem('', '', '', '')">добавить позицию</button>
         </div>
     </div>
 

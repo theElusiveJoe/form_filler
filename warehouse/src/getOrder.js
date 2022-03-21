@@ -23,17 +23,40 @@ function addItemsbox(i) {
 function addItem(name, artNo, ammount, price) {
     var newitem = document.createElement("div")
     newitem.id = item_id++
-    newitem.price = price
     newitem.className = "item"
     newitem.draggable = "true"
     newitem.addEventListener("dragstart", (event) => { drag_item(event) })
     newitem.innerHTML = `
-    <div class="name">${name}</div> 
-    артикул: <b><div class="artNo">${artNo}</div></b>
-    кол-во: <b> <div class="ammount">${ammount}</div></b>
-    <button class="btn2" onclick="addItem(${name}, ${artNo}, ${ammount})">клонировать</button>
+    название:
+    <input type="text" style="width:40%" class="name" value=${name}>
+    <br>
+    артикул:
+    <input type="text" style="width:40%" class="artNo" value=${artNo}>
+    <br>
+    кол-во:
+    <input type="text" style="width:15%" class="ammount" value=${ammount}>
+    <br>
     `
+
+    var bubton = document.createElement("button")
+    bubton.className = "btn22"
+    bubton.onclick = () => addItem(name, artNo, ammount)
+    bubton.innerHTML = "клонировать"
+
+    var bubton2 = document.createElement("button")
+    bubton2.className = "btn22"
+    // bubton2.onclick = () => {this.parentNode.remove();}
+    bubton2.addEventListener('click', function(e) {
+        e.currentTarget.parentNode.remove();
+        heights()
+    }, false);
+    bubton2.innerHTML = "удалить"
+
+    newitem.appendChild(bubton)
+    newitem.appendChild(bubton2)
     document.querySelector('#toSort').appendChild(newitem)
+
+    heights()
 }
 
 function getJSON() {

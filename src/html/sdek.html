@@ -243,7 +243,7 @@
     <div class="row">
         <div class="col-25">
 
-            <input type="text" id="lineNum" value="4" style="margin: 2px;" />
+            <input type="text" id="lineNum" value="5" style="margin: 2px;" />
             <div id='zippackLink'></div>
             <div id='getJsonResp'></div>
         </div>
@@ -275,8 +275,10 @@
                         <option value="ТД">ТД</option>
                         <option value="ТТ">ТТ</option>
                     </select> -->
-                    <label class="description">Сумма объявленной стоимости</label>
+                    <label class="description">Берем с клиента за товар</label>
                     <input id="cargoValue" type="text" />
+                    <label class="description">Берем с клиента за доставку</label>
+                    <input id="shippingValue" type="text" />
                     <label class="description">Содержимое отправки</label>
                     <input id="cargoCategory" type="text" />
                 </div>
@@ -311,8 +313,7 @@
                                     <th>№</th>
                                     <th>Артикул</th>
                                     <th>Наименование</th>
-                                    <th>Кол-во</th>
-                                    <th>Стоимость ед.</th>
+                                    <!-- <th>упак.</th> -->
                                 </tr>
                             </thead>
                             <tbody id="itemsList">

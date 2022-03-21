@@ -54,12 +54,13 @@ function createOrder() {
 
     // доп сбор
     data['delivery_recipient_cost'] = {
-        "value": Number(ziplusheets['zippack']['obj']['ShippingCost'])
+        "value": Number(document.querySelector('#shippingValue').value)
     }
 
     // упаковки
     data['packages'] = []
-
+    
+    // переберем все упаковки, чтобы заполнить массу и габариты
     for (var i = 0; i < gpackages.length; i++) {
         var package = {}
 
@@ -71,48 +72,30 @@ function createOrder() {
         package['width'] = gabs[1]
         package['height'] = gabs[2]
 
-        var amm_of_items_in_this_package = 0 // количество единиц таваров в упаковке, причем паки по 1000+ считаются за один
-        for (var j = 0; j < gpackages[i]['items'].length; j++) {
-            amm_of_items_in_this_package += Number(gpackages[i]['items'][j]['ammount']) < 1000 ? Number(gpackages[i]['items'][j]['ammount']) : 1
-        }
-
-        console.log('gpackages: ', gpackages)
-        console.log('amount: ', amm_of_items_in_this_package)
-        var avg_weight = package['weight'] / amm_of_items_in_this_package // средний вес единицы товара в упаковки [в граммах]
-        console.log('avg weight ', avg_weight)
-
-        var items = []
-        for (var j = 0; j < gpackages[i]['items'].length; j++) {
-            items[j] = {}
-
-            if (ziplusheets['gsheets']['paid'] == 'оплачено') {
-                var payval = 0
-            } else {
-                var disc = (100 - ziplusheets['zippack']['obj']['OrderDiscount']) / 100;
-                var payval = Number(gpackages[i]['items'][j]['price']) * disc
-            }
-            
-            if (Number(gpackages[i]['items'][j]['ammount']) >= 1000) {
-                items[j]['name'] = 'Набор ' + gpackages[i]['items'][j]['ammount'] + "шт "
-                    + gpackages[i]['items'][j]['name']
-                items[j]['amount'] = 1
-                items[j]['cost'] = Number(gpackages[i]['items'][j]['price']) * Number(gpackages[i]['items'][j]['ammount'])
-                payval = payval * Number(gpackages[i]['items'][j]['ammount'])
-            } else {
-                items[j]['name'] = gpackages[i]['items'][j]['name']
-                items[j]['amount'] = Number(gpackages[i]['items'][j]['ammount'])
-                items[j]['cost'] = Number(gpackages[i]['items'][j]['price'])
-            }
-
-            items[j]['weight'] = parseInt(avg_weight)
-            items[j]['ware_key'] = gpackages[i]['items'][j]['artNo']
-            
-            items[j]['payment'] = { 'value': payval }
-            items[j]['value'] = payval
-        }
-        package['items'] = items
-
+        package['items'] = []
         data['packages'].push(package)
+    }
+
+    // а теперь раскидаем товары из таблички по упаковкам
+    var disc = (100 - ziplusheets['zippack']['obj']['OrderDiscount']) / 100;
+    var payval = Number(document.querySelector("#cargoValue").value) * disc / numitems
+    var costval = Number(ziplusheets['zippack']['obj']['Sum']) / numitems
+    console.log('платиииии', payval)
+    for (var i = 0; i < numitems; i++){
+        var numpack = parseInt(document.querySelector(`#items\\[${i}\\]\\[numpack\\]`).value)
+        console.log('номер посылки: ', numpack)
+        var item = {
+            'name': document.querySelector(`#items\\[${i}\\]\\[name\\]`).value,
+            'amount': 1,
+            'ware_key': document.querySelector(`#items\\[${i}\\]\\[article\\]`).value,
+            'weight': parseInt(gpackages[numpack]['weight']) / gpackages[numpack]['items'].length * 1000,
+            'cost': costval,
+            'payment' : {'value' : payval},
+            'value' : payval
+        }
+        console.log('item: ', item)
+        console.log('data: ', data)
+        data['packages'][numpack]['items'].push(item)
     }
 
     console.log('заказ: ')

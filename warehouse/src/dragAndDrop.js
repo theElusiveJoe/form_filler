@@ -4,8 +4,10 @@ function heights() {
     for (var i = 0; i < boxes.length; i++) {
         console.log(boxes[i])
         items = boxes[i].querySelectorAll(".item").length;
-        boxes[i].style.height = String(82 * (items + 2)) + "px";
+        boxes[i].style.height = String(200 * (items+1)) + "px";
     }
+
+
 }
 
 function allowDrop(ev) {
