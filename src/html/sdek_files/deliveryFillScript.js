@@ -41,10 +41,15 @@ function parseTerminals(points) {
         })
 
         myMap.geoObjects.add(myPlacemark);
-    }
 
-    if (points.length == 1) {
-        myMap.geoObjects.get(0).click;
+        if (points[i]['code'] == document.querySelector("#terminal_id").value){
+            choosen_id = points[i]['code']
+            choosen_city_code = points[i]['city_code']
+            choosen_type = points[i]['type']
+            document.querySelector("#terminal_id").value = choosen_id
+            document.getElementById('terminal_addr').innerHTML = points[i]['addr']
+            break
+        }
     }
 }
 

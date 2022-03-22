@@ -209,6 +209,7 @@
             border-radius: 8px;
             padding: 15px 5%;
         }
+
         /* Popup box BEGIN */
 
         @media (max-width: 800px) {
@@ -232,12 +233,12 @@
 </head>
 
 <body>
-    
+
     <h2>Создание заказа СДЭК!</h2>
     <div class="hover_bkgr_fricc">
         <span class="helper"></span>
         <div>
-           <h1>ПОДОЖДИТЕ</h1>
+            <h1>ПОДОЖДИТЕ</h1>
         </div>
     </div>
     <div class="row">
@@ -355,11 +356,13 @@
             </div>
             <div class="row">
                 <div class="col-50">
+                    <!-- <div class="col-50"><input name="pvz_type" type="radio" value="office" id="office_pvz_rb">офис</div>
+                    <div class="col-50"><input name="pvz_type" type="radio" value="terminal" id="terminal_pvz_rb">постамат</div> -->
+                    <label class="description" style="margin-top: 10px;">код пвз (если есть)</label>
+                    <input id="terminal_id" type="text" value="MSK789"></h2>
                     <label class="terminal_adress_str">все, что знаем о адресе</label>
-                    <input id="delivery_point_address" type="text" />
+                    <input id="delivery_point_address" type="text" value="Москва" />
                     <button class="btn2" onclick="getTerminals();">найти пвз</button>
-                    <label class="description" style="margin-top: 10px;">код пвз</label>
-                    <input id="terminal_id" type="text" ></h2>
                 </div>
                 <div id="to_location" class="col-50">
                     <!-- <label class="description">регион</label>
@@ -377,7 +380,10 @@
         </div>
     </div>
     <div class="row">
-        <div id="map" class="row-50" style="width: 900px; height: 800px;"></div>
+        <div id="map" class="row-50" style="width: 900px; height: 800px;">
+            <a href="https://www.cdek.ru/ru/offices" target="_blank">Карта СДЕК</a>
+        </div>
+
         <div class="row-50">
             <button onclick="count_delivery()" id='countDeliveryBtn' class="btn2" style="width: 300px;">варианты
                 доставки</button>
@@ -413,7 +419,7 @@
         var getTerminalsBtn = document.getElementById('delivery_point_address');
         getTerminalsBtn.addEventListener('keyup', function (e) {
             if (e.keyCode === 13) {
-                e.preventDefault();th
+                e.preventDefault(); th
                 getTerminals();
             }
         })

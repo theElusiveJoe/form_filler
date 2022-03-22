@@ -88,6 +88,8 @@ def get_cities(fias_region_guid='',
 def get_cities_by_name(name):
     check_token_relevance()
 
+    print('№№№№№№№№№№ ИЩУ ГОРОД', name, '###################')
+    
     headers = {'Authorization': THE_TOKEN}
     params = {"country_codes": ["RU"],
               "city": name,
@@ -101,10 +103,12 @@ def get_cities_by_name(name):
 def get_offices_by_citycode(city_code, max_weight):
     check_token_relevance()
 
+    print('№№№№№№№№№№ ИЩУ в городе номер', city_code, '###################')
+
     token = THE_TOKEN
     headers = {'Authorization': token}
     params = {"country_code": "RU",
-              "city_code": city_code,
+              "city_code": int(city_code),
               'weight_max': int(max_weight),
               'type': 'ALL'
               }
@@ -184,14 +188,20 @@ def getSDEKOffices(post_body):
     for x in ['settlement', 'city', 'area', 'region']:
         if addr[x] is not None:
             cities = get_cities_by_name(addr[x])
+            print('cities1:', cities)
+            if 'ё' in addr[x] and cities == []:
+                cities += get_cities_by_name(addr[x].replace('ё', 'е'))
+                print('cities2:', cities)
             break
 
     offices_list = []
+    print('cities:', cities)
     for city in cities:
         print('city:', city['city'])
         print('maxweight: ', addr_obj['weight'])
+        print('code', city['code'])
         offices = get_offices_by_citycode(city['code'], addr_obj['weight'])
-        print('offices:', offices)
+        print('offices num:', len(offices))
         for office in offices:
             # print(office['type'])
             offices_list.append({
@@ -203,6 +213,7 @@ def getSDEKOffices(post_body):
                 'type': office['type']
             }
             )
+
     return_obj['suggestions'] = offices_list
     return json.dumps(return_obj)
 
@@ -293,4 +304,4 @@ def send_to_server(obj):
 
 
 if __name__ == "__main__":
-    get_token()
+    get_token() 
