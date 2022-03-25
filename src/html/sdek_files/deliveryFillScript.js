@@ -11,7 +11,8 @@ function getMaxWeight(){
             max = w
         }
     }
-    return parseInt(max)
+    var mw = parseInt(max)
+    return mw >= 1 ? mw : 1 // тут округлить до большего
 }
 
 function parseTerminals(points) {

@@ -41,6 +41,8 @@ def get_token():
     resp = requests.post(
         f'https://api{testMode}.cdek.ru/v2/oauth/token?parameters', data=body)
 
+    print(resp.status_code)
+
     cont = json.loads(str(resp.content, encoding='utf-8'))
     # print(cont)
     THE_TOKEN = 'Bearer ' + cont['access_token']
@@ -195,11 +197,11 @@ def getSDEKOffices(post_body):
             break
 
     offices_list = []
-    print('cities:', cities)
+    # print('cities:', cities)
     for city in cities:
-        print('city:', city['city'])
-        print('maxweight: ', addr_obj['weight'])
-        print('code', city['code'])
+        # print('city:', city['city'])
+        # print('maxweight: ', addr_obj['weight'])
+        # print('code', city['code'])
         offices = get_offices_by_citycode(city['code'], addr_obj['weight'])
         print('offices num:', len(offices))
         for office in offices:

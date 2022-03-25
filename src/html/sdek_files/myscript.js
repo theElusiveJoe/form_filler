@@ -119,10 +119,10 @@ function fillFields(order) {
     }
 
     // цены всякие
-    var cost = Number(order['zippack']['obj']['Sum'])
     document.getElementById('cargoValue').value = order['gsheets']['paid'] == "оплачено" ? 0 : Number(order['zippack']['obj']['Sum'])
-    console.log('paooaooaoa', order['gsheets']['paid'] == "оплачено", order['gsheets']['paid'])
-    document.getElementById('shippingValue').value = Number(order['zippack']['obj']['ShippingCost']) 
+    // console.log('paooaooaoa', order['gsheets']['paid'] == "оплачено", order['gsheets']['paid'])
+    // document.getElementById('shippingValue').value = Number(order['zippack']['obj']['ShippingCost']) 
+    
     // номер заказа
     document.getElementById('number').value = order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim();
     console.log(order['gsheets']['account_number'] != '' ? order['gsheets']['account_number'].trim() : order['gsheets']['id'].trim())

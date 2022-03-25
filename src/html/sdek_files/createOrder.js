@@ -53,9 +53,9 @@ function createOrder() {
     }
 
     // доп сбор
-    data['delivery_recipient_cost'] = {
-        "value": Number(document.querySelector('#shippingValue').value)
-    }
+    // data['delivery_recipient_cost'] = {
+    //     "value": Number(document.querySelector('#shippingValue').value)
+    // }
 
     // упаковки
     data['packages'] = []
@@ -78,7 +78,7 @@ function createOrder() {
 
     // а теперь раскидаем товары из таблички по упаковкам
     var disc = (100 - ziplusheets['zippack']['obj']['OrderDiscount']) / 100;
-    var payval = Number(document.querySelector("#cargoValue").value) * disc / numitems
+    var payval = Number(document.querySelector("#cargoValue").value) / numitems
     var costval = Number(ziplusheets['zippack']['obj']['Sum']) / numitems
     console.log('платиииии', payval)
     for (var i = 0; i < numitems; i++){
@@ -88,7 +88,7 @@ function createOrder() {
             'name': document.querySelector(`#items\\[${i}\\]\\[name\\]`).value,
             'amount': 1,
             'ware_key': document.querySelector(`#items\\[${i}\\]\\[article\\]`).value,
-            'weight': parseInt(gpackages[numpack]['weight']) / gpackages[numpack]['items'].length * 1000,
+            'weight': parseInt(Number(gpackages[numpack]['weight']) / gpackages[numpack]['items'].length * 1000),
             'cost': costval,
             'payment' : {'value' : payval},
             'value' : payval
