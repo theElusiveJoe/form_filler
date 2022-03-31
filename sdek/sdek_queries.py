@@ -2,6 +2,7 @@ import json
 import http.client
 import requests
 import time
+import logging
 
 
 THE_TOKEN = ''
@@ -27,28 +28,30 @@ smth = open("smth.json", "w")
 
 
 def get_token():
-
     global THE_TOKEN
     global token_expiration_time
     global token_upd_time
 
-    print('###########ОБНОВЛЯЮ ТОКЕН#################')
-    body = {
-        'grant_type': "client_credentials",
-        "client_id": client_account,
-        "client_secret": client_password,
-    }
-    resp = requests.post(
-        f'https://api{testMode}.cdek.ru/v2/oauth/token?parameters', data=body)
+    try:
+        print('###########ОБНОВЛЯЮ ТОКЕН#################')
+        body = {
+            'grant_type': "client_credentials",
+            "client_id": client_account,
+            "client_secret": client_password,
+        }
+        resp = requests.post(
+            f'https://api{testMode}.cdek.ru/v2/oauth/token?parameters', data=body)
 
-    print(resp.status_code)
+        print(resp.status_code)
 
-    cont = json.loads(str(resp.content, encoding='utf-8'))
-    # print(cont)
-    THE_TOKEN = 'Bearer ' + cont['access_token']
-    token_upd_time = time.time()
-    token_expiration_time = int(cont['expires_in'])
-
+        cont = json.loads(str(resp.content, encoding='utf-8'))
+        # print(cont)
+        THE_TOKEN = 'Bearer ' + cont['access_token']
+        token_upd_time = time.time()
+        token_expiration_time = int(cont['expires_in'])
+    except:
+        logging.exception('')
+        logging.error('Проблема с обновлением токена')
 
 def check_token_relevance():
     if int(time.time()) > token_upd_time + token_expiration_time + 180:
@@ -165,7 +168,11 @@ def getSDEKOffices(post_body):
 
     addr_obj = json.loads(post_body)
     print('###############Пришло с сайта:################\n', addr_obj)
-    addr_predictions = getCorrectAddres(addr_obj['all_info'])
+    try:
+        addr_predictions = getCorrectAddres(addr_obj['all_info'])
+    except:
+        logging.exception('')
+        logging.error('Проблемы с dadata')
     print('###############Пришло с dadata:################\n', addr_predictions)
 
     return_obj = {'problems': False}
@@ -187,36 +194,41 @@ def getSDEKOffices(post_body):
 
     return_obj['ymapSearch'] = addr['result']
 
-    for x in ['settlement', 'city', 'area', 'region']:
-        if addr[x] is not None:
-            cities = get_cities_by_name(addr[x])
-            print('cities1:', cities)
-            if 'ё' in addr[x] and cities == []:
-                cities += get_cities_by_name(addr[x].replace('ё', 'е'))
-                print('cities2:', cities)
-            break
+    try:
+        for x in ['settlement', 'city', 'area', 'region']:
+            if addr[x] is not None:
+                cities = get_cities_by_name(addr[x])
+                print('cities1:', cities)
+                if 'ё' in addr[x] and cities == []:
+                    cities += get_cities_by_name(addr[x].replace('ё', 'е'))
+                    print('cities2:', cities)
+                break
 
-    offices_list = []
-    # print('cities:', cities)
-    for city in cities:
-        # print('city:', city['city'])
-        # print('maxweight: ', addr_obj['weight'])
-        # print('code', city['code'])
-        offices = get_offices_by_citycode(city['code'], addr_obj['weight'])
-        print('offices num:', len(offices))
-        for office in offices:
-            # print(office['type'])
-            offices_list.append({
-                'code': office['code'],
-                'latitude': office['location']['latitude'],
-                'longitude': office['location']['longitude'],
-                'addr': office['location']['address_full'],
-                'city_code': office['location']['city_code'],
-                'type': office['type']
-            }
-            )
+        offices_list = []
+        # print('cities:', cities)
+        for city in cities:
+            # print('city:', city['city'])
+            # print('maxweight: ', addr_obj['weight'])
+            # print('code', city['code'])
+            offices = get_offices_by_citycode(city['code'], addr_obj['weight'])
+            print('offices num:', len(offices))
+            for office in offices:
+                # print(office['type'])
+                offices_list.append({
+                    'code': office['code'],
+                    'latitude': office['location']['latitude'],
+                    'longitude': office['location']['longitude'],
+                    'addr': office['location']['address_full'],
+                    'city_code': office['location']['city_code'],
+                    'type': office['type']
+                }
+                )
 
-    return_obj['suggestions'] = offices_list
+        return_obj['suggestions'] = offices_list
+    except:
+        logging.exception('')
+        logging.error('Проблемы с поиском офиса')
+
     return json.dumps(return_obj)
 
 
