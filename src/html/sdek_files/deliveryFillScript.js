@@ -149,7 +149,9 @@ function count_delivery(){
         
         var tariffs
         console.log('choosen type: ', choosen_type)
-        if (document.querySelector('input[name="delivery_type"]:checked').value == "door"){
+        console.log(document.querySelector('input[name="delivery_type"]:checked'))
+        
+        if (choosen_type == -1){
             tariffs = resp["tariff_codes"].filter(x => x['delivery_mode'] == 3)
         } else { 
             if (choosen_type == "PVZ"){
