@@ -50,7 +50,7 @@ function addItem(name, artNo, ammount, price) {
     bubton2.className = "btn22"
     bubton2.style.margin = "10px"
     bubton2.addEventListener('click', function(e) {
-        e.currentTarget.parentNode.remove();
+        e.currentTarget.parentNode.parentNode.remove();
         heights()
     }, false);
     bubton2.innerHTML = "удалить"

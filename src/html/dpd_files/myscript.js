@@ -6,7 +6,7 @@ function getTodayDate() {
     var date = now.getDate().toString();
     var mon = (now.getMonth() + 1).toString();
     if (date.length == 1) { date = '0' + date; }
-    if (date.length == 1) { mon = '0' + mon; }
+    if (mon.length == 1) { mon = '0' + mon; }
     return (now.getFullYear().toString() + '-' + mon + '-'+ date);
 }
 
@@ -29,7 +29,7 @@ function resetInnerHTML(){
     document.querySelector("#serviceCode").innerHTML = ''
     choosen = ''
     document.querySelector("#choosenTerminal").innerHTML = ''
-   document.querySelector('.hover_bkgr_fricc').style.display = "none"
+//    document.querySelector('.hover_bkgr_fricc').style.display = "none"
     document.getElementById('zippackLink').innerHTML = ''
 }
 
@@ -134,8 +134,10 @@ function getJSON() {
             alert('произошла ошибка на сервере')
             return
         }
+        console.log(JSON.parse(xhr.responseText))
         try {
             obj = JSON.parse(xhr.responseText)
+    
             fillFields(obj)
         } catch (err){
             alert('произошла ошибка при разборе данных, прибывших с сервера')
