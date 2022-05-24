@@ -59,7 +59,6 @@ def get_order_from_mail(order_raw_num):
                 pl = part.get_payload(decode='base64')
                 soup = BeautifulSoup(pl, 'html.parser')
                 break
-        print(soup)
         # находим таблички с товарами
         itemtables = soup.find_all('table', attrs={'cellspacing': '1'})
         items = []
@@ -87,7 +86,6 @@ def get_order_from_mail(order_raw_num):
         # находим табличку с итоговой ценой
         pricetable = soup.find_all('table', attrs={'cellspacing': '2'})
         # sum = pd.read_html(str(pricetable))[1].iloc[0]['Итого c учетом доставки и скидок']
-        # pricetable
         # pd.read_html(str(pricetable).replace(',', ''))
         obj['Sum'] = float(price_to_num(pricetable[0].find_all('strong')[-1].text))
 
