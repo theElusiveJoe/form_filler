@@ -10,7 +10,7 @@ from compose_data.mail_reader import get_order_from_mail
 def get_order_info(line_num):
     gstring, order_id = get_order_from_gsheetstring(line_num.strip())
     zstring = ''
-    if ord('A') <= ord(order_id[0].strip()) <= ord('Z'): 
+    if ord('A') <= ord(order_id.strip()[0]) <= ord('Z'): 
         try:
             zstring = get_order_from_zippack(re.sub("\D", "", order_id))
         except:
