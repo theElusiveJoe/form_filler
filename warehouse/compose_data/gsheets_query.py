@@ -42,6 +42,14 @@ def get_titles():
     return sheet.values().get(spreadsheetId=SHEET_ID, range='Лист1!A2:Z2').execute()['values'][0]
 
 def get_string(num):
+    a = sheet.values()
+    print('a:', a)
+    b = a.get(spreadsheetId=SHEET_ID, range=f'Лист1!A{num}:Z{num}')
+    print('b:', b)
+    c = b.execute()
+    print('c:', c)
+    print('values', c['values'])
+
     return sheet.values().get(spreadsheetId=SHEET_ID, range=f'Лист1!A{num}:Z{num}').execute()['values'][0]
 
 def get_order_from_gsheetstring(ordernum):
