@@ -69,32 +69,32 @@ def getTerminals(siteQuery, dadataResp = ''):
     returns json string ready to respond to website
     """
 
-    # for test!!!
-    # m = {
-    #     "error": False,
-    #     "problems": True,
-    #     "description": "слишком большая посылка, либо нашлось несколько подходящих пунктов",
-    #     "suggestions": [
-    #         {
-    #             "code": "M11",
-    #             "lat": "55.827237",
-    #             "long": "37.659551",
-    #             "addr": "Москва, улица, Касаткина, 11(2)"
-    #         }
-    #     ],
-    #     "predicion": "превышение габарит"
-    # }
-
-    # return json.dumps(m)
-    # orderData = siteQuery
-    # orderData = json.loads(siteQuery)
-
     conn = sqlite3.connect(r"db/dpd.db")
     cur = conn.cursor()
     
+    cur.execute(
+        f"""CREATE TABLE IF NOT EXISTS lastUpdate(
+        time INTEGER DEFAULT 0
+        );"""
+    )
+    conn.commit()
+    
+    print('counting strings')
+    cur.execute(
+        f"""SELECT count(*) from lastUpdate"""
+    )
+
+    if cur.fetchone()[0] == 0:
+        print('inserting zero')
+        cur.execute(
+            f"""INSERT INTO lastUpdate (time) VALUES (0);"""
+        )
+        conn.commit()
+
     cur.execute("""
         SELECT * FROM lastUpdate
     """)
+    
 
     lastUpdateTime = cur.fetchone()[0]
     nowtime = round(time.time())

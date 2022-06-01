@@ -102,6 +102,7 @@ def getQueryText(queryNum):
 
 
 def updateCitiesCashPay():
+    print('UPDATING')
     tableName = "citiesCashPay"
     conn = sqlite3.connect(r"db/dpd.db")
     cur = conn.cursor()
