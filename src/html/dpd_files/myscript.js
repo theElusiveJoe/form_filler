@@ -134,10 +134,12 @@ function getJSON() {
             alert('произошла ошибка на сервере')
             return
         }
+
+        console.log(xhr.responseText)
         console.log(JSON.parse(xhr.responseText))
+
         try {
             obj = JSON.parse(xhr.responseText)
-    
             fillFields(obj)
         } catch (err){
             alert('произошла ошибка при разборе данных, прибывших с сервера')

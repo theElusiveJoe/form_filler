@@ -39,12 +39,15 @@ def get_order_from_mail(order_raw_num):
     try:
         latest_email_id = id_list[0]  # Берем первое упоминание
     except:
-        logging.exception('')
-        logging.error('Письмо не найдено')
+        # logging.exception('')
+        logging.error('##########ПИСЬМО НЕ НАйДЕНО##########')
+        return
         
     # Получаем тело письма (RFC822) для данного ID
-    result, data = mail.fetch(latest_email_id, "(RFC822)")
-
+    try:
+        result, data = mail.fetch(latest_email_id, "(RFC822)")
+    except:
+        logging.error('##########НЕ УДАЛОСЬ ПОЛУЧИТЬ ТЕЛО ПИСЬМА##########')
     msg = email.message_from_bytes(data[0][1])
 
     try:
@@ -59,7 +62,6 @@ def get_order_from_mail(order_raw_num):
                 pl = part.get_payload(decode='base64')
                 soup = BeautifulSoup(pl, 'html.parser')
                 break
-        print(soup)
         # находим таблички с товарами
         itemtables = soup.find_all('table', attrs={'cellspacing': '1'})
         items = []
@@ -120,21 +122,20 @@ def get_order_from_mail(order_raw_num):
                 obj['Customer'][y] = order_info.loc[x]
 
         # информация о доставке
-        shipping_type = order_info.loc['Способ получения:']
-        obj['ShippingName'] = shipping_type
-        print(shipping_type)
+        shipping_type = order_info.loc['Способ получения:'] if 'Способ получения:' in order_info.keys() else ''
+        print(shipping_type, type(shipping_type))
+
         if pd.isna(shipping_type) \
                 or shipping_type == 'Самовывоз. 1-2 дня' \
                 or shipping_type.startswith('DPD') and 'курьером до двери' not in shipping_type \
                 or shipping_type == 'Самовывоз':
-
             obj['Customer']['CustomField1'] = order_info.loc['Выбранный пункт самовывоза:']
-
         elif shipping_type.startswith('Курьер - ДО АДРЕСА.') \
                 or shipping_type.startswith('СДЭК') \
                 or 'курьером до двери' in shipping_type:
-
             obj['Customer']['CustomField1'] = order_info.loc['Адрес доставки, Ф.И.О. и телефоны контактного лица:']
+        else:
+            obj['Customer']['CustomField1'] = ""
 
         obj['ShippingCost'] = float(price_to_num(
             order_info.loc['Стоимость доставки:']))
@@ -153,8 +154,8 @@ def get_order_from_mail(order_raw_num):
 
         obj['PaymentName'] = strs[strs.index('Способ оплаты:')+1]
     except:
-        logging.exception('')
-        logging.error('Возникли проблемы при парсинге письма')
+        logging.exception('Возникли проблемы при парсинге письма')
+        # logging.error('Возникли проблемы при парсинге письма')
     the_json['obj'] = obj
 
     return json.dumps(the_json, ensure_ascii=False)
