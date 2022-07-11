@@ -352,11 +352,11 @@
         <div class="col-75">
             <div class="row">
                 <div class="col-50">
-                    <input name="delivery_type" type="radio" value="terminal" id="terminal_rb"/>
+                    <input name="delivery_type" type="radio" value="terminal" id="terminal_rb" />
                     ПВЗ
                 </div>
                 <div class="col-50">
-                    <input name="delivery_type" type="radio" value="door" id="door_rb"/>
+                    <input name="delivery_type" type="radio" value="door" id="door_rb" />
                     до двери
                 </div>
             </div>
@@ -397,6 +397,11 @@
             <select class="select-css" id="serviceCodeList"></select>
             <br><br>
             <button onclick="createOrder()" id='createOrderBtn' class="btn2" style="width: 300px;">заполнить!</button>
+            
+            <form class="btn3" method="GET" action="/src/html/sdek_status.html">
+                <button type="submit">статусы заказов</button>
+            </form>
+
             <div id="createOrderResp"></div>
         </div>
     </div>

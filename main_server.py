@@ -2,6 +2,7 @@ from sdek.sdek_queries import send_SDEK_order
 from sdek.sdek_queries import getSDEKOffices as get_SDEK_offices
 from sdek.sdek_queries import countSDEKDelivery as count_SDEK_delivery
 from sdek.sdek_queries import parseSDEKAddress as parse_SDEK_address
+from sdek.sdek_queries import get_orders_status as get_SDEK_order_status
 from dpd.dpd_order import create_dpd_order
 from dpd.dpd_service_cost import getServiceCostByParcels2 as get_dpd_cost
 from dpd.dpd_pick_terminal import getTerminals as get_dpd_terminals
@@ -170,6 +171,12 @@ class S(BaseHTTPRequestHandler):
                 self.wfile.write(bytes(result, "utf-8"))
             elif 'createSDEKOrder.func' in self.path:
                 result = send_SDEK_order(post_body)
+                self.send_response(200)
+                self.send_header("Content-type", "application/json")
+                self.end_headers()
+                self.wfile.write(bytes(result, "utf-8"))
+            elif 'getSDEKstatus.func' in self.path:
+                result = get_SDEK_order_status()
                 self.send_response(200)
                 self.send_header("Content-type", "application/json")
                 self.end_headers()

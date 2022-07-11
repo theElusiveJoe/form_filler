@@ -3,12 +3,14 @@ import http.client
 import requests
 import time
 import logging
+import sqlite3
 
 
 THE_TOKEN = ''
 token_upd_time = 0
 token_expiration_time = 0
-order_constants = json.load(open('sdek/order_constants.json', 'r', encoding='utf-8'))
+order_constants = json.load(
+    open('sdek/order_constants.json', 'r', encoding='utf-8'))
 
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
@@ -53,6 +55,7 @@ def get_token():
         logging.exception('')
         logging.error('Проблема с обновлением токена')
 
+
 def check_token_relevance():
     if int(time.time()) > token_upd_time + token_expiration_time + 180:
         get_token()
@@ -94,7 +97,7 @@ def get_cities_by_name(name):
     check_token_relevance()
 
     print('№№№№№№№№№№ ИЩУ ГОРОД', name, '###################')
-    
+
     headers = {'Authorization': THE_TOKEN}
     params = {"country_codes": ["RU"],
               "city": name,
@@ -235,7 +238,7 @@ def getSDEKOffices(post_body):
 def countSDEKDelivery(body):
     check_token_relevance()
     print(body)
-    
+
     token = THE_TOKEN
     headers = {'Authorization': token,
                'Content-Type': 'application/json'}
@@ -298,9 +301,10 @@ def send_to_server(obj):
 
     headers = {'Authorization': THE_TOKEN, 'Content-Type': 'application/json'}
     # params = {"country_codes": ["RU"]}
-    print('######################BOODY',type(obj), json.dumps(obj, ensure_ascii=False))
+    print('######################BOODY', type(
+        obj), json.dumps(obj, ensure_ascii=False))
     resp = requests.post(f'https://api{testMode}.cdek.ru/v2/orders',
-                        #  params=params,
+                         #  params=params,
                          headers=headers,
                          data=json.dumps(obj))
 
@@ -309,13 +313,111 @@ def send_to_server(obj):
     ans = {
         'state': resp['requests'][0]['state'],
     }
-    if 'errors' in resp['requests'][0]:
-        ans['errors'] = resp['requests'][0]['errors']
-    if 'warnings' in resp['requests'][0]:
-        ans['warnings'] = resp['requests'][0]['warnings']
+
+    if 'errors' in resp['requests'][0] or 'warnings' in resp['requests'][0]:
+        if 'errors' in resp['requests'][0]:
+            ans['errors'] = resp['requests'][0]['errors']
+        if 'warnings' in resp['requests'][0]:
+            ans['warnings'] = resp['requests'][0]['warnings']
+    else:
+        add_order_to_created(
+            uuid=resp['entity']['uuid'], time=resp['requests'][0]['date_time'])
 
     return json.dumps(ans)
 
 
+def add_order_to_created(uuid, time):
+    try:
+        file_path = r'db/sdek.sdek.db'
+        with open(file_path, 'x') as fp:
+            pass
+    except:
+        pass
+
+    conn = sqlite3.connect(r"db/sdek.db")
+    cur = conn.cursor()
+
+    cur.execute(
+        f"""CREATE TABLE IF NOT EXISTS created_orders(
+        time TEXT PRIMARY KEY,
+        uuid TEXT
+        );"""
+    )
+    conn.commit()
+
+    cur.execute(
+        f"""INSERT INTO {"created_orders"}
+        (time, uuid)
+        VALUES ("{time}", "{uuid}")
+        """
+    )
+    conn.commit()
+
+
+def get_orders_status():
+    try:
+        file_path = r'db/sdek.db'
+        with open(file_path, 'x') as fp:
+            pass
+    except:
+        pass
+
+    conn = sqlite3.connect(r"db/sdek.db")
+    cur = conn.cursor()
+
+    cur.execute(
+        f"""CREATE TABLE IF NOT EXISTS created_orders(
+        time INTEGER PRIMARY KEY,
+        uuid INTEGER
+        );"""
+    )
+    conn.commit()
+
+    cur.execute(
+        f"""SELECT (uuid) FROM created_orders
+        ORDER BY time DESC;
+        """
+    )
+
+    uuids = cur.fetchall()
+    if uuids:
+        check_token_relevance()
+
+    print('UUIDS:', uuids)
+
+    statuses = []
+    for uuid in uuids:
+        resp = requests.get(
+            f'https://api{testMode}.cdek.ru/v2/orders/{uuid[0]}',
+            headers={'Authorization': THE_TOKEN,
+                     'Content-Type': 'application/json'},
+        )
+        if resp.status_code != 200:
+            continue
+
+        resp = json.loads(str(resp.content, encoding='utf-8'))
+        print(resp['requests'])
+        
+        request = resp['requests'][0]
+        errors = []
+        if 'errors' in request: 
+            for error in request['errors']:
+                errors.append(error['message'])
+        warnings = []
+        if 'warnings' in request: 
+            for warning in request['warnings']:
+                warning.append(warning['message'])
+
+        statuses.append({
+            'id': resp['entity']['number'],    
+            'errors': errors,
+            'warnings' : warnings,
+            'state': request['state']
+        })
+        print(statuses)
+        
+    return json.dumps(statuses, ensure_ascii=False)
+
+
 if __name__ == "__main__":
-    get_token() 
+    get_orders_status()
