@@ -18,14 +18,14 @@
 						<streetAbbr>ул</streetAbbr>
 						<house>1</house>
 						<!-- <houseKorpus>?</houseKorpus> -->
-						<str>1</str>
+						<str>13</str>
 						<!-- <vlad>?</vlad> -->
-						<extraInfo>1б/1</extraInfo>
+						<extraInfo></extraInfo>
 						<workTimeFrom>10:00</workTimeFrom>
 						<workTimeTo>18:00</workTimeTo>
 						<contactFio>Алексей, Михаил</contactFio>
 						<contactPhone>89261672339, 89680914603</contactPhone>
-						<instructions>подъезд 10, СитиРент</instructions>
+						<instructions>магазин "Зиппак" напротив "Лайт кухни"</instructions>
 					</senderAddress>
 					<pickupTimePeriod></pickupTimePeriod>
 				</header>

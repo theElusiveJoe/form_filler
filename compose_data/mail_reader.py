@@ -53,7 +53,7 @@ def get_order_from_mail(order_raw_num):
     try:
         # парсим json шаблон
         ftempl = open('compose_data/zippack_patterm.json', 'r')
-        the_json = copy.copy(the_json_main)
+        the_json = json.load(ftempl)
         obj = the_json['obj']
 
         # выцепляем html часть
@@ -122,13 +122,15 @@ def get_order_from_mail(order_raw_num):
                 obj['Customer'][y] = order_info.loc[x]
 
         # информация о доставке
+        print(order_info)
         shipping_type = order_info.loc['Способ получения:'] if 'Способ получения:' in order_info.keys() else ''
         print(shipping_type, type(shipping_type))
 
         if pd.isna(shipping_type) \
                 or shipping_type == 'Самовывоз. 1-2 дня' \
                 or shipping_type.startswith('DPD') and 'курьером до двери' not in shipping_type \
-                or shipping_type == 'Самовывоз':
+                or shipping_type == 'Самовывоз' \
+                or shipping_type.startswith('СДЭК') and 'посылка' in shipping_type:
             obj['Customer']['CustomField1'] = order_info.loc['Выбранный пункт самовывоза:']
         elif shipping_type.startswith('Курьер - ДО АДРЕСА.') \
                 or shipping_type.startswith('СДЭК') \
