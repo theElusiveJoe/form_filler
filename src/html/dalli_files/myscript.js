@@ -29,7 +29,7 @@ function getTodayDate(){
     date = tomorrow.getDate().toString();
     mon = (tomorrow.getMonth()+1).toString();
     if (date.length == 1){date = '0' + date;}
-    if (date.length == 1){mon = '0' + mon;}
+    if (mon.length == 1){mon = '0' + mon;}
     return date + '.' + mon + '.' + tomorrow.getFullYear().toString();
 }
 
