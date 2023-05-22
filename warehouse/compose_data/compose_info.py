@@ -16,12 +16,17 @@ def get_order_info(line_num):
         except:
             logging.exception('')
             logging.error('Проблема с гугл таблицами')
+            zstring = '""'
+       
     else:
         try:
             zstring = get_order_from_mail(order_id)
         except:
             logging.exception('')
             logging.error('Проблема с почтой')
+    
+    if zstring.strip() == '':
+        zstring = '{}'
     the_string = f'{{"zippack":{zstring}, "gsheets":{gstring}}}'
     
     print('--------------------ПРИШЛО С ЗАППАКА|ПОЧТЫ:--------------------\n' + zstring)
