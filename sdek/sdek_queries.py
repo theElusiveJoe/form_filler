@@ -43,7 +43,7 @@ def get_token():
         }
         resp = requests.post(
             f'https://api{testMode}.cdek.ru/v2/oauth/token?parameters', data=body)
-
+        print(resp.json())
         print(resp.status_code)
 
         cont = json.loads(str(resp.content, encoding='utf-8'))
@@ -51,13 +51,15 @@ def get_token():
         THE_TOKEN = 'Bearer ' + cont['access_token']
         token_upd_time = time.time()
         token_expiration_time = int(cont['expires_in'])
-    except:
-        logging.exception('')
+    except e:
+        logging.exception(e)
         logging.error('Проблема с обновлением токена')
 
 
 def check_token_relevance():
+    print('ПРОВЕРЯЮ Актуальность токена')
     if int(time.time()) > token_upd_time + token_expiration_time + 180:
+        print('ТОкен старый - обновляю')
         get_token()
 
 

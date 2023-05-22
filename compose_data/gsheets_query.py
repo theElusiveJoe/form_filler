@@ -53,7 +53,7 @@ def get_order_from_gsheetstring(ordernum):
     m = {}
     for i, title in enumerate(titles):
         m[columns_to_xmlels[title]] = values[i]
-    return json.dumps(m, ensure_ascii=False), m['id']
+    return json.dumps(m, ensure_ascii=False), m['id'] if m['id'].strip() != '' else m['account_number']
 
 if __name__ == '__main__':
     get_order_from_gsheetstring(4416)
