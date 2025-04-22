@@ -1,52 +1,51 @@
-<?xml version='1.0' encoding='UTF-8'?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://dpd.ru/ws/order2/2012-04-04">
-	<soapenv:Body>
-		<tns:createOrder>
-			<orders>
-				<auth>
-					<clientNumber></clientNumber>
-					<clientKey></clientKey>
-				</auth>
-				<header>
-					<datePickup></datePickup>
-					<senderAddress>
-						<name>ИП Лихачев</name>
-						<countryName>Россия</countryName>
-						<index>101000</index>
-						<city>Москва</city>
-						<street>Складочная</street>
-						<streetAbbr>ул</streetAbbr>
-						<house>1</house>
-						<!-- <houseKorpus>?</houseKorpus> -->
-						<str>13</str>
-						<!-- <vlad>?</vlad> -->
-						<extraInfo></extraInfo>
-						<workTimeFrom>10:00</workTimeFrom>
-						<workTimeTo>18:00</workTimeTo>
-						<contactFio>Алексей, Михаил</contactFio>
-						<contactPhone>89261672339, 89680914603</contactPhone>
-						<instructions>магазин "Зиппак" напротив "Лайт кухни"</instructions>
-					</senderAddress>
-					<pickupTimePeriod></pickupTimePeriod>
-				</header>
-				<order>
-					<orderNumberInternal></orderNumberInternal>
-					<serviceCode></serviceCode>
-					<serviceVariant></serviceVariant>
-					<cargoNumPack></cargoNumPack>
-					<cargoWeight></cargoWeight>
-					<cargoRegistered>false</cargoRegistered>
-					<cargoValue></cargoValue>
-					<cargoCategory></cargoCategory>
-					<receiverAddress>
-						<name></name>
-						<terminalCode></terminalCode>
-						<countryName>Россия</countryName>
-						<contactFio></contactFio>
-						<contactPhone></contactPhone>
-					</receiverAddress>
-				</order>
-			</orders>
-		</tns:createOrder>
-	</soapenv:Body>
+<soapenv:Body>
+<tns:createOrder>
+<orders>
+<auth>
+<clientNumber/>
+<clientKey/>
+</auth>
+<header>
+<datePickup/>
+<senderAddress>
+<name>ИП Лихачев</name>
+<countryName>Россия</countryName>
+<index>101000</index>
+<city>Москва</city>
+<street>Складочная</street>
+<streetAbbr>ул</streetAbbr>
+<house>13</house>
+<!--  <houseKorpus>?</houseKorpus>  -->
+<str>1</str>
+<!--  <vlad>?</vlad>  -->
+<extraInfo>1б/1</extraInfo>
+<workTimeFrom>10:00</workTimeFrom>
+<workTimeTo>18:00</workTimeTo>
+<contactFio>Алексей, Павел, Татьяна, Настя</contactFio>
+<contactPhone>89684236677,89629394400, 89680914603</contactPhone>
+<instructions>двойная зеленая дверь слева от центрального входа, желтые парковочные столбики</instructions>
+</senderAddress>
+<pickupTimePeriod/>
+</header>
+<order>
+<orderNumberInternal/>
+<serviceCode/>
+<serviceVariant/>
+<cargoNumPack/>
+<cargoWeight/>
+<cargoRegistered>false</cargoRegistered>
+<cargoValue/>
+<cargoCategory/>
+<receiverAddress>
+<name/>
+<terminalCode/>
+<countryName>Россия</countryName>
+<contactFio/>
+<contactPhone/>
+</receiverAddress>
+</order>
+</orders>
+</tns:createOrder>
+</soapenv:Body>
 </soapenv:Envelope>
