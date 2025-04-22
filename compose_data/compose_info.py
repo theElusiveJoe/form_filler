@@ -11,19 +11,22 @@ from compose_data.spbkonvert_query import get_order_from_spbkonvert
 def get_order_info(line_num):
     gstring, order_id = get_order_from_gsheetstring(line_num.strip())
     zstring = ''
+    shopString = ''
     if ord('A') <= ord(order_id.strip()[0]) <= ord('Z'): 
         try:
             zstring = get_order_from_zippack(re.sub("\D", "", order_id))
+            shopString = '"zippack"'
         except:
             logging.exception('')
             logging.error('Проблема с гугл таблицами')
     else:
         try:
             zstring = get_order_from_spbkonvert(order_id)
+            shopString = '"spbkonvert"'
         except:
             logging.exception('')
             logging.error('Проблема с спбконверт')
-    the_string = f'{{"zippack":{zstring}, "gsheets":{gstring}}}'
+    the_string = f'{{"zippack":{zstring}, "gsheets":{gstring}, "shop":{shopString}}}'
     
     print('--------------------ПРИШЛО С ЗАППАКА|ПОЧТЫ:--------------------\n' + zstring)
     print('--------------------ПРИШЛО С ГУГЛ ТАБЛИЦ--------------------\n' + gstring)

@@ -7,7 +7,7 @@ function getTodayDate() {
     var mon = (now.getMonth() + 1).toString();
     if (date.length == 1) { date = '0' + date; }
     if (mon.length == 1) { mon = '0' + mon; }
-    return (now.getFullYear().toString() + '-' + mon + '-'+ date);
+    return (now.getFullYear().toString() + '-' + mon + '-' + date);
 }
 
 function GetByPath(obj, path) {
@@ -21,7 +21,7 @@ function GetByPath(obj, path) {
     return current;
 }
 
-function resetInnerHTML(){
+function resetInnerHTML() {
     document.getElementById('createOrderResp').innerHTML = ''
     document.querySelector("#serverResp").innerHTML = ''
     document.getElementById('countServiceResp').innerHTML = ''
@@ -29,20 +29,31 @@ function resetInnerHTML(){
     document.querySelector("#serviceCode").innerHTML = ''
     choosen = ''
     document.querySelector("#choosenTerminal").innerHTML = ''
-//    document.querySelector('.hover_bkgr_fricc').style.display = "none"
+    //    document.querySelector('.hover_bkgr_fricc').style.display = "none"
     document.getElementById('zippackLink').innerHTML = ''
 }
 
 function fillFields(order) {
     resetInnerHTML()
     console.log(order)
-    if (!order['zippack']['result']){
+    if (!order['zippack']['result']) {
         document.querySelector("#lineNum").value = 'На Зиппаке произошла ошибка';
         return;
     }
     ziplusheets = order
-    document.getElementById('zippackLink').innerHTML = ('<a target="_blank" href="https://zippack.ru/adminv3/orders/edit/' + order['zippack']['obj']['Id'] 
-                                                        + '">ссылка на заказ ' +order['zippack']['obj']['Id']+'</a>')
+
+    // ссылка на заказ
+    const orderId = order['zippack']['obj']['Id']
+    var orderLink = ""
+    if (order['shop'] == 'zippack') {
+        orderLink = "https://zippack.ru/adminv3/orders/edit/" + orderId
+    } else {
+        orderLink = "https://spbkonvert.com/adminv3/orders/edit/" + orderId
+    }
+
+    document.getElementById('zippackLink').innerHTML = (
+        '<a target="_blank" href="' + orderLink + '">ссылка на заказ ' + orderId + '</a>'
+    )
     // начинаем заполнять поля
     simpleFields = {
         'cargoNumPack': 'gsheets.positions', // количество посылок
@@ -58,11 +69,11 @@ function fillFields(order) {
     for (key in simpleFields) {
         document.getElementById(key).value = GetByPath(order, simpleFields[key])
     }
-    
-    if (document.querySelector("#cargoNumPack").value == ''){
+
+    if (document.querySelector("#cargoNumPack").value == '') {
         document.querySelector("#cargoNumPack").value = 1
     }
-    if (document.querySelector("#cargoWeight").value == ''){
+    if (document.querySelector("#cargoWeight").value == '') {
         document.querySelector("#cargoWeight").value = '????'
     }
 
@@ -90,32 +101,32 @@ function fillFields(order) {
 
     // товары
     document.getElementById('itemsList').innerHTML = ''
-    for (i = 0; i < GetByPath(order, 'zippack.obj.Items').length; i++){
+    for (i = 0; i < GetByPath(order, 'zippack.obj.Items').length; i++) {
         item = GetByPath(order, 'zippack.obj.Items')[i];
-        document.getElementById('itemsList').innerHTML += '<tr id="box'+i+'">' +
-        '<td>'+(i+1)+'</td>' + 
-        '<td><input size="15" type="text" id="items['+i+'][article]"></td>' + 
-        '<td><input size="100" style.width="100%" type="text" id="items['+i+'][name]"></td>' + 
-        '<td><input type="text" id="items['+i+'][quantity]"></td>' +
-        '<td><input type="text" id="items['+i+'][price]"></td>' +
-        '</tr> '
-        
+        document.getElementById('itemsList').innerHTML += '<tr id="box' + i + '">' +
+            '<td>' + (i + 1) + '</td>' +
+            '<td><input size="15" type="text" id="items[' + i + '][article]"></td>' +
+            '<td><input size="100" style.width="100%" type="text" id="items[' + i + '][name]"></td>' +
+            '<td><input type="text" id="items[' + i + '][quantity]"></td>' +
+            '<td><input type="text" id="items[' + i + '][price]"></td>' +
+            '</tr> '
+
     }
-    for (i = 0; i < GetByPath(order, 'zippack.obj.Items').length; i++){
+    for (i = 0; i < GetByPath(order, 'zippack.obj.Items').length; i++) {
         item = GetByPath(order, 'zippack.obj.Items')[i];
-        document.getElementById('items['+i+'][article]').value = item['ArtNo']
-        document.getElementById('items['+i+'][name]').value = item['Name']
-        document.getElementById('items['+i+'][quantity]').value = item['Amount']
-        document.getElementById('items['+i+'][price]').value = item['Price']
+        document.getElementById('items[' + i + '][article]').value = item['ArtNo']
+        document.getElementById('items[' + i + '][name]').value = item['Name']
+        document.getElementById('items[' + i + '][quantity]').value = item['Amount']
+        document.getElementById('items[' + i + '][price]').value = item['Price']
     }
 
     //  для поиска терминала
-    if (document.getElementById('serviceVariant').value == 'ДТ'){
+    if (document.getElementById('serviceVariant').value == 'ДТ') {
         buttonTerminalDelivery();
     } else {
         buttonAddressDelivery();
     }
-    
+
 }
 
 // получаем первичные данные по заказу с сервера и заполняем поля формы
@@ -128,8 +139,8 @@ function getJSON() {
     xhr.send();
     document.getElementById('getJsonResp').innerHTML = 'Подождите'
     // после загрузки заполняем поля
-    xhr.onloadend = () =>{
-        if (xhr.status === 500){
+    xhr.onloadend = () => {
+        if (xhr.status === 500) {
             console.log('ошибка на сервере')
             alert('произошла ошибка на сервере')
             return
@@ -141,12 +152,12 @@ function getJSON() {
         try {
             obj = JSON.parse(xhr.responseText)
             fillFields(obj)
-        } catch (err){
+        } catch (err) {
             alert('произошла ошибка при разборе данных, прибывших с сервера')
             return
         }
 
     }
-    
+
 }
 

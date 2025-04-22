@@ -98,8 +98,17 @@ function fillFields(order) {
     ziplusheets = order
 
     // ссылка на заказ
-    document.getElementById('zippackLink').innerHTML = ('<a target="_blank" href="https://zippack.ru/adminv3/orders/edit/' + order['zippack']['obj']['Id']
-        + '">ссылка на заказ ' + order['zippack']['obj']['Id'] + '</a>')
+    const orderId = order['zippack']['obj']['Id']
+    var orderLink = ""
+    if (order['shop'] == 'zippack') {
+        orderLink = "https://zippack.ru/adminv3/orders/edit/" + orderId
+    } else {
+        orderLink = "https://spbkonvert.com/adminv3/orders/edit/" + orderId
+    }
+
+    document.getElementById('zippackLink').innerHTML = (
+        '<a target="_blank" href="' + orderLink + '">ссылка на заказ ' + orderId +'</a>'
+    )
     // начинаем заполнять поля
 
     // данные по заказу
